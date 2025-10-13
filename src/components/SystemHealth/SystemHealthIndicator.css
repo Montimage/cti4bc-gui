@@ -1,0 +1,242 @@
+.system-health-indicator {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.health-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  position: relative;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  color: var(--bs-body-color);
+}
+
+.health-button:hover {
+  background-color: var(--bs-secondary-bg);
+  transform: scale(1.1);
+}
+
+.health-button.dark:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Status-specific colors for the button */
+.health-button.healthy {
+  color: var(--bs-success);
+}
+
+.health-button.warning {
+  color: var(--bs-warning);
+}
+
+.health-button.critical {
+  color: var(--bs-danger);
+}
+
+/* Status change animation */
+.health-button.status-changing {
+  animation: statusChange 1s ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes statusChange {
+  0% { 
+    transform: scale(1); 
+    box-shadow: 0 0 0 0 rgba(var(--bs-primary-rgb), 0.7);
+  }
+  25% { 
+    transform: scale(1.1); 
+    box-shadow: 0 0 0 8px rgba(var(--bs-primary-rgb), 0.3);
+  }
+  50% { 
+    transform: scale(1.05); 
+    box-shadow: 0 0 0 12px rgba(var(--bs-primary-rgb), 0.1);
+  }
+  75% { 
+    transform: scale(1.02); 
+    box-shadow: 0 0 0 8px rgba(var(--bs-primary-rgb), 0.05);
+  }
+  100% { 
+    transform: scale(1); 
+    box-shadow: 0 0 0 0 rgba(var(--bs-primary-rgb), 0);
+  }
+}
+
+/* Enhanced pulse animations for different statuses */
+.health-button.warning {
+  animation: healthPulse 2s infinite;
+}
+
+.health-button.critical {
+  animation: criticalPulse 1s infinite;
+}
+
+@keyframes criticalPulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px rgba(220, 53, 69, 0.3);
+  }
+}
+
+.health-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 320px;
+  max-height: 400px;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1050;
+  overflow: hidden;
+}
+
+.health-dropdown.dark {
+  background: var(--bs-dark);
+  border-color: var(--bs-border-color-translucent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.health-dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  background: var(--bs-tertiary-bg);
+}
+
+.health-dropdown-header h6 {
+  color: var(--bs-body-color);
+  font-weight: 600;
+}
+
+.refresh-btn {
+  background: none;
+  border: none;
+  color: var(--bs-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}
+
+.refresh-btn:hover {
+  text-decoration: underline;
+}
+
+.health-components {
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.health-component-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.health-component-item:hover {
+  background: var(--bs-secondary-bg);
+}
+
+.health-component-item.dark:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.health-component-item:last-child {
+  border-bottom: none;
+}
+
+.component-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.component-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.component-name {
+  color: var(--bs-body-color);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.component-response-time {
+  color: var(--bs-text-muted);
+  font-size: 0.8rem;
+  font-family: 'Courier New', monospace;
+}
+
+.health-footer {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  background: var(--bs-tertiary-bg);
+  text-align: center;
+}
+
+.view-more-btn {
+  background: none;
+  border: none;
+  color: var(--bs-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.view-more-btn:hover {
+  text-decoration: underline;
+}
+
+/* Animation for health indicator pulse */
+@keyframes healthPulse {
+  0%, 100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.7; 
+    transform: scale(1.05); 
+  }
+}
+
+.health-button.warning {
+  animation: healthPulse 2s infinite;
+}
+
+.health-button.critical {
+  animation: criticalPulse 1s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .health-dropdown {
+    width: 280px;
+    right: -20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .health-dropdown {
+    width: 260px;
+    right: -40px;
+  }
+}

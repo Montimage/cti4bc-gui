@@ -1,0 +1,190 @@
+.fixed-height {
+    height: 150px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.clickable-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none !important;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.clickable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.active-card {
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb) !important;
+    border-color: #64b5f6 !important;
+}
+
+.select-all-label {
+    margin-left: 12px;
+    font-weight: 500;
+    color: var(--bs-body-color);
+}
+
+/* Stats cards */
+.card-title {
+    color: #495057;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.card-text {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2196f3;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.card-text + p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+/* Table improvements */
+.table-hover tbody tr:hover {
+    background-color: rgba(33, 150, 243, 0.05);
+    transition: background-color 0.2s ease;
+}
+
+/* Status badges */
+.badge {
+    font-size: 0.85rem;
+    padding: 0.5em 1em;
+    border-radius: 20px;
+}
+
+td .badge {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.badge.bg-success {
+    background-color: #4caf50 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ff9800 !important;
+    color: #fff;
+}
+
+.badge.bg-danger {
+    background-color: #f44336 !important;
+}
+
+/* Action buttons */
+.btn-link {
+    color: #2196f3;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-link:hover {
+    color: #1976d2;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Filters section */
+.card .form-floating > label {
+    color: var(--bs-body-color);
+    transition: color 0.3s ease;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-select:focus ~ label {
+    color: #2196f3;
+}
+
+.sortable-header {
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.sortable-header:hover {
+    background-color: rgba(33, 150, 243, 0.05);
+}
+
+.sortable-header h4 {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+.sortable-header h4::after {
+    content: "";
+    margin-left: 5px;
+    opacity: 0.3;
+    transition: opacity 0.2s ease;
+}
+
+.sortable-header:hover h4::after {
+    opacity: 1;
+}
+
+.text-center-column,
+.text-center-column.sortable-header {
+    text-align: center;
+}
+
+.text-center-column.sortable-header h4,
+th.text-center-column {
+    justify-content: center;
+}
+
+/* Dark mode specific overrides */
+[data-bs-theme="dark"] .clickable-card {
+    background: linear-gradient(145deg, #333333, #2a2a2a) !important;
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .active-card {
+    background: linear-gradient(145deg, #1a3f5f, #164e7b) !important;
+    border-color: #64b5f6 !important;
+}
+
+[data-bs-theme="dark"] .card-title {
+    color: #e0e0e0;
+}
+
+[data-bs-theme="dark"] .card-text {
+    color: #64b5f6;
+}
+
+[data-bs-theme="dark"] .card-text + p {
+    color: #b0b0b0;
+}
+
+[data-bs-theme="dark"] .btn-link {
+    color: #64b5f6;
+}
+
+[data-bs-theme="dark"] .btn-link:hover {
+    color: #90caf9;
+}
+
+[data-bs-theme="dark"] .sortable-header:hover {
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+[data-bs-theme="dark"] .table-hover tbody tr:hover {
+    background-color: rgba(100, 181, 246, 0.1);
+}

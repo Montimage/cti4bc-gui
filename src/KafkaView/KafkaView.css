@@ -1,0 +1,256 @@
+.message-container {
+    border-radius: 0.25rem;
+    padding: 1rem;
+    overflow-y: auto;
+    min-height: 300px;
+    flex: 1;
+}
+
+/* Styles pour la carte des messages */
+.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body.flex-grow-1 {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-footer.mt-auto {
+    flex-shrink: 0;
+    background-color: var(--bs-card-cap-bg);
+    border-top: var(--bs-card-border-width) solid var(--bs-card-border-color);
+}
+
+/* Make sure dark theme colors work correctly */
+[data-bs-theme="dark"] .message-container {
+    background-color: #2b3035;
+}
+
+[data-bs-theme="light"] .message-container {
+    background-color: #f8f9fa;
+}
+
+.message-card {
+    border-left: 4px solid #007bff;
+    transition: all 0.2s ease-in-out;
+}
+
+.message-card:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+[data-bs-theme="dark"] .message-card:hover {
+    box-shadow: 0 0.25rem 0.75rem rgba(255, 255, 255, 0.1);
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+/* Styles pour la sélection multiple */
+select[multiple] {
+    font-size: 0.9rem;
+}
+
+select[multiple] option {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+select[multiple] option:checked {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Styles pour les badges de topics sélectionnés */
+.selected-topics-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.selected-topic-badge {
+    display: flex;
+    align-items: center;
+    border-radius: 16px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+[data-bs-theme="light"] .selected-topic-badge {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+[data-bs-theme="dark"] .selected-topic-badge {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+
+.selected-topic-badge span {
+    margin-right: 0.5rem;
+}
+
+.remove-topic-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+}
+
+.remove-topic-btn:hover {
+    color: #dc3545;
+}
+
+/* Add some animation for new messages */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom scrollbar for message container */
+.message-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.message-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+[data-bs-theme="dark"] .message-container::-webkit-scrollbar-track {
+    background: #212529;
+}
+
+.message-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.message-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Message content styling */
+.message-content {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+pre.message-content {
+    margin: 0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+[data-bs-theme="light"] pre.message-content {
+    background-color: #f8f9fa;
+    border: 1px solid #eaeaea;
+}
+
+[data-bs-theme="dark"] pre.message-content {
+    background-color: #212529;
+    border: 1px solid #495057;
+    color: #f8f9fa;
+}
+
+/* Animation for new messages */
+@keyframes highlight {
+    0% { background-color: rgba(0, 123, 255, 0.2); }
+    100% { background-color: transparent; }
+}
+
+.message-card:first-child {
+    animation: highlight 2s ease-out;
+}
+
+/* Card styling */
+.card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.kafka-main-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-header {
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+}
+
+.card-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+[data-bs-theme="light"] .card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+[data-bs-theme="dark"] .card-footer {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-top: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+/* Disable transitions temporarily during theme changes */
+.kafka-view.theme-changing * {
+  transition: none !important;
+}
+
+/* Specific optimization for form controls */
+.kafka-view.theme-changing .form-control,
+.kafka-view.theme-changing .btn,
+.kafka-view.theme-changing .card,
+.kafka-view.theme-changing .message-card {
+  transition: none !important;
+}
+
+/* Re-enable specific transitions after theme change */
+.kafka-view:not(.theme-changing) .message-card {
+  transition: all 0.2s ease-in-out;
+  transition-delay: 0.1s;
+}
+
+.kafka-view:not(.theme-changing) .form-control {
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition-delay: 0.1s;
+}
+
+.kafka-view:not(.theme-changing) .btn {
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  transition-delay: 0.1s;
+}

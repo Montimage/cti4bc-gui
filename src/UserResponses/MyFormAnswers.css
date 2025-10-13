@@ -1,0 +1,521 @@
+.my-form-answers-container {
+  min-height: calc(100vh - 120px);
+  padding-bottom: 2rem;
+  background-color: transparent !important;
+}
+
+.my-form-answers-container.dark-theme {
+  background-color: transparent !important;
+  color: #ffffff;
+}
+
+/* Card styling */
+.my-form-answers-container .card {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.my-form-answers-container .card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.my-form-answers-container.dark-theme .card {
+  background-color: #2d2d2d;
+  border-color: #404040;
+  color: #ffffff;
+}
+
+/* Header styling */
+.my-form-answers-container .card-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1.25rem 1.5rem;
+}
+
+.my-form-answers-container.dark-theme .card-header {
+  border-color: #404040;
+}
+
+/* Table styling */
+.my-form-answers-container .table {
+  color: inherit;
+  background-color: transparent;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.my-form-answers-container .table th {
+  border-color: rgba(0, 0, 0, 0.08);
+  background-color: rgba(var(--bs-primary-rgb), 0.05);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.my-form-answers-container.dark-theme .table {
+  color: #ffffff;
+  background-color: transparent;
+}
+
+.my-form-answers-container.dark-theme .table th {
+  border-color: #404040;
+  background-color: #333333;
+  color: #ffffff;
+  border-bottom: 2px solid #404040;
+}
+
+.my-form-answers-container .table td {
+  border-color: rgba(0, 0, 0, 0.08);
+  vertical-align: middle;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.my-form-answers-container .table td:first-child {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.my-form-answers-container .table td:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.my-form-answers-container.dark-theme .table td {
+  border-color: #404040;
+  background-color: #2d2d2d;
+  border-top: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+}
+
+.my-form-answers-container.dark-theme .table td:first-child {
+  border-left: 1px solid #404040;
+}
+
+.my-form-answers-container.dark-theme .table td:last-child {
+  border-right: 1px solid #404040;
+}
+
+.my-form-answers-container .table-hover tbody tr:hover td {
+  background-color: rgba(var(--bs-primary-rgb), 0.05);
+}
+
+.my-form-answers-container.dark-theme .table-hover tbody tr:hover td {
+  background-color: #404040;
+}
+
+/* Override Bootstrap table-light in dark mode */
+.my-form-answers-container.dark-theme .table-light {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .table-light th {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+/* Row styling improvements */
+.my-form-answers-container .border-bottom {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.my-form-answers-container.dark-theme .border-bottom {
+  border-bottom-color: #404040 !important;
+}
+
+/* Modal styling */
+.my-form-answers-container .modal-content {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.my-form-answers-container.dark-theme .modal-content {
+  background-color: #2d2d2d;
+  color: #ffffff;
+}
+
+.my-form-answers-container .modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px 16px 0 0;
+  padding: 1.5rem;
+}
+
+.my-form-answers-container .modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0 0 16px 16px;
+  padding: 1.5rem;
+}
+
+.my-form-answers-container.dark-theme .modal-header,
+.my-form-answers-container.dark-theme .modal-footer {
+  border-color: #404040;
+}
+
+/* Answer content styling for modals */
+.my-form-answers-container.dark-theme .border.rounded.p-3.bg-light {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: #404040 !important;
+}
+
+.my-form-answers-container.dark-theme .bg-white.rounded {
+  background-color: #333333 !important;
+}
+
+/* Emergency override - test if this works */
+.dark-answer-box-test-123 {
+  background-color: #303030af !important;
+  color: #ffffff !important;
+  border-left: 4px solid #0d6efd !important;
+}
+
+.my-form-answers-container.dark-theme .border-start.border-primary {
+  border-left-color: #0d6efd !important;
+}
+
+/* Card inside modals */
+.my-form-answers-container.dark-theme .card.border-0.bg-light {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .card.border-0.bg-light .card-body {
+  color: #ffffff !important;
+}
+
+/* Text color fixes for modals */
+.my-form-answers-container.dark-theme .fw-semibold {
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .text-wrap {
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .answer-content span {
+  color: #ffffff !important;
+}
+
+/* Bootstrap modal override for dark theme */
+.my-form-answers-container.dark-theme .modal-header.bg-dark,
+.my-form-answers-container.dark-theme .modal-footer.bg-dark {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+/* Alert overrides in modals */
+.my-form-answers-container.dark-theme .alert.bg-dark {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+  border-color: #404040 !important;
+}
+
+/* Form control overrides for modals */
+.my-form-answers-container.dark-theme .border.rounded.p-3.bg-dark {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: #404040 !important;
+}
+
+/* Badge styling in modals */
+.my-form-answers-container.dark-theme .answer-content .badge {
+  background-color: #404040 !important;
+  color: #ffffff !important;
+}
+
+/* Link styling in dark mode */
+.my-form-answers-container.dark-theme .answer-content a {
+  color: #66b3ff !important;
+}
+
+.my-form-answers-container.dark-theme .answer-content a:hover {
+  color: #3399ff !important;
+}
+
+/* Form controls styling */
+.my-form-answers-container .form-control,
+.my-form-answers-container .form-select {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.my-form-answers-container .form-control:focus,
+.my-form-answers-container .form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+.my-form-answers-container.dark-theme .form-control,
+.my-form-answers-container.dark-theme .form-select {
+  background-color: #404040;
+  border-color: #555555;
+  color: #ffffff;
+}
+
+.my-form-answers-container.dark-theme .form-control:focus,
+.my-form-answers-container.dark-theme .form-select:focus {
+  background-color: #404040;
+  border-color: #0d6efd;
+  color: #ffffff;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Alert styling */
+.my-form-answers-container .alert {
+  border: none;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.my-form-answers-container .alert-info {
+  background-color: rgba(var(--bs-info-rgb), 0.1);
+  border-left-color: var(--bs-info);
+  color: var(--bs-info-text);
+}
+
+.my-form-answers-container .alert-warning {
+  background-color: rgba(var(--bs-warning-rgb), 0.1);
+  border-left-color: var(--bs-warning);
+  color: var(--bs-warning-text);
+}
+
+.my-form-answers-container.dark-theme .alert-info {
+  background-color: rgba(13, 202, 240, 0.1);
+  color: #b8daff;
+}
+
+.my-form-answers-container.dark-theme .alert-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffecb5;
+}
+
+/* Badge styling */
+.my-form-answers-container .badge {
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+/* Button styling */
+.my-form-answers-container .btn {
+  border-radius: 8px;
+  font-weight: 500;
+  border-width: 1px;
+}
+
+.my-form-answers-container .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.my-form-answers-container .btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Answer content styling */
+.my-form-answers-container .answer-content {
+  line-height: 1.6;
+}
+
+.my-form-answers-container .answer-content .badge {
+  margin: 0.125rem;
+}
+
+/* Icon styling */
+.my-form-answers-container .bi {
+  font-size: 1em;
+  vertical-align: middle;
+}
+
+.my-form-answers-container .display-1 {
+  font-size: 4rem;
+  opacity: 0.3;
+}
+
+.my-form-answers-container .display-6 {
+  font-size: 2rem;
+  opacity: 0.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .my-form-answers-container {
+    padding-bottom: 1rem;
+  }
+  
+  .my-form-answers-container .table-responsive {
+    font-size: 0.875rem;
+  }
+  
+  .my-form-answers-container .card-header h5 {
+    font-size: 1.1rem;
+  }
+  
+  .my-form-answers-container .table th,
+  .my-form-answers-container .table td {
+    padding: 0.75rem 1rem;
+  }
+  
+  .my-form-answers-container .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .my-form-answers-container .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+  
+  .my-form-answers-container .btn {
+    width: 100%;
+  }
+}
+
+/* Loading spinner enhancement */
+.my-form-answers-container .spinner-border {
+  border-width: 3px;
+}
+
+/* Text improvements */
+.my-form-answers-container .text-muted {
+  opacity: 0.7;
+}
+
+.my-form-answers-container.dark-theme .text-muted {
+  color: #adb5bd !important;
+  opacity: 0.8;
+}
+
+/* Form field container styling */
+.my-form-answers-container .bg-light {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+
+.my-form-answers-container.dark-theme .bg-light {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Text color overrides for dark mode */
+.my-form-answers-container.dark-theme .text-dark {
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .fw-semibold,
+.my-form-answers-container.dark-theme .fw-bold {
+  color: inherit;
+}
+
+/* Badge styling improvements for dark mode */
+.my-form-answers-container.dark-theme .badge.bg-light {
+  background-color: #404040 !important;
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .badge[data-bs-theme="dark"] {
+  background-color: #404040 !important;
+  color: #ffffff !important;
+}
+
+/* Modal header and footer overrides */
+.my-form-answers-container.dark-theme .modal-header.bg-light,
+.my-form-answers-container.dark-theme .modal-footer.bg-light {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme .modal-header.bg-primary {
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+
+/* Card header primary styling */
+.my-form-answers-container.dark-theme .card-header.bg-primary {
+  background-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+
+/* Specific overrides for icons and circular elements */
+.my-form-answers-container.dark-theme .bg-primary.bg-opacity-10 {
+  background-color: rgba(13, 110, 253, 0.2) !important;
+}
+
+.my-form-answers-container.dark-theme .bg-info.bg-opacity-10 {
+  background-color: rgba(13, 202, 240, 0.2) !important;
+}
+
+/* Global text color improvements */
+.my-form-answers-container.dark-theme {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.my-form-answers-container.dark-theme * {
+  color: inherit;
+}
+
+/* Container and card styling to prevent background issues */
+.my-form-answers-container.dark-theme .container-fluid {
+  background-color: transparent !important;
+}
+
+/* Force transparent background on all parent containers */
+.my-form-answers-container.dark-theme,
+.my-form-answers-container.dark-theme .container-fluid,
+.my-form-answers-container.dark-theme .row,
+.my-form-answers-container.dark-theme .col {
+  background-color: transparent !important;
+}
+
+/* Ensure the wrapper div doesn't have a black background */
+.my-form-answers-container.dark-theme > div {
+  background-color: transparent !important;
+}
+
+/* Alert styling improvements for better contrast */
+.my-form-answers-container.dark-theme .alert {
+  border: 1px solid;
+}
+
+.my-form-answers-container.dark-theme .alert-info {
+  background-color: rgba(13, 202, 240, 0.15) !important;
+  border-color: rgba(13, 202, 240, 0.3) !important;
+  color: #b8daff !important;
+}
+
+.my-form-answers-container.dark-theme .alert-warning {
+  background-color: rgba(255, 193, 7, 0.15) !important;
+  border-color: rgba(255, 193, 7, 0.3) !important;
+  color: #ffecb5 !important;
+}
+
+.my-form-answers-container.dark-theme .alert-danger {
+  background-color: rgba(220, 53, 69, 0.15) !important;
+  border-color: rgba(220, 53, 69, 0.3) !important;
+  color: #f8d7da !important;
+}
+
+.my-form-answers-container.dark-theme .alert-success {
+  background-color: rgba(25, 135, 84, 0.15) !important;
+  border-color: rgba(25, 135, 84, 0.3) !important;
+  color: #d1e7dd !important;
+}
+
+/* Border enhancements */
+.my-form-answers-container .border-start.border-primary {
+  border-left-width: 4px !important;
+}
+
+.my-form-answers-container .rounded {
+  border-radius: 8px !important;
+}

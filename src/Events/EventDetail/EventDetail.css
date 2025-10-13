@@ -1,0 +1,185 @@
+/* Event Details container */
+.event-details-container {
+    background: var(--bs-body-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Section headers */
+.section-header {
+    color: var(--bs-body-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--bs-border-color);
+}
+
+/* Textarea improvements */
+textarea {
+    min-height: 100px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.5;
+    padding: 12px;
+    background-color: var(--bs-form-control-bg, var(--bs-body-bg));
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+    transition: all 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.25);
+}
+
+/* Table enhancements */
+.table td, .table th {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.table td:first-child {
+    font-weight: 500;
+    color: inherit;
+    width: 200px;
+}
+
+/* Badge enhancements */
+.badge.bg-primary {
+    background: linear-gradient(45deg, #2196f3, #1976d2) !important;
+    font-weight: 500;
+    padding: 0.4em 0.8em;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+/* Select inputs */
+select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--bs-border-color);
+    background-color: var(--bs-form-control-bg, var(--bs-body-bg));
+    color: var(--bs-body-color);
+    cursor: pointer;
+    min-width: 150px;
+    transition: all 0.3s ease;
+}
+
+select:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.25);
+}
+
+/* Comment section */
+.comment-section {
+    margin-top: 1rem;
+}
+
+.comment-textarea {
+    width: 100%;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 4px;
+    background-color: var(--bs-form-control-bg, var(--bs-body-bg));
+    color: var(--bs-body-color);
+    transition: all 0.3s ease;
+}
+
+/* Action buttons */
+.action-button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Attribute tables */
+.attribute-table {
+    margin-top: 1.5rem;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    color: var(--bs-body-color);
+}
+
+.attribute-table thead {
+    background-color: var(--bs-tertiary-bg);
+}
+
+.attribute-table th {
+    font-weight: 600;
+    color: var(--bs-body-color);
+}
+
+/* Strategy section */
+.strategy-section {
+    background-color: var(--bs-tertiary-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.strategy-title {
+    color: var(--bs-body-color);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Form group spacing */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    color: var(--bs-body-color);
+    font-weight: 500;
+}
+
+/* Disabled state styling */
+select:disabled,
+input:disabled,
+textarea:disabled {
+    background-color: var(--bs-tertiary-bg);
+    color: var(--bs-secondary-color);
+    cursor: not-allowed;
+}
+
+/* File input specific styles */
+input[type="file"] {
+    background-color: var(--bs-form-control-bg, var(--bs-body-bg));
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+    padding: 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+/* Artifact container styling */
+.artifact-container {
+    background-color: var(--bs-form-control-bg, var(--bs-body-bg));
+    color: var(--bs-body-color);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}

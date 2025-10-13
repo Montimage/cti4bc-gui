@@ -1,0 +1,251 @@
+/* Ensure instant theme switching for all elements */
+*,
+*::before,
+*::after,
+.form-control,
+.form-select,
+.btn,
+.card,
+.modal-content,
+.modal-header,
+.modal-body,
+.modal-footer,
+.table,
+.badge,
+.alert,
+.navbar,
+input,
+textarea,
+select {
+    transition: none !important;
+}
+
+/* Only keep smooth transitions for hover effects and transformations */
+.stats-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+}
+
+.btn:hover,
+.card:hover {
+    transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out !important;
+}
+
+/* LLM Settings Styles */
+.llm-settings-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+}
+
+.llm-settings-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.llm-provider-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.llm-info-card {
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease-in-out !important;
+}
+
+.llm-info-card:hover {
+    border-color: #007bff;
+}
+
+.settings-gear-btn {
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.settings-gear-btn:hover {
+    transform: rotate(90deg);
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+/* Additional styles for Reports page */
+.report-content {
+    line-height: 1.8;
+    font-size: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    white-space: pre-wrap;
+    font-family: Georgia, serif;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.report-content h1, .report-content h2, .report-content h3, .report-content h4, .report-content h5, .report-content h6 {
+    color: #2c3e50;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.report-content p {
+    margin-bottom: 1rem;
+}
+
+.report-content ul, .report-content ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.report-content strong {
+    color: #2c3e50;
+}
+
+.report-content em {
+    color: #7f8c8d;
+}
+
+.btn-group .btn {
+    border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.reports-table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.reports-table thead th {
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05rem;
+}
+
+.reports-table tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+@media (max-width: 768px) {
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        border-radius: 0.375rem !important;
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Dark theme styles */
+[data-bs-theme="dark"] .report-content,
+.dark-theme .report-content {
+    background-color: var(--bs-card-bg);
+    border-color: var(--bs-border-color);
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .report-content h1,
+[data-bs-theme="dark"] .report-content h2,
+[data-bs-theme="dark"] .report-content h3,
+[data-bs-theme="dark"] .report-content h4,
+[data-bs-theme="dark"] .report-content h5,
+[data-bs-theme="dark"] .report-content h6,
+.dark-theme .report-content h1,
+.dark-theme .report-content h2,
+.dark-theme .report-content h3,
+.dark-theme .report-content h4,
+.dark-theme .report-content h5,
+.dark-theme .report-content h6 {
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .report-content strong,
+.dark-theme .report-content strong {
+    color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .report-content em,
+.dark-theme .report-content em {
+    color: var(--bs-secondary-color);
+}
+
+[data-bs-theme="dark"] .stats-card:hover,
+.dark-theme .stats-card:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255,0.1);
+}
+
+[data-bs-theme="dark"] .reports-table tbody tr:hover,
+.dark-theme .reports-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .bg-light,
+.dark-theme .bg-light {
+    background-color: var(--bs-card-bg) !important;
+    color: var(--bs-body-color) !important;
+}
+
+[data-bs-theme="dark"] .text-muted,
+.dark-theme .text-muted {
+    color: var(--bs-secondary-color) !important;
+}
+
+/* Fix dropdown z-index and overflow issues */
+.dropdown-menu {
+    z-index: 1050 !important;
+}
+
+/* Ensure card-body and table containers don't clip dropdown menus */
+.card-body {
+    overflow: visible !important;
+}
+
+.table-responsive {
+    overflow: visible !important;
+}
+
+.reports-table {
+    overflow: visible !important;
+}
+
+/* Force dropdown to appear above all content */
+.btn-group .dropdown-menu,
+.dropdown .dropdown-menu {
+    z-index: 1050 !important;
+    position: fixed !important;
+}
+
+/* Specific fix for dropdown in table cells */
+td .dropdown {
+    position: relative !important;
+}
+
+td .dropdown-menu {
+    position: fixed !important;
+    z-index: 1050 !important;
+}
+
+/* Ensure dropdown menu stays visible */
+.dropdown-menu.show {
+    display: block !important;
+    z-index: 1050 !important;
+    position: fixed !important;
+}

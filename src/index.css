@@ -1,0 +1,228 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css');
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  transition: none !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Layout styles */
+.split-view {
+  display: flex;
+  gap: 20px;
+  padding: 15px;
+}
+
+.split-half {
+  flex: 1;
+  padding: 20px;
+  overflow: auto;
+  background: var(--bs-body-bg);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: none !important;
+}
+
+.json-view {
+  background-color: var(--bs-tertiary-bg);
+  border-left: 2px solid var(--bs-border-color);
+  transition: none !important;
+}
+
+/* Global components styling */
+.btn {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background-color: var(--bs-card-bg);
+  color: var(--bs-body-color);
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Form elements */
+.form-control, .form-select {
+  border-radius: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--bs-form-control-bg, var(--bs-body-bg));
+  color: var(--bs-body-color);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+.form-control::file-selector-button {
+  background-color: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+  transition: none !important;
+}
+
+/* Tables */
+.table {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: none !important;
+}
+
+/* Badge styling */
+.badge {
+  padding: 0.5em 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: none !important;
+}
+
+/* Loading spinner */
+.spinner-border {
+  border-width: 0.15em;
+}
+
+/* Alert styling */
+.alert {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bs-tertiary-bg);
+  border-radius: 4px;
+  transition: none !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bs-secondary-color);
+  border-radius: 4px;
+  transition: none !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bs-tertiary-color);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease; 
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+}
+
+/* Dark mode specific overrides */
+[data-bs-theme="dark"] {
+  --bs-body-color: #e0e0e0;
+  --bs-body-color-rgb: 224, 224, 224;
+  --bs-secondary-color: #c0c0c0;
+  --bs-tertiary-color: #a0a0a0;
+  --bs-card-bg: #2d2d2d;
+  --bs-form-control-bg: #2d2d2d;
+}
+
+[data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+  color: var(--bs-body-color);
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+  color: var(--bs-secondary-color);
+}
+
+/* Animation for theme transition */
+.theme-transition {
+  transition: none !important;
+}
+
+/* Force background color for upload buttons */
+.custom-file-input {
+  background-color: var(--bs-form-control-bg, var(--bs-body-bg)) !important;
+  color: var(--bs-body-color) !important;
+  transition: none !important;
+}
+
+/* Style for sidebar and detail panels */
+[data-bs-theme="dark"] .sidebar, 
+[data-bs-theme="dark"] .event-details-container,
+[data-bs-theme="dark"] .nav-link.active,
+[data-bs-theme="dark"] .menu-item {
+  background-color: var(--bs-card-bg) !important;
+  color: var(--bs-body-color) !important;
+  transition: none !important;
+}
+
+/* Card styles for Stats Dashboard */
+[data-bs-theme="dark"] .clickable-card {
+  background: linear-gradient(145deg, #333333, #2a2a2a) !important;
+  color: var(--bs-body-color);
+  transition: none !important;
+}
+
+[data-bs-theme="dark"] .active-card {
+  background: linear-gradient(145deg, #1a3f5f, #164e7b) !important;
+  transition: none !important;
+}
+
+/* Improve contrast for cards in dark mode */
+[data-bs-theme="dark"] .card-title {
+  color: #e0e0e0 !important;
+  transition: none !important;
+}
+
+[data-bs-theme="dark"] .card-text {
+  color: #64b5f6 !important;
+  transition: none !important;
+}
+
+[data-bs-theme="dark"] .card-text + p {
+  color: #b0b0b0 !important;
+  transition: none !important;
+}
+
+.fade,
+.collapse,
+.collapsing,
+.modal,
+.modal-backdrop,
+.tooltip,
+.popover {
+  transition: none !important;
+}
