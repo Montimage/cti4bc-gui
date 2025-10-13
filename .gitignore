@@ -137,3 +137,13 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+__pycache__
+*.zip
+**/.env
+.venv
+*egg-info
+
+.DS_Store
+**/node_modules/
+.env
