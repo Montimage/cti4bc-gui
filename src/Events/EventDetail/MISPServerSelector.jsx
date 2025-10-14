@@ -131,16 +131,6 @@ const MISPServerSelector = ({ onServersSelected }) => {
                     </div>
                 ))}
             </div>
-            
-            {selectedServers.length > 0 ? (
-                <div className="alert alert-info mt-3">
-                    {selectedServers.length} server(s) selected
-                </div>
-            ) : (
-                <div className="alert alert-warning mt-3">
-                    Please select at least one MISP server to share with
-                </div>
-            )}
         </div>
     );
 };

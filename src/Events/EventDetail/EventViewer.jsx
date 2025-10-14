@@ -569,14 +569,6 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
                             )}
                         </div>
                         )}
-                        { /* Files attached */ }
-
-                        { /* Sharing options */ }
-                        {/* <div className="mt-3">
-                            <h2>Sharing options</h2>
-                            to be completed
-                            sharing_group_id
-                        </div> */}
                         <div className="d-flex justify-content-end">
                             <button className="btn btn-secondary"
                                 onClick={() => toggleJsonView()}>

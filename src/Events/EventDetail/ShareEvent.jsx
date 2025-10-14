@@ -163,13 +163,13 @@ const ShareEventView = () => {
         setShowShareModal(true);
     };
 
-    const handleConfirmShare = async (serverIds) => {
+    const handleConfirmShare = async ({mispServerIds, organizationIds}) => {
         if (!jsonData) {
                         return;
         }
         
-        if (serverIds.length === 0) {
-            showError('Please select at least one MISP server to share with');
+        if ((mispServerIds?.length ?? 0) === 0 && (organizationIds?.length ?? 0) === 0) {
+            showError('Please select at least one destination (MISP server or organization).');
             return;
         }
 
@@ -178,7 +178,7 @@ const ShareEventView = () => {
         const url = `${SERVER_URL}/event/share/${id}/`;
         
         try {
-                        const token = localStorage.getItem('accessToken');
+            const token = localStorage.getItem('accessToken');
 
             const payload = {
                 ...jsonData,
@@ -190,7 +190,8 @@ const ShareEventView = () => {
 
             const dataToSend = {
                 ...payload,
-                misp_server_ids: serverIds
+                misp_server_ids: mispServerIds ?? [],
+                organization_ids: organizationIds ?? [],
             };
 
             const response = await fetch(url, {
