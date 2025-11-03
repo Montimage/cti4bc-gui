@@ -6,7 +6,7 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
     useEffect(() => {
         if (jsonData) {
             setTimeout(() => {
-                ["RISK4BC", "SOAR4BC", "AWARE4BC"].forEach(source => {
+                ["RISK4BC", "SOAR4BC", "SOAR4BC_RESULT", "AWARE4BC"].forEach(source => {
                     jsonData.Attribute[source]?.forEach((_, index) => {
                         adjustTextareaHeight(source, index, "comment");
                         adjustTextareaHeight(source, index, "value");
@@ -34,6 +34,9 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
                 break;
             case "SOAR4BC":
                 url = `${SERVER_URL}/event/update_playbook/${jsonData.id}/`;
+                break;
+            case "SOAR4BC_RESULT":
+                url = `${SERVER_URL}/event/update_system_reaction/${jsonData.id}/`;
                 break;
             default:
                 console.error("Unknown source for refresh:", source);
@@ -228,8 +231,8 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
                 </table>
             ) : <p>Risk assessment is not available yet</p>}
 
-            {/* System Reaction */}
-            <h2>System Reaction 
+            {/* Proposed Playbook */}
+            <h2>Proposed Playbook
                 <span className="badge bg-primary ms-2" style={{ fontSize: '0.9rem' }}>SOAR4BC</span>
                 <button
                     className="btn btn-link btn-sm ms-2 p-0"
@@ -281,6 +284,68 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
                                 </td>
                                 <td>
                                     <button className="btn btn-outline-danger" onClick={() => handleDeleteAttribute("SOAR4BC", index)}>
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            ) : <p>System reaction is not available yet</p>}
+
+            {/* System Reaction (SOAR4BC_RESULT) */}
+            <h2>System Reaction
+                <span className="badge bg-primary ms-2" style={{ fontSize: '0.9rem' }}>SOAR4BC</span>
+                <button
+                    className="btn btn-link btn-sm ms-2 p-0"
+                    style={{ fontSize: "1.25rem", verticalAlign: "middle" }}
+                    onClick= {() => handleRefresh("SOAR4BC_RESULT")}
+                >
+                    <i className="bi bi-arrow-clockwise"></i>
+                </button>
+            </h2>
+            {jsonData.Attribute.SOAR4BC_RESULT && jsonData.Attribute.SOAR4BC_RESULT.length > 0 ? (
+                <table className="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>To IDS</th>
+                            <th>Comment</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {jsonData.Attribute.SOAR4BC_RESULT.map((attr, index) => (
+                            <tr key={index}>
+                                <td>{attr.category}</td>
+                                <td>{attr.type}</td>
+                                <td>
+                                    <textarea
+                                        id={`value-SOAR4BC_RESULT-${index}`}
+                                        className="form-control"
+                                        value={attr.value}
+                                        onChange={e => handleAttributeChange("SOAR4BC_RESULT", index, "value", e.target.value)}
+                                    />
+                                </td>
+                                <td>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={attr.to_ids} 
+                                        onChange={e => handleAttributeChange("SOAR4BC_RESULT", index, "to_ids", e.target.checked)}
+                                    />
+                                </td>
+                                <td>
+                                    <textarea
+                                        id={`comment-SOAR4BC_RESULT-${index}`} 
+                                        className="form-control"
+                                        value={attr.comment || ""} 
+                                        onChange={e => handleAttributeChange("SOAR4BC_RESULT", index, "comment", e.target.value)}
+                                    />
+                                </td>
+                                <td>
+                                    <button className="btn btn-outline-danger" onClick={() => handleDeleteAttribute("SOAR4BC_RESULT", index)}>
                                         <i className="fas fa-trash"></i>
                                     </button>
                                 </td>

@@ -60,7 +60,8 @@ const ShareEventView = () => {
                     {
                         AWARE4BC: eventData.attributes.aware || [],
                         RISK4BC: eventData.attributes.risk || [],
-                        SOAR4BC: eventData.attributes.soar || []
+                        SOAR4BC: eventData.attributes.soar || [],
+                        SOAR4BC_RESULT: eventData.attributes.soar_result || [],
                     }
                 );
                 transformedData.id = id;
