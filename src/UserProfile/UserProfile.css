@@ -30,8 +30,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-  color: white;
+  background: linear-gradient(135deg, #E9AB34 0%, #D49A2E 100%);
+  color: #1A1A1A;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,38 +39,38 @@
   font-size: 14px;
   border: 2px solid transparent;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+  box-shadow: 0 2px 8px rgba(233, 171, 52, 0.3);
 }
 
 .user-avatar:hover {
-  border-color: #64b5f6;
-  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+  border-color: #F0BC52;
+  box-shadow: 0 4px 12px rgba(233, 171, 52, 0.4);
 }
 
 .user-avatar.dark {
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  background: linear-gradient(135deg, #D49A2E 0%, #B07D14 100%);
   border-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.4);
+  box-shadow: 0 2px 8px rgba(233, 171, 52, 0.4);
 }
 
 .user-avatar.dark:hover {
-  border-color: #64b5f6;
-  box-shadow: 0 4px 12px rgba(100, 181, 246, 0.5);
+  border-color: #F0BC52;
+  box-shadow: 0 4px 12px rgba(233, 171, 52, 0.5);
 }
 
 .user-avatar-large {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-  color: white;
+  background: linear-gradient(135deg, #E9AB34 0%, #D49A2E 100%);
+  color: #1A1A1A;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 18px;
   margin: 0 auto 8px auto;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+  box-shadow: 0 2px 8px rgba(233, 171, 52, 0.3);
 }
 
 .user-dropdown {

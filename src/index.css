@@ -72,7 +72,7 @@ code {
 
 .form-control:focus, .form-select:focus {
   border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+  box-shadow: 0 0 0 0.2rem rgba(233, 171, 52,0.25);
 }
 
 .form-control::file-selector-button {
@@ -208,7 +208,7 @@ code {
 }
 
 [data-bs-theme="dark"] .card-text {
-  color: #64b5f6 !important;
+  color: #F0BC52 !important;
   transition: none !important;
 }
 

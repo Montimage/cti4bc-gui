@@ -609,7 +609,7 @@
 }
 
 .forms-container .import-loading-screen .progress-bar {
-  background: linear-gradient(45deg, #007bff, #0056b3, #007bff);
+  background: linear-gradient(45deg, #E9AB34, #D49A2E, #E9AB34);
   background-size: 200% 200%;
   animation: gradient-shift 2s ease-in-out infinite;
   border-radius: 10px;

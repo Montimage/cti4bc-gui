@@ -111,11 +111,11 @@
 }
 
 .notification-item.unread {
-  background: rgba(13, 110, 253, 0.05);
+  background: rgba(233, 171, 52, 0.05);
 }
 
 .notification-item.unread.dark {
-  background: rgba(13, 110, 253, 0.1);
+  background: rgba(233, 171, 52, 0.1);
 }
 
 .notification-icon {

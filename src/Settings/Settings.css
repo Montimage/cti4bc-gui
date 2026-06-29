@@ -67,7 +67,7 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  background: linear-gradient(135deg, #E9AB34 0%, #D49A2E 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -75,7 +75,7 @@
   font-weight: 600;
   font-size: 32px;
   margin: 0 auto 15px;
-  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
+  box-shadow: 0 4px 16px rgba(233, 171, 52, 0.3);
 }
 
 .profile-name {
@@ -157,14 +157,14 @@
 }
 
 .tab-button:hover {
-  background: rgba(33, 150, 243, 0.1);
+  background: rgba(233, 171, 52, 0.1);
   color: var(--bs-body-color);
 }
 
 .tab-button.active {
-  color: #2196f3;
+  color: var(--bs-primary-text-emphasis);
   background: var(--bs-body-bg);
-  border-bottom-color: #2196f3;
+  border-bottom-color: var(--bs-primary-text-emphasis);
 }
 
 .settings-forms-card.dark .tab-button.active {
@@ -201,8 +201,8 @@
 }
 
 .form-control:focus {
-  border-color: #2196f3;
-  box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+  border-color: var(--bs-primary-text-emphasis);
+  box-shadow: 0 0 0 0.2rem rgba(233, 171, 52, 0.25);
   background: var(--bs-body-bg);
   color: var(--bs-body-color);
 }
@@ -215,7 +215,7 @@
 
 .settings-container.dark .form-control:focus {
   background: #1a1a1a;
-  border-color: #2196f3;
+  border-color: var(--bs-primary-text-emphasis);
   color: var(--bs-body-color);
 }
 
@@ -233,25 +233,25 @@
 }
 
 .settings-container .btn-primary {
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  background: linear-gradient(135deg, #E9AB34 0%, #D49A2E 100%);
   border: none;
   color: white;
 }
 
 .settings-container .btn-primary:hover {
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  background: linear-gradient(135deg, #D49A2E 0%, #B07D14 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  box-shadow: 0 4px 12px rgba(233, 171, 52, 0.3);
 }
 
 .settings-container .btn-warning {
-  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
   border: none;
   color: white;
 }
 
 .settings-container .btn-warning:hover {
-  background: linear-gradient(135deg, #f57c00 0%, #ef6c00 100%);
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
   color: white;
@@ -267,12 +267,12 @@
 }
 
 .settings-container .alert-success {
-  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
   color: white;
 }
 
 .settings-container .alert-danger {
-  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
   color: white;
 }
 
@@ -326,16 +326,16 @@
 
 .directory-module:hover {
   background: var(--bs-tertiary-bg);
-  border-color: #2196f3;
+  border-color: var(--bs-primary-text-emphasis);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.1);
+  box-shadow: 0 4px 12px rgba(233, 171, 52, 0.1);
 }
 
 .directory-module.active {
-  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-  border-color: #2196f3;
+  background: linear-gradient(135deg, #E9AB34 0%, #D49A2E 100%);
+  border-color: var(--bs-primary-text-emphasis);
   color: white;
-  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
+  box-shadow: 0 4px 16px rgba(233, 171, 52, 0.3);
 }
 
 .directory-module.dark:hover {
@@ -346,7 +346,7 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: rgba(33, 150, 243, 0.1);
+  background: rgba(233, 171, 52, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -360,7 +360,7 @@
 
 .module-icon i {
   font-size: 18px;
-  color: #2196f3;
+  color: var(--bs-primary-text-emphasis);
 }
 
 .directory-module.active .module-icon i {
@@ -410,7 +410,7 @@
   font-size: 16px;
   margin-bottom: 15px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(33, 150, 243, 0.2);
+  border-bottom: 1px solid rgba(233, 171, 52, 0.2);
 }
 
 .theme-options {
@@ -437,13 +437,13 @@
 }
 
 .form-check-input:checked {
-  background-color: #2196f3;
-  border-color: #2196f3;
+  background-color: var(--bs-primary-text-emphasis);
+  border-color: var(--bs-primary-text-emphasis);
 }
 
 .form-check-input:focus {
-  border-color: #2196f3;
-  box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+  border-color: var(--bs-primary-text-emphasis);
+  box-shadow: 0 0 0 0.2rem rgba(233, 171, 52, 0.25);
 }
 
 .form-switch .form-check-input {
@@ -452,8 +452,8 @@
 }
 
 .form-switch .form-check-input:checked {
-  background-color: #2196f3;
-  border-color: #2196f3;
+  background-color: var(--bs-primary-text-emphasis);
+  border-color: var(--bs-primary-text-emphasis);
 }
 
 .preference-description {
@@ -496,12 +496,12 @@
 }
 
 .theme-options .form-check:has(.form-check-input:checked) {
-  background: rgba(33, 150, 243, 0.1);
+  background: rgba(233, 171, 52, 0.1);
   border-color: var(--bs-primary);
 }
 
 .settings-container.dark .theme-options .form-check:has(.form-check-input:checked) {
-  background: rgba(33, 150, 243, 0.2);
+  background: rgba(233, 171, 52, 0.2);
 }
 
 /* Preferences Actions */
@@ -586,10 +586,18 @@
 
 /* Loading state */
 .spinner-border {
-  color: #2196f3;
+  color: var(--bs-primary-text-emphasis);
 }
 
 /* Smooth transitions - Only for Settings page */
 .settings-container * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+
+/* Phase 2 (Montimage): dark text on solid amber surfaces for WCAG AA */
+.profile-avatar-large,
+.settings-container .btn-primary,
+.directory-module.active,
+.directory-module.active .module-name,
+.directory-module.active .module-icon i { color: #1A1A1A !important; }
+.directory-module.active .module-description { color: rgba(26, 26, 26, .75) !important; }

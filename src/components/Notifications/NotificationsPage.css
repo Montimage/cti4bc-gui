@@ -41,7 +41,7 @@
 }
 
 .icon-wrapper {
-  background: linear-gradient(135deg, var(--bs-primary) 0%, #0056b3 100%);
+  background: linear-gradient(135deg, var(--bs-primary) 0%, #D49A2E 100%);
   color: white;
   border-radius: 20px;
   width: 80px;
@@ -50,7 +50,7 @@
   align-items: center;
   justify-content: center;
   font-size: 2rem;
-  box-shadow: 0 8px 24px rgba(13, 110, 253, 0.3);
+  box-shadow: 0 8px 24px rgba(233, 171, 52, 0.3);
   animation: pulse 2s infinite;
 }
 
@@ -63,7 +63,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, var(--bs-primary) 0%, #0056b3 100%);
+  background: linear-gradient(135deg, var(--bs-primary) 0%, #D49A2E 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -125,7 +125,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(135deg, var(--bs-primary) 0%, #0056b3 100%);
+  background: linear-gradient(135deg, var(--bs-primary) 0%, #D49A2E 100%);
 }
 
 .stats-card.success::before {
@@ -218,7 +218,7 @@
 
 .search-input:focus {
   border-color: var(--bs-primary);
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(233, 171, 52, 0.25);
 }
 
 .clear-search-btn {
@@ -299,11 +299,11 @@
 
 .notification-card.unread {
   border-left: 6px solid var(--bs-primary);
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.05) 0%, var(--bs-body-bg) 100%);
+  background: linear-gradient(135deg, rgba(233, 171, 52, 0.05) 0%, var(--bs-body-bg) 100%);
 }
 
 .notification-card.unread.dark {
-  background: linear-gradient(135deg, rgba(13, 110, 253, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(233, 171, 52, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
 }
 
 .notification-content {

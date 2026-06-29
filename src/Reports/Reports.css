@@ -51,7 +51,7 @@ select {
 }
 
 .llm-info-card:hover {
-    border-color: #007bff;
+    border-color: var(--bs-primary-text-emphasis);
 }
 
 .settings-gear-btn {
@@ -140,7 +140,7 @@ select {
 }
 
 .reports-table tbody tr:hover {
-    background-color: rgba(13, 110, 253, 0.05);
+    background-color: rgba(233, 171, 52, 0.05);
 }
 
 @media (max-width: 768px) {

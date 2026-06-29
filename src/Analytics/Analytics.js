@@ -32,10 +32,10 @@ const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const colorPalette = {
     primary: [
-        'rgba(52, 152, 219, 1)',  // #3498db
-        'rgba(41, 128, 185, 1)',  // #2980b9
-        'rgba(26, 188, 156, 1)',  // #1abc9c
-        'rgba(22, 160, 133, 1)'   // #16a085
+        'rgba(233, 171, 52, 1)',  // #E9AB34 Montimage amber
+        'rgba(212, 154, 46, 1)',  // #D49A2E amber-hover
+        'rgba(240, 188, 82, 1)',  // #F0BC52 amber-light
+        'rgba(176, 125, 20, 1)'   // #B07D14 amber-deep
     ],
     danger: [
         'rgba(231, 76, 60, 1)',   // #e74c3c
@@ -586,7 +586,7 @@ function Analytics() {
                 datasets: [{
                     data: Object.values(stats.attackTypes || {}),
                     backgroundColor: [
-                        'rgba(52, 152, 219, 1)',
+                        'rgba(233, 171, 52, 1)',
                         'rgba(231, 76, 60, 1)',
                         'rgba(46, 204, 113, 1)',
                         'rgba(241, 196, 15, 1)',

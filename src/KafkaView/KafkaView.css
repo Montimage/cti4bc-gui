@@ -37,7 +37,7 @@
 }
 
 .message-card {
-    border-left: 4px solid #007bff;
+    border-left: 4px solid #E9AB34;
     transition: all 0.2s ease-in-out;
 }
 
@@ -77,7 +77,7 @@ select[multiple] option {
 }
 
 select[multiple] option:checked {
-    background-color: #007bff;
+    background-color: var(--bs-primary-text-emphasis);
     color: white;
 }
 
@@ -184,7 +184,7 @@ pre.message-content {
 
 /* Animation for new messages */
 @keyframes highlight {
-    0% { background-color: rgba(0, 123, 255, 0.2); }
+    0% { background-color: rgba(233, 171, 52, 0.2); }
     100% { background-color: transparent; }
 }
 

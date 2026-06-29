@@ -173,11 +173,11 @@
 .dark-answer-box-test-123 {
   background-color: #303030af !important;
   color: #ffffff !important;
-  border-left: 4px solid #0d6efd !important;
+  border-left: 4px solid #E9AB34 !important;
 }
 
 .my-form-answers-container.dark-theme .border-start.border-primary {
-  border-left-color: #0d6efd !important;
+  border-left-color: var(--bs-primary-text-emphasis) !important;
 }
 
 /* Card inside modals */
@@ -262,9 +262,9 @@
 .my-form-answers-container.dark-theme .form-control:focus,
 .my-form-answers-container.dark-theme .form-select:focus {
   background-color: #404040;
-  border-color: #0d6efd;
+  border-color: var(--bs-primary-text-emphasis);
   color: #ffffff;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(233, 171, 52, 0.25);
 }
 
 /* Alert styling */
@@ -435,19 +435,19 @@
 }
 
 .my-form-answers-container.dark-theme .modal-header.bg-primary {
-  background-color: #0d6efd !important;
+  background-color: var(--bs-primary-text-emphasis) !important;
   color: #ffffff !important;
 }
 
 /* Card header primary styling */
 .my-form-answers-container.dark-theme .card-header.bg-primary {
-  background-color: #0d6efd !important;
+  background-color: var(--bs-primary-text-emphasis) !important;
   color: #ffffff !important;
 }
 
 /* Specific overrides for icons and circular elements */
 .my-form-answers-container.dark-theme .bg-primary.bg-opacity-10 {
-  background-color: rgba(13, 110, 253, 0.2) !important;
+  background-color: rgba(233, 171, 52, 0.2) !important;
 }
 
 .my-form-answers-container.dark-theme .bg-info.bg-opacity-10 {
