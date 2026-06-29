@@ -688,11 +688,12 @@ const FormsView = () => {
     <>
     <div className="container-fluid mt-4">
       <Container fluid className="forms-container">
-      <Row className="mb-4">
-        <Col>
-          <h2>Forms Management</h2>
-        </Col>
-      </Row>
+      <div className="mi-page-head">
+        <div>
+          <h1>Forms Management</h1>
+          <div className="mi-sub">Create, import and manage data-collection forms for partner organizations.</div>
+        </div>
+      </div>
 
       {/* Toggle Buttons */}
       <Row className="mb-4">
