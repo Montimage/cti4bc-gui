@@ -371,290 +371,146 @@ const EventShareLogs = () => {
     const sortedShareLogs = getSortedLogs();
     
     return (
-        <div className="container mt-4" style={{ transition: 'none' }}>
+        <div className="mi-share-logs">
             
-            <div className="d-flex justify-content-between align-items-center mb-4" style={{ transition: 'none' }}>
-                <h2 style={{ transition: 'none' }}>Event Share Logs</h2>
+            <div className="mi-page-head">
+                <div>
+                    <h1>Event Share Logs</h1>
+                    <div className="mi-sub">Audit trail of events shared with partner organizations and MISP servers.</div>
+                </div>
             </div>
 
-            {/* Filters Card */}
-            <div className="card mb-4" style={{ transition: 'none' }}>
-                <div className="card-body" style={{ transition: 'none' }}>
-                    <h5 className="card-title mb-3" style={{ transition: 'none' }}>Filters</h5>
-                    <div className="row g-3" style={{ transition: 'none' }}>
-                        <div className="col-md-3" style={{ transition: 'none' }}>
-                            <div className="form-floating" style={{ transition: 'none' }}>
-                            <select 
-                                className="form-select" 
-                                id="organization"
-                                value={selectedOrg} 
-                                onChange={(e) => setSelectedOrg(e.target.value)}
-                                style={{ transition: 'none' }}
-                            >
-                                <option value="">All Organizations</option>
-                                {organizations.map(org => (
-                                    <option key={org.id} value={org.id}>{org.name}</option>
-                                ))}
-                            </select>
-                            <label htmlFor="organization" style={{ transition: 'none' }}>Organization</label>
-                            </div>
-                        </div>
-                        <div className="col-md-2" style={{ transition: 'none' }}>
-                            <div className="form-floating" style={{ transition: 'none' }}>
-                                <select 
-                                    className="form-select" 
-                                    id="statusFilter"
-                                    value={statusFilter} 
-                                    onChange={(e) => setStatusFilter(e.target.value)}
-                                    style={{ transition: 'none' }}
-                                >
-                                    <option value="all">All</option>
-                                    <option value="shared">Shared (Green)</option>
-                                    <option value="unshared">Unshared (Red)</option>
-                                </select>
-                                <label htmlFor="statusFilter" style={{ transition: 'none' }}>Status</label>
-                            </div>
-                        </div>
-                        <div className="col-md-2" style={{ transition: 'none' }}>
-                            <div className="form-floating" style={{ transition: 'none' }}>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="startDate"
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    style={{ transition: 'none' }}
-                                />
-                                <label htmlFor="startDate" style={{ transition: 'none' }}>Start Date</label>
-                            </div>
-                        </div>
-                        <div className="col-md-2" style={{ transition: 'none' }}>
-                            <div className="form-floating" style={{ transition: 'none' }}>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    id="endDate"
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    style={{ transition: 'none' }}
-                                />
-                                <label htmlFor="endDate" style={{ transition: 'none' }}>End Date</label>
-                            </div>
-                        </div>
-                        <div className="col-md-3" style={{ transition: 'none' }}>
-                            <div className="form-floating" style={{ transition: 'none' }}>
-                                <select 
-                                    id="dataFormat"
-                                    className="form-select" 
-                                    value={dataFormat} 
-                                    onChange={(e) => setDataFormat(e.target.value)}
-                                    style={{ transition: 'none' }}
-                                >
-                                    <option value="json">JSON</option>
-                                    <option value="csv">CSV</option>
-                                </select>
-                                <label htmlFor="dataFormat" style={{ transition: 'none' }}>Format</label>
-                            </div>
-                        </div>
-                        
-                        <div className="row g-3 align-items-center mt-3" style={{ transition: 'none' }}>
-                            <div className="col-12 d-flex justify-content-end gap-2" style={{ transition: 'none' }}>
-                                <button 
-                                    className="btn btn-secondary" 
-                                    onClick={resetFilters}
-                                    style={{ transition: 'none', width: '150px' }}
-                                >
-                                    Reset Filters
-                                </button>
-                                <button 
-                                    className="btn btn-primary"
-                                    onClick={handleViewData}
-                                    style={{ transition: 'none', width: '150px' }}
-                                >
-                                    {showData ? `Hide ${dataFormat.toUpperCase()}` : `View ${dataFormat.toUpperCase()}`}
-                                </button>
-                                <button 
-                                    className="btn btn-primary"
-                                    onClick={handleExport}
-                                    style={{ transition: 'none', width: '150px' }}
-                                >
-                                    Export as {dataFormat.toUpperCase()}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            {/* Filters toolbar */}
+            <div className="mi-toolbar">
+                <div className="mi-field" style={{ flex: '1 1 200px' }}>
+                    <label htmlFor="organization">Organization</label>
+                    <select className="form-select" id="organization" value={selectedOrg} onChange={(e) => setSelectedOrg(e.target.value)}>
+                        <option value="">All Organizations</option>
+                        {organizations.map(org => (
+                            <option key={org.id} value={org.id}>{org.name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mi-field">
+                    <label htmlFor="statusFilter">Status</label>
+                    <select className="form-select" id="statusFilter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                        <option value="all">All</option>
+                        <option value="shared">Shared (Green)</option>
+                        <option value="unshared">Unshared (Red)</option>
+                    </select>
+                </div>
+                <div className="mi-field">
+                    <label htmlFor="startDate">Start Date</label>
+                    <input type="date" className="form-control" id="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                </div>
+                <div className="mi-field">
+                    <label htmlFor="endDate">End Date</label>
+                    <input type="date" className="form-control" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+                </div>
+                <div className="mi-field">
+                    <label htmlFor="dataFormat">Format</label>
+                    <select id="dataFormat" className="form-select" value={dataFormat} onChange={(e) => setDataFormat(e.target.value)}>
+                        <option value="json">JSON</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+                <div className="mi-toolbar__spacer"></div>
+                <div className="mi-field" style={{ flexDirection: 'row', gap: '8px', alignItems: 'flex-end' }}>
+                    <button className="btn btn-outline-secondary" onClick={resetFilters}>Reset Filters</button>
+                    <button className="btn btn-outline-primary" onClick={handleViewData}>
+                        {showData ? `Hide ${dataFormat.toUpperCase()}` : `View ${dataFormat.toUpperCase()}`}
+                    </button>
+                    <button className="btn btn-primary" onClick={handleExport}>Export as {dataFormat.toUpperCase()}</button>
                 </div>
             </div>
 
             {/* JSON/CSV Viewer */}
             {showData && (
-                <div className="card mb-4" style={{ transition: 'none' }}>
-                    <div className="card-body" style={{ transition: 'none' }}>
-                        <h5 className="card-title" style={{ transition: 'none' }}>{dataFormat === 'json' ? 'JSON Data' : 'CSV Data'}</h5>
-                        <div className="p-3 rounded" style={{ 
-                            overflowX: 'auto', 
-                            maxHeight: '500px', 
-                            backgroundColor: '#2c3034', 
-                            color: 'white',
-                            transition: 'none' 
-                        }}>
-                            <pre style={{ transition: 'none' }}>{formatData()}</pre>
-                        </div>
+                <div className="mi-card" style={{ marginBottom: '16px' }}>
+                    <div className="mi-card__head"><div className="mi-card__title">{dataFormat === 'json' ? 'JSON Data' : 'CSV Data'}</div></div>
+                    <div className="mi-card__body">
+                        <pre className="json" style={{ maxHeight: '500px', overflow: 'auto', margin: 0 }}>{formatData()}</pre>
                     </div>
                 </div>
             )}
 
-            {/* Table of logs */}
-            <div className="table-responsive" style={{ transition: 'none', width: '100%'}}>
-                <table className="table table-hover" style={{ transition: 'none', width: '100%', tableLayout: 'fixed' }}>
-                    <thead style={{ transition: 'none' }}>
-                        <tr style={{ transition: 'none' }}>
-                            <th style={{ width: '5%', textAlign: 'center', transition: 'none', whiteSpace: 'nowrap', overflow: 'hidden' }}>Status</th>
-                            <th className="sortable-header" onClick={() => handleSortChange('event_info')} style={{ width: '15%', transition: 'none' }}>
-                                Event Info{getSortIndicator('event_info')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('organization')} style={{ width: '11%', textAlign: 'center', transition: 'none' }}>
-                                Organization{getSortIndicator('organization')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('shared_by')} style={{ width: '20%', transition: 'none' }}>
-                                Shared By{getSortIndicator('shared_by')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('shared_at')} style={{ width: '10%', transition: 'none' }}>
-                                Shared At{getSortIndicator('shared_at')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('misp_servers')} style={{ width: '11%', textAlign: 'center', transition: 'none' }}>
-                                MISP Servers{getSortIndicator('misp_servers')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('deleted_by')} style={{ width: '20%', transition: 'none' }}>
-                                Deleted By{getSortIndicator('deleted_by')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('deleted_at')} style={{ width: '10%', transition: 'none' }}>
-                                Deleted At{getSortIndicator('deleted_at')}
-                            </th>
-                            <th className="text-center" style={{ width: '8%', transition: 'none' }}>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody style={{ transition: 'none' }}>
-                        {sortedShareLogs.map((log) => {
-                            const mispServers = extractMispServers(log);
-                            return (
-                                <tr key={log.id} style={{ transition: 'none' }}>
-                                    <td style={{ textAlign: 'center', verticalAlign: 'middle', transition: 'none' }}>
-                                        <div 
-                                            style={{ 
-                                                width: '12px', 
-                                                height: '12px', 
-                                                borderRadius: '50%', 
-                                                backgroundColor: log.is_unshared ? '#dc3545' : '#28a745',
-                                                margin: '0 auto',
-                                                transition: 'none'
-                                            }} 
-                                            title={log.is_unshared ? "Unshared" : "Shared"}
-                                        />
-                                    </td>
-                                    <td style={{ 
-                                        transition: 'none', 
-                                        wordBreak: 'break-word', 
-                                        whiteSpace: 'normal', 
-                                        overflow: 'hidden' 
-                                    }}>{log.event_info}</td>
-                                    <td style={{ 
-                                        transition: 'none', 
-                                        wordBreak: 'break-word',
-                                        whiteSpace: 'normal',
-                                        overflow: 'hidden',
-                                        textAlign: 'center'
-                                    }}>{log.organization}</td>
-                                    <td style={{ 
-                                        transition: 'none',
-                                        wordBreak: 'break-word',
-                                        whiteSpace: 'normal',
-                                        overflow: 'hidden'
-                                    }}>
-                                        <div className="d-flex flex-column" style={{ transition: 'none' }}>
-                                            <span style={{ transition: 'none' }}><strong>Username:</strong> {log.shared_by.username}</span>
-                                            <span style={{ transition: 'none' }}><strong>Email:</strong> {log.shared_by.email}</span>
-                                        </div>
-                                    </td>
-                                    <td style={{ 
-                                        transition: 'none',
-                                        wordBreak: 'break-word',
-                                        whiteSpace: 'normal',
-                                        overflow: 'hidden'
-                                    }}>{formatDateDisplay(log.shared_at)}</td>
-                                    <td style={{ 
-                                        transition: 'none',
-                                        textAlign: 'center',
-                                        verticalAlign: 'middle'
-                                    }}>
-                                        {mispServers.length > 0 ? (
-                                            <span 
-                                                className="badge rounded-pill" 
-                                                style={{
-                                                    fontSize: '0.9rem',
-                                                    padding: '8px 14px',
-                                                    cursor: 'pointer',
-                                                    transition: 'all 0.3s ease',
-                                                    backgroundColor: '#0d6efd'
-                                                }}
-                                                onClick={() => handleMispServersClick(mispServers)}
-                                                onMouseOver={(e) => e.target.style.backgroundColor = '#0257d5'}
-                                                onMouseOut={(e) => e.target.style.backgroundColor = '#0d6efd'}
-                                                title="Click to view MISP servers"
-                                            >
-                                                {mispServers.length} {mispServers.length === 1 ? 'server' : 'servers'}
+            {/* Logs table */}
+            <div className="mi-card">
+                <div className="mi-table-wrap">
+                    <table className="mi-tbl">
+                        <thead>
+                            <tr>
+                                <th style={{ textAlign: 'center' }}>Status</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('event_info')}>Event Info{getSortIndicator('event_info')}</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('organization')}>Organization{getSortIndicator('organization')}</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('shared_by')}>Shared By{getSortIndicator('shared_by')}</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('shared_at')}>Shared At{getSortIndicator('shared_at')}</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('misp_servers')}>MISP Servers{getSortIndicator('misp_servers')}</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('deleted_by')}>Deleted By{getSortIndicator('deleted_by')}</th>
+                                <th className="mi-sortable" onClick={() => handleSortChange('deleted_at')}>Deleted At{getSortIndicator('deleted_at')}</th>
+                                <th style={{ textAlign: 'right' }}>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {sortedShareLogs.map((log) => {
+                                const mispServers = extractMispServers(log);
+                                return (
+                                    <tr key={log.id}>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <span className={`mi-badge ${log.is_unshared ? 'mi-danger' : 'mi-success'}`} title={log.is_unshared ? 'Unshared' : 'Shared'}>
+                                                <span className="mi-led"></span> {log.is_unshared ? 'Unshared' : 'Shared'}
                                             </span>
-                                        ) : (
-                                            <span className="badge bg-secondary">None</span>
-                                        )}
-                                    </td>
-                                    <td style={{ 
-                                        transition: 'none',
-                                        wordBreak: 'break-word',
-                                        whiteSpace: 'normal',
-                                        overflow: 'hidden'
-                                    }}>
-                                        {log.deleted_by ? (
-                                            <div className="d-flex flex-column" style={{ transition: 'none' }}>
-                                                <span style={{ transition: 'none' }}><strong>Username:</strong> {log.deleted_by.username}</span>
-                                                <span style={{ transition: 'none' }}><strong>Email:</strong> {log.deleted_by.email}</span>
+                                        </td>
+                                        <td className="mi-ev-title">{log.event_info}</td>
+                                        <td>{log.organization}</td>
+                                        <td>
+                                            <div className="d-flex flex-column">
+                                                <span><strong>Username:</strong> {log.shared_by.username}</span>
+                                                <span><strong>Email:</strong> {log.shared_by.email}</span>
                                             </div>
-                                        ) : ''}
-                                    </td>
-                                    <td style={{ 
-                                        transition: 'none',
-                                        wordBreak: 'break-word',
-                                        whiteSpace: 'normal',
-                                        overflow: 'hidden'
-                                    }}>
-                                        {formatDeletedAtDisplay(log.deleted_at) || ''}
-                                    </td>
-                                    <td className="text-center" style={{ 
-                                        transition: 'none',
-                                        wordBreak: 'break-word',
-                                        whiteSpace: 'normal',
-                                        overflow: 'hidden'
-                                    }}>
-                                        <button 
-                                            className="btn btn-link"
-                                            onClick={() => navigate(`/event/${log.event_id}`)}
-                                            style={{ transition: 'none' }}
-                                        >
-                                            View Event
-                                        </button>
+                                        </td>
+                                        <td>{formatDateDisplay(log.shared_at)}</td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {mispServers.length > 0 ? (
+                                                <span
+                                                    className="mi-badge mi-info"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => handleMispServersClick(mispServers)}
+                                                    title="Click to view MISP servers"
+                                                >
+                                                    {mispServers.length} {mispServers.length === 1 ? 'server' : 'servers'}
+                                                </span>
+                                            ) : (
+                                                <span className="mi-badge mi-neutral"><span className="mi-led"></span> None</span>
+                                            )}
+                                        </td>
+                                        <td>
+                                            {log.deleted_by ? (
+                                                <div className="d-flex flex-column">
+                                                    <span><strong>Username:</strong> {log.deleted_by.username}</span>
+                                                    <span><strong>Email:</strong> {log.deleted_by.email}</span>
+                                                </div>
+                                            ) : ''}
+                                        </td>
+                                        <td>{formatDeletedAtDisplay(log.deleted_at) || ''}</td>
+                                        <td style={{ textAlign: 'right' }}>
+                                            <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/event/${log.event_id}`)}>
+                                                View Event
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            {sortedShareLogs.length === 0 && (
+                                <tr>
+                                    <td colSpan="9" style={{ textAlign: 'center', padding: '24px', color: 'var(--mi-muted)' }}>
+                                        No share logs found matching your criteria.
                                     </td>
                                 </tr>
-                            );
-                        })}
-                        {sortedShareLogs.length === 0 && (
-                            <tr style={{ transition: 'none' }}>
-                                <td colSpan="9" className="text-center py-3" style={{ transition: 'none' }}>
-                                    No share logs found matching your criteria.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Modal for MISP Servers details */}
