@@ -223,180 +223,160 @@ function EventList() {
     };
 
     return (
-    <div>
-        <div className="container mt-3">
-            
-            <div className="row mb-4">
-                <div className="col">
-                    <div 
-                        className={`card text-center clickable-card ${activeCard === 'highThreat' ? 'active-card' : ''}`}
-                        onClick={() => setActiveCard(activeCard === 'highThreat' ? null : 'highThreat')}
-                        style={{ transition: 'none' }}
-                    >
-                        <div className="card-body fixed-height">
-                            <h5 className="card-title">High Threat Events</h5>
-                            <p className="card-text">{highThreatEventsCount}</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div 
-                        className={`card text-center clickable-card ${activeCard === 'notShared' ? 'active-card' : ''}`}
-                        onClick={() => setActiveCard(activeCard === 'notShared' ? null : 'notShared')}
-                        style={{ transition: 'none' }}
-                    >
-                        <div className="card-body fixed-height">
-                            <h5 className="card-title">Shared Events</h5>
-                            <p className="card-text">{sharedEventsPercentage}%</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div 
-                        className={`card text-center clickable-card ${activeCard === 'recentActivity' ? 'active-card' : ''}`}
-                        onClick={() => setActiveCard(activeCard === 'recentActivity' ? null : 'recentActivity')}
-                        style={{ transition: 'none' }}
-                    >
-                        <div className="card-body fixed-height">
-                            <h5 className="card-title">Recent Activity</h5>
-                            <p className="card-text">{recentActivityCount}</p>
-                            <p className="card-text">events in the last 24h</p>
-                        </div>
-                    </div>
-                </div>
+    <div className="mi-events">
+        <div className="mi-page-head">
+            <div>
+                <h1>Threat Events</h1>
+                <div className="mi-sub">Manage, anonymize and share MISP events across partner organizations.</div>
             </div>
+            <div className="mi-page-head__actions">
+                {selectedEvents.length > 1 && (
+                    <button className="btn btn-primary" onClick={() => handleShareTogether()}>
+                        <i className="bi bi-diagram-3 me-1"></i> Share Together
+                    </button>
+                )}
+                <button className="btn btn-outline-secondary" onClick={resetFilters}>
+                    <i className="bi bi-arrow-counterclockwise me-1"></i> Reset Filters
+                </button>
+            </div>
+        </div>
 
-            <div className="card mb-4" style={{ transition: 'none' }}>
-                <div className="card-body">
-                    <div className="d-flex flex-wrap align-items-center justify-content-between">
-                        <div className="d-flex gap-3 mb-2 mb-md-0">
-                            <div className="input-group flex-nowrap" style={{ width: 'auto' }}>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search in Info"
-                                    value={searchInfo}
-                                    onChange={(e) => setSearchInfo(e.target.value)}
-                                    style={{ transition: 'none' }}
-                                />
-                            </div>
-                            
-                            <div className="input-group flex-nowrap" style={{ width: 'auto' }}>
-                                <select 
-                                    className="form-select" 
-                                    value={selectedOrg} 
-                                    onChange={(e) => setSelectedOrg(e.target.value)}
-                                    style={{ transition: 'none' }}
-                                >
-                                    <option value="all">All Organizations</option>
-                                    {organizations.map(org => (
-                                        <option key={org.id} value={org.name}>{org.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div className="d-flex align-items-center gap-2">
-                            {selectedEvents.length > 1 && (
-                                <button className="btn btn-primary" onClick={() => handleShareTogether()} style={{ transition: 'none' }}>
-                                    Share Together
-                                </button>
-                            )}
-                            <button 
-                                className="btn btn-outline-secondary" 
-                                onClick={resetFilters}
-                                style={{ transition: 'none' }}
-                            >
-                                Reset Filters
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        {/* Stat cards — clickable filters preserved (set activeCard) */}
+        <div className="mi-stats">
+            <div className="mi-stat">
+                <div className="mi-stat__label">Total Events</div>
+                <div className="mi-stat__value">{events.length}</div>
+                <div className="mi-stat__delta">all organizations</div>
             </div>
-            
-            <div className="table-responsive" style={{ transition: 'none' }}>
-                <table className="table table-hover" style={{ transition: 'none' }}>
-                    <thead style={{ transition: 'none' }}>
-                        <tr style={{ transition: 'none' }}>
-                            <th style={{width: '1%', transition: 'none'}}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={selectAll}
-                                    onChange={handleSelectAllChange}
-                                    style={{ transition: 'none' }}
-                                />
+            <div
+                className={`mi-stat mi-clickable ${activeCard === 'highThreat' ? 'mi-active' : ''}`}
+                onClick={() => setActiveCard(activeCard === 'highThreat' ? null : 'highThreat')}
+            >
+                <div className="mi-stat__label">High Threat Events</div>
+                <div className="mi-stat__value">{highThreatEventsCount}</div>
+                <div className="mi-stat__delta">click to filter</div>
+            </div>
+            <div
+                className={`mi-stat mi-clickable ${activeCard === 'notShared' ? 'mi-active' : ''}`}
+                onClick={() => setActiveCard(activeCard === 'notShared' ? null : 'notShared')}
+            >
+                <div className="mi-stat__label">Shared Events</div>
+                <div className="mi-stat__value"><span className="mi-accent">{sharedEventsPercentage}%</span></div>
+                <div className="mi-stat__delta">click to filter</div>
+            </div>
+            <div
+                className={`mi-stat mi-clickable ${activeCard === 'recentActivity' ? 'mi-active' : ''}`}
+                onClick={() => setActiveCard(activeCard === 'recentActivity' ? null : 'recentActivity')}
+            >
+                <div className="mi-stat__label">Recent Activity</div>
+                <div className="mi-stat__value">{recentActivityCount}</div>
+                <div className="mi-stat__delta">events in the last 24h</div>
+            </div>
+        </div>
+
+        {/* Filters toolbar */}
+        <div className="mi-toolbar">
+            <div className="mi-field" style={{ flex: '1 1 240px' }}>
+                <label>Search</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search in Info"
+                    value={searchInfo}
+                    onChange={(e) => setSearchInfo(e.target.value)}
+                />
+            </div>
+            <div className="mi-field">
+                <label>Organization</label>
+                <select
+                    className="form-select"
+                    value={selectedOrg}
+                    onChange={(e) => setSelectedOrg(e.target.value)}
+                >
+                    <option value="all">All Organizations</option>
+                    {organizations.map(org => (
+                        <option key={org.id} value={org.name}>{org.name}</option>
+                    ))}
+                </select>
+            </div>
+        </div>
+
+        {/* Events table */}
+        <div className="mi-card">
+            {selectedEvents.length > 0 && (
+                <div className="mi-selbar">
+                    <input type="checkbox" className="mi-check" checked={selectAll} onChange={handleSelectAllChange} />
+                    <span><b>{selectedEvents.length} event{selectedEvents.length > 1 ? 's' : ''}</b> selected</span>
+                    {selectedEvents.length > 1 && (
+                        <button className="btn btn-primary btn-sm" onClick={() => handleShareTogether()}>
+                            <i className="bi bi-diagram-3 me-1"></i> Share Together
+                        </button>
+                    )}
+                    <button
+                        className="btn btn-outline-secondary btn-sm"
+                        onClick={() => { setSelectedEvents([]); setSelectAll(false); }}
+                    >
+                        <i className="bi bi-x-lg me-1"></i> Clear
+                    </button>
+                </div>
+            )}
+            <div className="mi-table-wrap">
+                <table className="mi-tbl">
+                    <thead>
+                        <tr>
+                            <th style={{ width: '40px' }}>
+                                <input type="checkbox" className="mi-check" checked={selectAll} onChange={handleSelectAllChange} />
                             </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('info')} style={{ transition: 'none' }}>
-                                Info{getSortIndicator('info')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('organization')} style={{ width: '10%', textAlign: 'center', transition: 'none' }}>
-                                Organization{getSortIndicator('organization')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('threat_level')} style={{ width: '10%', textAlign: 'center', transition: 'none' }}>
-                                Threat Level{getSortIndicator('threat_level')}
-                            </th>
-                            <th className="sortable-header text-center-column" onClick={() => handleSortChange('share_status')} style={{ transition: 'none' }}>
-                                Share Status{getSortIndicator('share_status')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('date')} style={{ transition: 'none' }}>
-                                Arrival Date{getSortIndicator('date')}
-                            </th>
-                            <th className="sortable-header" onClick={() => handleSortChange('shared_at')} style={{ transition: 'none' }}>
-                                Shared Date{getSortIndicator('shared_at')}
-                            </th>
-                            <th style={{width: '100px', transition: 'none'}}>Actions</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('info')}>Info{getSortIndicator('info')}</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('organization')}>Organization{getSortIndicator('organization')}</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('threat_level')}>Threat Level{getSortIndicator('threat_level')}</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('share_status')}>Share Status{getSortIndicator('share_status')}</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('date')}>Arrival Date{getSortIndicator('date')}</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('shared_at')}>Shared Date{getSortIndicator('shared_at')}</th>
+                            <th style={{ textAlign: 'right' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredEvents.map((event, index) => (
-                            <tr key={index} style={{ transition: 'none' }}>
-                                <td className="text-center" style={{ transition: 'none' }}>
-                                    <input 
-                                        type="checkbox" 
-                                        checked={selectedEvents.includes(event.id)}
-                                        onChange={() => handleCheckboxChange(event.id)}
-                                        style={{ transition: 'none' }}
-                                    />
-                                </td>
-                                <td style={{ transition: 'none' }}>{event.info}</td>
-                                <td style={{ 
-                                    transition: 'none', 
-                                    wordBreak: 'break-word',
-                                    whiteSpace: 'normal',
-                                    overflow: 'hidden',
-                                    textAlign: 'center' }}>{event.organization || "N/A"}</td>
-                                <td style={{ 
-                                    transition: 'none', 
-                                    wordBreak: 'break-word',
-                                    whiteSpace: 'normal',
-                                    overflow: 'hidden',
-                                    textAlign: 'center' }}>{threatLevels[event.threat_level_id]}</td>
-                                <td className="text-center-column" style={{ transition: 'none' }}>
-                                    <span className={`badge ${getShareStatus(event) === "Shared in Time" ? "bg-success" : 
-                                                        getShareStatus(event) === "Shared Late" ? "bg-success" : 
-                                                        getShareStatus(event) === "Expired" ? "bg-danger" : 
-                                                    "bg-warning"}`}
-                                        style={{ transition: 'none' }}>
-                                        {getShareStatus(event)}
-                                    </span>
-                                </td>
-                                <td style={{ transition: 'none' }}>{event.date}</td>
-                                <td style={{ transition: 'none' }}>{event.shared ? event.shared_at : '-'}</td>
-                                <td style={{ transition: 'none' }}>
-                                    <button 
-                                        className="btn btn-link p-0"
-                                        onClick={() => handleDetailsClick(event)}
-                                        style={{ transition: 'none' }}
-                                    >
-                                        Details
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                        
+                        {filteredEvents.map((event, index) => {
+                            const status = getShareStatus(event);
+                            const statusClass = status === 'Shared in Time' ? 'mi-success'
+                                : status === 'Shared Late' ? 'mi-info'
+                                : status === 'Expired' ? 'mi-danger' : 'mi-warning';
+                            const tl = threatLevels[event.threat_level_id];
+                            const tlClass = tl === 'High' ? 'mi-danger' : tl === 'Medium' ? 'mi-warning' : tl === 'Low' ? 'mi-success' : 'mi-neutral';
+                            return (
+                                <tr key={index}>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            className="mi-check"
+                                            checked={selectedEvents.includes(event.id)}
+                                            onChange={() => handleCheckboxChange(event.id)}
+                                        />
+                                    </td>
+                                    <td className="mi-ev-title">{event.info}</td>
+                                    <td>{event.organization || "N/A"}</td>
+                                    <td><span className={`mi-badge ${tlClass}`}><span className="mi-led"></span> {tl}</span></td>
+                                    <td><span className={`mi-badge ${statusClass}`}><span className="mi-led"></span> {status}</span></td>
+                                    <td>{event.date}</td>
+                                    <td>{event.shared ? event.shared_at : '-'}</td>
+                                    <td>
+                                        <div className="mi-row-actions" style={{ justifyContent: 'flex-end' }}>
+                                            <button
+                                                className="btn btn-outline-primary btn-sm"
+                                                onClick={() => handleDetailsClick(event)}
+                                            >
+                                                Details
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+
                         {filteredEvents.length === 0 && (
-                            <tr style={{ transition: 'none' }}>
-                                <td colSpan="8" className="text-center py-3" style={{ transition: 'none' }}>
+                            <tr>
+                                <td colSpan="8" style={{ textAlign: 'center', padding: '24px', color: 'var(--mi-muted)' }}>
                                     No events match the selected filter criteria.
                                 </td>
                             </tr>

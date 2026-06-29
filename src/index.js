@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from './ThemeContext';
 // Montimage brand re-skin — imported LAST so its token overrides win the cascade
 import './theme/montimage-theme.css';
+import './theme/patterns.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
