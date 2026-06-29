@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI4BC — Maquette · Event detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="mockup.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="rail">
+      <div class="rail__brand"><div class="rail__mark">C</div><div class="rail__name">CTI4BC</div></div>
+      <nav class="rail__nav">
+        <a class="rail__link active" href="index.html"><i class="bi bi-shield-exclamation"></i><span>Events</span></a>
+        <a class="rail__link"><i class="bi bi-diagram-3"></i><span>Aggregation</span></a>
+        <a class="rail__link"><i class="bi bi-graph-up"></i><span>Analytics</span></a>
+        <a class="rail__link"><i class="bi bi-file-earmark-text"></i><span>Reports</span></a>
+        <a class="rail__link"><i class="bi bi-clock-history"></i><span>Shared Logs</span></a>
+        <div class="rail__group-label">Admin</div>
+        <a class="rail__link"><i class="bi bi-hdd-network"></i><span>Kafka</span></a>
+        <a class="rail__link"><i class="bi bi-ui-checks"></i><span>Forms</span></a>
+        <a class="rail__link"><i class="bi bi-heart-pulse"></i><span>System Health</span></a>
+      </nav>
+      <div class="rail__foot">Dynabic · CTI4BC v0.1</div>
+    </aside>
+
+    <header class="topbar">
+      <button class="topbar__toggle" id="toggle"><i class="bi bi-list"></i></button>
+      <div class="topbar__crumbs"><a href="index.html">Events</a><i class="bi bi-chevron-right" style="font-size:.7rem"></i><b>#1042</b></div>
+      <div class="topbar__spacer"></div>
+      <div class="topbar__util">
+        <button class="theme-toggle btn btn-outline btn-sm" id="themeBtn"><i class="bi bi-moon-stars"></i> Theme</button>
+        <span class="health-pill"><span class="led"></span> All systems operational</span>
+        <button class="icon-btn"><i class="bi bi-bell"></i><span class="dot">3</span></button>
+        <div class="avatar">A</div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <h1>Phishing campaign targeting energy sector</h1>
+          <div class="meta-chips">
+            <span class="chip"><i class="bi bi-hash"></i> Event 1042</span>
+            <span class="chip"><i class="bi bi-calendar3"></i> 2026-06-24</span>
+            <span class="chip"><i class="bi bi-building"></i> Montimage</span>
+            <span class="badge danger" style="align-self:center"><span class="led"></span> High</span>
+            <span class="badge warning" style="align-self:center"><span class="led"></span> Waiting to share</span>
+          </div>
+        </div>
+        <div class="page-head__actions">
+          <button class="btn btn-outline"><i class="bi bi-incognito"></i> Anonymize</button>
+          <button class="btn btn-primary"><i class="bi bi-share"></i> Share event</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active"><i class="bi bi-list-ul"></i> Attributes</div>
+        <div class="tab"><i class="bi bi-braces"></i> JSON</div>
+        <div class="tab"><i class="bi bi-share"></i> Sharing strategies</div>
+        <div class="tab"><i class="bi bi-building"></i> Organizations</div>
+        <div class="tab"><i class="bi bi-paperclip"></i> Files</div>
+      </div>
+
+      <div class="detail-grid">
+        <!-- Left: attributes -->
+        <div class="card">
+          <div class="card__head"><div class="card__title">Attributes</div>
+            <button class="btn btn-outline btn-sm"><i class="bi bi-funnel"></i> Filter</button>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Category</th><th>Type</th><th>Value</th><th>Anonymized</th></tr></thead>
+              <tbody>
+                <tr><td>Network activity</td><td class="mono">ip-dst</td><td class="mono">185.™.™.42</td><td><span class="badge success"><span class="led"></span> Yes</span></td></tr>
+                <tr><td>Payload delivery</td><td class="mono">sha256</td><td class="mono">9f2c…a17b</td><td><span class="badge neutral"><span class="led"></span> No</span></td></tr>
+                <tr><td>Network activity</td><td class="mono">domain</td><td class="mono">login-energy-portal[.]com</td><td><span class="badge success"><span class="led"></span> Yes</span></td></tr>
+                <tr><td>Email</td><td class="mono">email-src</td><td class="mono">ops@™.™</td><td><span class="badge success"><span class="led"></span> Yes</span></td></tr>
+                <tr><td>Other</td><td class="mono">comment</td><td>Spear-phishing wave observed via SOC</td><td><span class="badge neutral"><span class="led"></span> No</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: JSON + share -->
+        <div style="display:flex; flex-direction:column; gap:var(--s5)">
+          <div class="card">
+            <div class="card__head"><div class="card__title">Event JSON</div><button class="btn btn-ghost btn-sm"><i class="bi bi-clipboard"></i> Copy</button></div>
+            <div class="card__body" style="padding:var(--s3)">
+              <pre class="json"><span class="k">"id"</span>: <span class="n">1042</span>,
+<span class="k">"info"</span>: <span class="s">"Phishing campaign…"</span>,
+<span class="k">"threat_level"</span>: <span class="s">"High"</span>,
+<span class="k">"anonymized"</span>: <span class="b">true</span>,
+<span class="k">"attributes"</span>: <span class="n">5</span></pre>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__head"><div class="card__title">Sharing</div></div>
+            <div class="card__body">
+              <div class="share-panel">
+                <div class="share-row"><span><i class="bi bi-building" style="color:var(--mi-amber)"></i> Destination</span>
+                  <select class="select"><option>CERT-EU</option><option>ACME Energy</option><option>All partners</option></select></div>
+                <div class="share-row"><span><i class="bi bi-shuffle" style="color:var(--mi-amber)"></i> Strategy</span>
+                  <select class="select"><option>Anonymize + delay</option><option>Full disclosure</option></select></div>
+                <button class="btn btn-primary" style="width:100%; justify-content:center"><i class="bi bi-send"></i> Share now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="ribbon">MAQUETTE · charte Montimage · aucune donnée réelle</div>
+
+  <script>
+    const app = document.getElementById('app');
+    document.getElementById('toggle').onclick = () => app.classList.toggle('collapsed');
+    const html = document.documentElement, tBtn = document.getElementById('themeBtn');
+    tBtn.onclick = () => {
+      const dark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', dark ? 'light' : 'dark');
+      tBtn.innerHTML = dark ? '<i class="bi bi-moon-stars"></i> Theme' : '<i class="bi bi-sun"></i> Theme';
+    };
+    document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+      document.querySelector('.tab.active').classList.remove('active'); t.classList.add('active');
+    });
+  </script>
+</body>
+</html>

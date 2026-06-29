@@ -3,7 +3,6 @@ import { Container, Row, Col, Button, Table, Modal, Form, Alert, Badge, Card, To
 import { getToken } from '../auth';
 import { useToast } from '../components/Toast';
 import './FormsView.css';
-import NavBar from '../NavBar/NavBar';
 import { useTheme } from '../ThemeContext';
 
 // Configuration de l'URL du serveur
@@ -688,7 +687,6 @@ const FormsView = () => {
   return (
     <>
     <div className="container-fluid mt-4">
-      <NavBar />
       <Container fluid className="forms-container">
       <Row className="mb-4">
         <Col>

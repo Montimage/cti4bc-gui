@@ -14,7 +14,6 @@ import {
 } from 'chart.js';
 import { useTheme } from '../../ThemeContext';
 import { useHealth } from './HealthContext';
-import NavBar from '../../NavBar/NavBar';
 import ThresholdsDisplay from './ThresholdsDisplay';
 import ComponentDetailsModal from './ComponentDetailsModal';
 import './SystemHealthPage.css';
@@ -394,7 +393,6 @@ function SystemHealthPage() {
   return (
     <div className={`system-health-page ${theme}`}>
       <div className="health-wrapper mt-4 px-4">
-        <NavBar />
         
         {/* Header Section */}
         <div className={`health-header mb-4 ${theme}`}>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavBar from '../NavBar/NavBar';
 import { useTheme } from '../ThemeContext';
 import { useToast } from '../components/Toast';
 import './KafkaView.css';
@@ -238,7 +237,6 @@ const KafkaView = () => {
   
     return (
         <div className={`kafka-view container-fluid mt-4 ${isThemeChanging ? 'theme-changing' : ''}`}>
-            <NavBar />
             <div className="row kafka-main-row" style={{ minHeight: "calc(100vh - 80px)" }}>
                 {/* Left Column (1/3 width) */}
                 <div className="col-md-4">

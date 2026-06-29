@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Table, Button, Modal, Alert, Badge, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../auth';
-import NavBar from '../NavBar/NavBar';
 import { useTheme } from '../ThemeContext';
 import { useToast } from '../components/Toast';
 import './MyFormAnswers.css';
@@ -260,7 +259,6 @@ const MyFormAnswers = () => {
   return (
     <>
       <div className="container-fluid mt-4">
-        <NavBar />
         <Container fluid className={`my-form-answers-container ${theme === 'dark' ? 'dark-theme' : ''}`}>
           <Row className="mb-4">
             <Col>

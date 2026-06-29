@@ -102,7 +102,7 @@
   border: none;
   border-radius: 6px;
   background: var(--bs-primary);
-  color: white;
+  color: var(--mi-dark); /* dark text on Golden Amber for WCAG AA contrast */
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;

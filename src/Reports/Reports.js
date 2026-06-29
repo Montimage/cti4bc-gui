@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Alert, Form, Spinner, Modal, Table, Badge, InputGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Toast';
-import NavBar from '../NavBar/NavBar';
 import './Reports.css';
 
 const SERVER_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -656,7 +655,6 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
 
     return (
         <div className="container-fluid mt-4">
-            <NavBar showNavLinks={true} />
             <div style={{ minHeight: "calc(100vh - 80px)" }}>
                 <Container fluid className="mt-4">
                     <Row>

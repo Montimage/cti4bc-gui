@@ -8,6 +8,7 @@ import EventShareLogs from "./Events/EventShareLogs";
 import Login from "./Login/Login";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute";
 import AdminProtectedRoute from "./ProtectedRoute/AdminProtectedRoute";
+import AppLayout from "./layout/AppLayout";
 import KafkaView from "./KafkaView/KafkaView";
 import FormsView from "./Forms/FormsView";
 import FormStats from "./Forms/FormStats";
@@ -40,6 +41,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Login/>} />
                   <Route element={<ProtectedRoute />}>
+                   <Route element={<AppLayout />}>
                     <Route path="/events" element={<EventList />} />
                     <Route path="/event/:id" element={<ShareEventView />} />
                     <Route path="/aggregation" element={<Aggregation />} />
@@ -58,6 +60,7 @@ function App() {
                       <Route path='/admin/forms' element={<FormsView />} />
                       <Route path='/admin/form-stats' element={<FormStats />} />
                     </Route>
+                   </Route>
                   </Route>
                 </Routes>
               </Router>

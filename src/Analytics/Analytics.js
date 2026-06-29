@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 // Suppression of useNavigate import as it is no longer used directly in this component
-import NavBar from '../NavBar/NavBar';
 import { useTheme } from '../ThemeContext';
 import {
     Chart as ChartJS,
@@ -763,7 +762,6 @@ function Analytics() {
 
     return (
         <div className="container-fluid mt-4 px-4 theme-transition">
-            <NavBar />
 
             <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">

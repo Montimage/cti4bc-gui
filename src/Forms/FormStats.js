@@ -14,7 +14,6 @@ import {
   LineElement,
 } from 'chart.js';
 import { getToken } from '../auth';
-import NavBar from '../NavBar/NavBar';
 import { useTheme } from '../ThemeContext';
 import { useToast } from '../components/Toast';
 import './FormStats.css';
@@ -322,7 +321,6 @@ const FormStats = () => {
   return (
     <>
     <div className="container-fluid mt-4">
-      <NavBar />
       <Container fluid className={`forms-stats-container ${isDarkMode ? 'dark-theme' : ''}`}>
         <Row>
           <Col>

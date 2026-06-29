@@ -1,0 +1,250 @@
+/* =====================================================================
+   Montimage brand re-skin (mi-designer) — token layer over Bootstrap 5.3
+   ---------------------------------------------------------------------
+   Strategy: this file ONLY remaps design tokens (colours, fonts, radii,
+   surfaces) onto Bootstrap's CSS custom properties + a few component
+   variables. It changes NO markup and NO component logic, so all existing
+   interactions, buttons and features keep working.
+   Loaded LAST (see src/index.js) so it wins over bootstrap.min.css and
+   index.css by source order — no !important needed except where the base
+   stylesheet already used !important.
+
+   Charter source: Montimage/pskills · skills/mi-designer (Golden Amber).
+   ===================================================================== */
+
+/* ----------------------------- Brand tokens ------------------------- */
+:root {
+  --mi-amber: #E9AB34;
+  --mi-amber-hover: #D49A2E;
+  --mi-amber-light: #F0BC52;
+  --mi-amber-rgb: 233, 171, 52;
+  /* AA-safe amber for text/links on light surfaces (>= 4.5:1 on white) */
+  --mi-amber-text: #8A6411;
+
+  --mi-dark: #1A1A1A;
+  --mi-light: #FFFFFF;
+  --mi-neutral: #8B7D6B;
+  --mi-surface: #F5F0EB;
+  --mi-surface-dark: #2A2520;
+
+  --mi-danger: #EF4444;
+  --mi-warning: #F59E0B;
+  --mi-info: #3B82F6;
+  --mi-success: #22C55E;
+
+  --mi-radius-sm: 8px;
+  --mi-radius-md: 16px;
+  --mi-radius-lg: 24px;
+  --mi-radius-pill: 999px;
+
+  --mi-shadow: 0 4px 24px rgba(26, 26, 26, 0.08);
+  --mi-shadow-lg: 0 8px 48px rgba(26, 26, 26, 0.12);
+  --mi-transition: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography matched to montimage.eu — Montserrat titles, Roboto body */
+  --mi-font-display: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mi-font-body: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mi-font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+}
+
+/* -------------------- Map Bootstrap tokens (light) ------------------ */
+:root,
+[data-bs-theme="light"] {
+  --bs-primary: var(--mi-amber);
+  --bs-primary-rgb: var(--mi-amber-rgb);
+  --bs-primary-text-emphasis: var(--mi-amber-text);
+  --bs-primary-bg-subtle: #FBEDCA;
+  --bs-primary-border-subtle: #F4D99A;
+
+  --bs-link-color: var(--mi-amber-text);
+  --bs-link-color-rgb: 138, 100, 17;
+  --bs-link-hover-color: #6E4F0D;
+  --bs-link-hover-color-rgb: 110, 79, 13;
+
+  --bs-body-font-family: var(--mi-font-body);
+  --bs-body-bg: var(--mi-light);
+  --bs-secondary-bg: var(--mi-surface);
+  --bs-tertiary-bg: #EFE7DD;
+  --bs-border-color: #E3D9CC;
+
+  --bs-border-radius: var(--mi-radius-sm);
+  --bs-border-radius-sm: 6px;
+  --bs-border-radius-lg: var(--mi-radius-md);
+  --bs-border-radius-xl: var(--mi-radius-lg);
+
+  --bs-focus-ring-color: rgba(var(--mi-amber-rgb), 0.35);
+}
+
+/* --------------------- Map Bootstrap tokens (dark) ------------------ */
+[data-bs-theme="dark"] {
+  --bs-primary: var(--mi-amber);
+  --bs-primary-rgb: var(--mi-amber-rgb);
+  --bs-primary-text-emphasis: var(--mi-amber-light);
+  --bs-primary-bg-subtle: #3a2c10;
+  --bs-primary-border-subtle: #6b531c;
+
+  --bs-link-color: var(--mi-amber-light);
+  --bs-link-color-rgb: 240, 188, 82;
+  --bs-link-hover-color: var(--mi-amber);
+  --bs-link-hover-color-rgb: var(--mi-amber-rgb);
+
+  --bs-body-bg: var(--mi-dark);
+  --bs-body-color: #EDE6DA;
+  --bs-body-color-rgb: 237, 230, 218;
+  --bs-emphasis-color: #FFFFFF;
+  --bs-secondary-bg: #241F1A;
+  --bs-tertiary-bg: var(--mi-surface-dark);
+  --bs-border-color: #3A332B;
+
+  /* used by index.css overrides */
+  --bs-card-bg: var(--mi-surface-dark);
+  --bs-form-control-bg: #241F1A;
+
+  --bs-focus-ring-color: rgba(var(--mi-amber-rgb), 0.45);
+}
+
+/* ----------------------------- Typography --------------------------- */
+body {
+  font-family: var(--mi-font-body);
+}
+
+/* Display serif reserved for the strongest headings + brand wordmark,
+   body sans kept for dense data so scannability is preserved. */
+h1, h2, .h1, .h2,
+.display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
+.navbar-brand {
+  font-family: var(--mi-font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+code, kbd, pre, samp, .font-monospace, .json-view {
+  font-family: var(--mi-font-mono);
+}
+
+/* ------------------------------- Buttons ---------------------------- */
+/* Amber buttons use near-black text (amber + white fails WCAG AA). */
+.btn-primary {
+  --bs-btn-color: var(--mi-dark);
+  --bs-btn-bg: var(--mi-amber);
+  --bs-btn-border-color: var(--mi-amber);
+  --bs-btn-hover-color: var(--mi-dark);
+  --bs-btn-hover-bg: var(--mi-amber-hover);
+  --bs-btn-hover-border-color: var(--mi-amber-hover);
+  --bs-btn-focus-shadow-rgb: var(--mi-amber-rgb);
+  --bs-btn-active-color: var(--mi-dark);
+  --bs-btn-active-bg: var(--mi-amber-hover);
+  --bs-btn-active-border-color: var(--mi-amber-hover);
+  --bs-btn-disabled-color: var(--mi-dark);
+  --bs-btn-disabled-bg: var(--mi-amber);
+  --bs-btn-disabled-border-color: var(--mi-amber);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-primary-text-emphasis);
+  --bs-btn-border-color: var(--mi-amber);
+  --bs-btn-hover-color: var(--mi-dark);
+  --bs-btn-hover-bg: var(--mi-amber);
+  --bs-btn-hover-border-color: var(--mi-amber);
+  --bs-btn-focus-shadow-rgb: var(--mi-amber-rgb);
+  --bs-btn-active-color: var(--mi-dark);
+  --bs-btn-active-bg: var(--mi-amber);
+  --bs-btn-active-border-color: var(--mi-amber);
+}
+
+.btn-link {
+  --bs-btn-color: var(--bs-link-color);
+  --bs-btn-hover-color: var(--bs-link-hover-color);
+}
+
+/* ----------------------- Forms / selections ------------------------ */
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus,
+.btn-check:focus + .btn,
+.form-control:focus-visible {
+  border-color: var(--mi-amber-light);
+  box-shadow: 0 0 0 0.25rem rgba(var(--mi-amber-rgb), 0.25);
+}
+
+.form-check-input:checked {
+  background-color: var(--mi-amber);
+  border-color: var(--mi-amber-hover);
+}
+
+.form-range::-webkit-slider-thumb { background-color: var(--mi-amber); }
+.form-range::-moz-range-thumb { background-color: var(--mi-amber); }
+
+/* -------------------- Navigation / pagination ---------------------- */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background-color: var(--mi-amber);
+  color: var(--mi-dark);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--bs-primary-text-emphasis);
+  border-top-color: var(--mi-amber);
+}
+
+.page-link { color: var(--bs-primary-text-emphasis); }
+.page-item.active .page-link {
+  background-color: var(--mi-amber);
+  border-color: var(--mi-amber);
+  color: var(--mi-dark);
+}
+
+.list-group-item.active {
+  background-color: var(--mi-amber);
+  border-color: var(--mi-amber);
+  color: var(--mi-dark);
+}
+
+/* --------------------- Accents / indicators ------------------------ */
+.progress-bar { background-color: var(--mi-amber); color: var(--mi-dark); }
+.spinner-border.text-primary,
+.spinner-grow.text-primary { color: var(--mi-amber) !important; }
+
+.bg-primary { background-color: var(--mi-amber) !important; }
+.text-bg-primary,
+.badge.bg-primary,
+.badge.text-bg-primary {
+  background-color: var(--mi-amber) !important;
+  color: var(--mi-dark) !important;
+}
+.border-primary { border-color: var(--mi-amber) !important; }
+
+/* Status colours stay semantic (text usage), aligned to charter hues */
+.text-danger  { color: var(--mi-danger)  !important; }
+.text-warning { color: var(--mi-warning) !important; }
+.text-info    { color: var(--mi-info)    !important; }
+.text-success { color: var(--mi-success) !important; }
+
+/* ----------------- Replace residual blue from index.css ------------- */
+/* index.css used Bootstrap-blue accents in dark mode; remap to amber.
+   These selectors already used !important upstream, so match it. */
+[data-bs-theme="dark"] .card-text { color: var(--mi-amber-light) !important; }
+[data-bs-theme="dark"] .card-text + p { color: #C9BFB0 !important; }
+[data-bs-theme="dark"] .clickable-card {
+  background: linear-gradient(145deg, #2A2520, #241F1A) !important;
+  border: 1px solid #3A332B !important;
+}
+[data-bs-theme="dark"] .active-card {
+  background: linear-gradient(145deg, #3a2c10, #2A2520) !important;
+  border: 1px solid var(--mi-amber) !important;
+}
+[data-bs-theme="dark"] .nav-link.active,
+[data-bs-theme="dark"] .menu-item.active {
+  background-color: var(--mi-amber) !important;
+  color: var(--mi-dark) !important;
+}
+
+/* --------------------------- Soft polish ---------------------------- */
+.card { box-shadow: var(--mi-shadow); }
+.card:hover { box-shadow: var(--mi-shadow-lg); }
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--mi-amber);
+  color: var(--mi-dark);
+}
+::selection { background: rgba(var(--mi-amber-rgb), 0.3); }

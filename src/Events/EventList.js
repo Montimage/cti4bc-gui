@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 import './EventList.css';
-import NavBar from '../NavBar/NavBar';
 import { useToast } from '../components/Toast';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
@@ -226,7 +225,6 @@ function EventList() {
     return (
     <div>
         <div className="container mt-3">
-            <NavBar />
             
             <div className="row mb-4">
                 <div className="col">

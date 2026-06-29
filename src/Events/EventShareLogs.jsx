@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from '../NavBar/NavBar';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -373,7 +372,6 @@ const EventShareLogs = () => {
     
     return (
         <div className="container mt-4" style={{ transition: 'none' }}>
-            <NavBar />
             
             <div className="d-flex justify-content-between align-items-center mb-4" style={{ transition: 'none' }}>
                 <h2 style={{ transition: 'none' }}>Event Share Logs</h2>

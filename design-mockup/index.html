@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI4BC — Maquette · Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="mockup.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- ===== Sidebar ===== -->
+    <aside class="rail">
+      <div class="rail__brand">
+        <div class="rail__mark">C</div>
+        <div class="rail__name">CTI4BC</div>
+      </div>
+      <nav class="rail__nav">
+        <a class="rail__link active"><i class="bi bi-shield-exclamation"></i><span>Events</span></a>
+        <a class="rail__link"><i class="bi bi-diagram-3"></i><span>Aggregation</span></a>
+        <a class="rail__link"><i class="bi bi-graph-up"></i><span>Analytics</span></a>
+        <a class="rail__link"><i class="bi bi-file-earmark-text"></i><span>Reports</span></a>
+        <a class="rail__link"><i class="bi bi-clock-history"></i><span>Shared Logs</span></a>
+        <div class="rail__group-label">Admin</div>
+        <a class="rail__link"><i class="bi bi-hdd-network"></i><span>Kafka</span></a>
+        <a class="rail__link"><i class="bi bi-ui-checks"></i><span>Forms</span></a>
+        <a class="rail__link"><i class="bi bi-heart-pulse"></i><span>System Health</span></a>
+      </nav>
+      <div class="rail__foot">Dynabic · CTI4BC v0.1</div>
+    </aside>
+
+    <!-- ===== Topbar ===== -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="toggle" title="Replier le menu"><i class="bi bi-list"></i></button>
+      <div class="topbar__crumbs"><span>CTI</span><i class="bi bi-chevron-right" style="font-size:.7rem"></i><b>Events</b></div>
+      <div class="topbar__spacer"></div>
+      <div class="topbar__util">
+        <button class="theme-toggle btn btn-outline btn-sm" id="themeBtn"><i class="bi bi-moon-stars"></i> Theme</button>
+        <span class="health-pill"><span class="led"></span> All systems operational</span>
+        <button class="icon-btn" title="Notifications"><i class="bi bi-bell"></i><span class="dot">3</span></button>
+        <div class="avatar" title="admin">A</div>
+      </div>
+    </header>
+
+    <!-- ===== Main ===== -->
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <h1>Threat Events</h1>
+          <div class="sub">Manage, anonymize and share MISP events across partner organizations.</div>
+        </div>
+        <div class="page-head__actions">
+          <button class="btn btn-outline"><i class="bi bi-diagram-3"></i> Aggregate</button>
+          <button class="btn btn-primary"><i class="bi bi-share"></i> Share selected</button>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <section class="stats">
+        <div class="stat"><div class="stat__label">Total events</div><div class="stat__value">128</div><div class="stat__delta up">+6 this week</div></div>
+        <div class="stat"><div class="stat__label">Shared in time</div><div class="stat__value">94</div><div class="stat__delta">73% of shared</div></div>
+        <div class="stat"><div class="stat__label">Waiting to share</div><div class="stat__value"><span class="accent">17</span></div><div class="stat__delta">action needed</div></div>
+        <div class="stat"><div class="stat__label">Expired</div><div class="stat__value">5</div><div class="stat__delta">past SLA</div></div>
+      </section>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="field search">
+          <label>Search</label>
+          <div style="position:relative"><i class="bi bi-search"></i><input class="input" placeholder="Search info, tags, UUID…"></div>
+        </div>
+        <div class="field"><label>Organization</label>
+          <select class="select"><option>All organizations</option><option>Montimage</option><option>CERT-EU</option><option>ACME Energy</option></select>
+        </div>
+        <div class="field"><label>Threat level</label>
+          <select class="select"><option>Any</option><option>High</option><option>Medium</option><option>Low</option><option>Undefined</option></select>
+        </div>
+        <div class="field"><label>Share status</label>
+          <select class="select"><option>Any</option><option>Shared in time</option><option>Shared late</option><option>Waiting</option><option>Expired</option></select>
+        </div>
+      </div>
+
+      <!-- Events table -->
+      <div class="card">
+        <div class="selbar"><input type="checkbox" class="checkbox" checked> <span><b>2 events</b> selected</span>
+          <button class="btn btn-primary btn-sm"><i class="bi bi-share"></i> Share</button>
+          <button class="btn btn-outline btn-sm"><i class="bi bi-diagram-3"></i> Aggregate</button>
+          <button class="btn btn-ghost btn-sm"><i class="bi bi-x-lg"></i> Clear</button>
+        </div>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th style="width:40px"><input type="checkbox" class="checkbox"></th>
+                <th>Event</th>
+                <th class="sortable">Date <i class="bi bi-caret-down-fill caret" style="font-size:.7rem"></i></th>
+                <th>Threat level</th>
+                <th>Organization</th>
+                <th>Share status</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" class="checkbox" checked></td>
+                <td><div class="ev-title">Phishing campaign targeting energy sector</div><div class="ev-sub mono">a3f1-77c2-…-9e0b</div></td>
+                <td>2026-06-24</td>
+                <td><span class="badge danger"><span class="led"></span> High</span></td>
+                <td>Montimage</td>
+                <td><span class="badge warning"><span class="led"></span> Waiting</span></td>
+                <td><div class="row-actions"><button class="btn btn-outline btn-sm">Details</button><button class="icon-btn" title="Share"><i class="bi bi-share"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="checkbox" checked></td>
+                <td><div class="ev-title">Ransomware IoCs — LockBit variant</div><div class="ev-sub mono">b8d4-21aa-…-4f7c</div></td>
+                <td>2026-06-22</td>
+                <td><span class="badge warning"><span class="led"></span> Medium</span></td>
+                <td>CERT-EU</td>
+                <td><span class="badge success"><span class="led"></span> Shared in time</span></td>
+                <td><div class="row-actions"><button class="btn btn-outline btn-sm">Details</button><button class="icon-btn" title="Share"><i class="bi bi-share"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><div class="ev-title">Suspicious C2 infrastructure observed</div><div class="ev-sub mono">c1e9-55bd-…-1a23</div></td>
+                <td>2026-06-19</td>
+                <td><span class="badge danger"><span class="led"></span> High</span></td>
+                <td>ACME Energy</td>
+                <td><span class="badge info"><span class="led"></span> Shared late</span></td>
+                <td><div class="row-actions"><button class="btn btn-outline btn-sm">Details</button><button class="icon-btn" title="Share"><i class="bi bi-share"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><div class="ev-title">Credential stuffing attempts — VPN portal</div><div class="ev-sub mono">d7a0-90fe-…-8b55</div></td>
+                <td>2026-06-15</td>
+                <td><span class="badge success"><span class="led"></span> Low</span></td>
+                <td>Montimage</td>
+                <td><span class="badge danger"><span class="led"></span> Expired</span></td>
+                <td><div class="row-actions"><button class="btn btn-outline btn-sm">Details</button><button class="icon-btn" title="Share"><i class="bi bi-share"></i></button></div></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" class="checkbox"></td>
+                <td><div class="ev-title">Malicious npm package supply-chain alert</div><div class="ev-sub mono">e2b6-13cc-…-7d41</div></td>
+                <td>2026-06-11</td>
+                <td><span class="badge neutral"><span class="led"></span> Undefined</span></td>
+                <td>CERT-EU</td>
+                <td><span class="badge success"><span class="led"></span> Shared in time</span></td>
+                <td><div class="row-actions"><button class="btn btn-outline btn-sm">Details</button><button class="icon-btn" title="Share"><i class="bi bi-share"></i></button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style="margin-top:var(--s5)"><a href="event-detail.html" class="btn btn-outline"><i class="bi bi-arrow-right"></i> Voir la maquette « Event detail »</a></div>
+    </main>
+  </div>
+
+  <div class="ribbon">MAQUETTE · charte Montimage · aucune donnée réelle</div>
+
+  <script>
+    const app = document.getElementById('app');
+    document.getElementById('toggle').onclick = () => app.classList.toggle('collapsed');
+    const html = document.documentElement, tBtn = document.getElementById('themeBtn');
+    tBtn.onclick = () => {
+      const dark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', dark ? 'light' : 'dark');
+      tBtn.innerHTML = dark ? '<i class="bi bi-moon-stars"></i> Theme' : '<i class="bi bi-sun"></i> Theme';
+    };
+  </script>
+</body>
+</html>

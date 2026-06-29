@@ -3,7 +3,6 @@ import { Row, Col, Card, Button, Badge, Dropdown, InputGroup, FormControl } from
 import { useNavigate } from 'react-router-dom';
 import { useNotifications } from './NotificationContext';
 import { useTheme } from '../../ThemeContext';
-import NavBar from '../../NavBar/NavBar';
 import './NotificationsPage.css';
 
 function NotificationsPage() {
@@ -140,7 +139,6 @@ function NotificationsPage() {
   return (
     <div className={`notifications-page ${theme} ${isThemeChanging ? 'theme-changing' : ''}`}>
       <div className="notifications-wrapper mt-4 px-4">
-        <NavBar />
         
         {/* Header Section */}
         <div className="notifications-header">
