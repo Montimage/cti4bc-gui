@@ -46,23 +46,31 @@ const Aggregation = () => {
     }, [selectedEventIds, isDataFetched]);
 
     return(
-        <div>
-            <div className="d-flex justify-content-between align-items-center">
-                <button onClick={() => navigate(-1)} className="btn btn-secondary m-3">
-                    Go Back
-                </button>
-                <button className="btn btn-primary m-3" onClick={handleSave}>
-                    Share Aggregated Event
-                </button>
+        <div className="mi-aggregation">
+            <div className="mi-page-head">
+                <div>
+                    <h1>Aggregated Event</h1>
+                    <div className="mi-sub">Review and share the combined view of the selected events.</div>
+                </div>
+                <div className="mi-page-head__actions">
+                    <button onClick={() => navigate(-1)} className="btn btn-outline-secondary">
+                        <i className="bi bi-arrow-left me-1"></i> Go Back
+                    </button>
+                    <button className="btn btn-primary" onClick={handleSave}>
+                        <i className="bi bi-share me-1"></i> Share Aggregated Event
+                    </button>
+                </div>
             </div>
 
-            {jsonData ? (
-                <>
-                <EventViewer ref={eventViewerRef} data={jsonData} />
-                </>
-            ) : (
-                <p>Loading...</p>
-            )}
+            <div className="mi-card">
+                <div className="mi-card__body">
+                    {jsonData ? (
+                        <EventViewer ref={eventViewerRef} data={jsonData} />
+                    ) : (
+                        <p className="mb-0">Loading...</p>
+                    )}
+                </div>
+            </div>
         </div>
     );
 

@@ -324,106 +324,92 @@ const FormStats = () => {
       <Container fluid className={`forms-stats-container ${isDarkMode ? 'dark-theme' : ''}`}>
         <Row>
           <Col>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <h2>Form Statistics & KPIs</h2>
-              <Button variant="outline-primary" onClick={() => window.location.href = '/admin/forms'}>
-              Back to Forms
-              </Button>
+            <div className="mi-page-head">
+              <div>
+                <h1>Form Statistics & KPIs</h1>
+              </div>
+              <div className="mi-page-head__actions">
+                <Button variant="outline-primary" onClick={() => window.location.href = '/admin/forms'}>
+                  Back to Forms
+                </Button>
+              </div>
             </div>
 
             {/* Overview Statistics */}
             {overviewStats && (
-              <Row className="mb-4">
-                <Col md={3}>
-                  <Card className="text-center h-100">
-                    <Card.Body>
-                      <h5>Total Forms</h5>
-                      <h2 className="text-primary">{overviewStats.total_forms}</h2>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={3}>
-                  <Card className="text-center h-100">
-                    <Card.Body>
-                      <h5>Total Responses</h5>
-                      <h2 className="text-success">{overviewStats.total_responses}</h2>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={3}>
-                  <Card className="text-center h-100">
-                    <Card.Body>
-                      <h5>Avg Responses/Form</h5>
-                      <h2 className="text-primary">{overviewStats.average_responses_per_form}</h2>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={3}>
-                  <Card className="text-center h-100">
-                    <Card.Body>
-                      <h5>Active Forms</h5>
-                      <h2 className="text-warning">{forms.filter(f => f.is_active).length}</h2>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              </Row>
+              <div className="mi-stats">
+                <div className="mi-stat">
+                  <div className="mi-stat__label">Total Forms</div>
+                  <div className="mi-stat__value">{overviewStats.total_forms}</div>
+                </div>
+                <div className="mi-stat">
+                  <div className="mi-stat__label">Total Responses</div>
+                  <div className="mi-stat__value">{overviewStats.total_responses}</div>
+                </div>
+                <div className="mi-stat">
+                  <div className="mi-stat__label">Avg Responses/Form</div>
+                  <div className="mi-stat__value"><span className="mi-accent">{overviewStats.average_responses_per_form}</span></div>
+                </div>
+                <div className="mi-stat">
+                  <div className="mi-stat__label">Active Forms</div>
+                  <div className="mi-stat__value">{forms.filter(f => f.is_active).length}</div>
+                </div>
+              </div>
             )}
 
             {/* Forms List with Stats Buttons */}
-            <Row>
-              <Col>
-                <Card>
-                  <Card.Header>
-                    <h5 className="mb-0">All Forms - Click for Detailed Statistics</h5>
-                  </Card.Header>
-                  <Card.Body>
-                    {loading ? (
-                      <div className="text-center">
-                        <Spinner animation="border" role="status">
-                          <span className="visually-hidden">Loading...</span>
-                        </Spinner>
-                      </div>
-                    ) : forms.length > 0 ? (
-                      <Table responsive hover>
-                        <thead>
-                          <tr>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th className="text-center">Status</th>
-                            <th className="text-center">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {forms.map((form) => (
-                            <tr key={form.id}>
-                              <td>{form.title}</td>
-                              <td>{form.description || 'No description'}</td>
-                              <td className="text-center">
-                                <Badge bg={form.is_active ? 'success' : 'secondary'}>
-                                  {form.is_active ? 'Active' : 'Inactive'}
-                                </Badge>
-                              </td>
-                              <td className="text-center">
-                                <Button
-                                  variant="outline-primary"
-                                  size="sm"
-                                  onClick={() => fetchFormStats(form.id)}
-                                  disabled={loading}
-                                >
-                                  View Statistics
-                                </Button>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    ) : (
-                      <Alert variant="secondary">No forms available</Alert>
-                    )}
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+            <div className="mi-card">
+              <div className="mi-card__head">
+                <div className="mi-card__title">All Forms - Click for Detailed Statistics</div>
+              </div>
+              {loading ? (
+                <div className="mi-card__body text-center">
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div>
+              ) : forms.length > 0 ? (
+                <div className="mi-table-wrap">
+                  <table className="mi-tbl">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th className="text-center">Status</th>
+                        <th className="text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {forms.map((form) => (
+                        <tr key={form.id}>
+                          <td className="mi-ev-title">{form.title}</td>
+                          <td>{form.description || 'No description'}</td>
+                          <td className="text-center">
+                            <span className={`mi-badge ${form.is_active ? 'mi-success' : 'mi-neutral'}`}>
+                              <span className="mi-led"></span> {form.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              onClick={() => fetchFormStats(form.id)}
+                              disabled={loading}
+                            >
+                              View Statistics
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="mi-card__body">
+                  <Alert variant="secondary" className="mb-0">No forms available</Alert>
+                </div>
+              )}
+            </div>
 
             {/* Enhanced Statistics Modal */}
             <Modal show={showStatsModal} onHide={() => setShowStatsModal(false)} size="xl" className="modal-xl-custom">

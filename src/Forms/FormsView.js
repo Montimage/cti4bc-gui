@@ -696,221 +696,209 @@ const FormsView = () => {
       </div>
 
       {/* Toggle Buttons */}
-      <Row className="mb-4">
-        <Col className="d-flex justify-content-center">
-          <div className="toggle-buttons">
-            <Button
-              variant={activeTab === 'forms' ? 'primary' : 'outline-primary'}
-              onClick={() => setActiveTab('forms')}
-            >
-              Forms
-            </Button>
-            <Button
-              variant={activeTab === 'answers' ? 'primary' : 'outline-primary'}
-              onClick={() => setActiveTab('answers')}
-            >
-              Form Answers
-            </Button>
-          </div>
-        </Col>
-      </Row>
+      <div className="mi-tabs">
+        <button
+          className={"mi-tab" + (activeTab === 'forms' ? " active" : "")}
+          onClick={() => setActiveTab('forms')}
+        >
+          Forms
+        </button>
+        <button
+          className={"mi-tab" + (activeTab === 'answers' ? " active" : "")}
+          onClick={() => setActiveTab('answers')}
+        >
+          Form Answers
+        </button>
+      </div>
 
       {/* Forms Tab */}
       {activeTab === 'forms' && (
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">Forms</h5>
-                <div className="d-flex gap-2">
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => window.location.href = '/admin/form-stats'}
-                  >
-                    Statistics & KPIs
-                  </Button>
-                  <Button
-                    variant="outline-primary"
-                    onClick={() => setShowImportModal(true)}
-                  >
-                    Import Form
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => setShowCreateModal(true)}
-                  >
-                    Create Form
-                  </Button>
-                </div>
-              </Card.Header>
-              <Card.Body>
-                {loading ? (
-                  <div className="text-center">Loading...</div>
-                ) : (
-                  <Table responsive hover>
-                    <thead>
-                      <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th className="organization-column text-center">Organizations</th>
-                        <th className="text-center">Status</th>
-                        <th className="text-center">Created</th>
-                        <th className="text-center">Fields</th>
-                        <th className="text-center">Actions</th>
+        <div className="mi-card">
+          <div className="mi-card__head">
+            <div className="mi-card__title">Forms</div>
+            <div className="d-flex gap-2">
+              <Button
+                variant="outline-primary"
+                onClick={() => window.location.href = '/admin/form-stats'}
+              >
+                Statistics & KPIs
+              </Button>
+              <Button
+                variant="outline-primary"
+                onClick={() => setShowImportModal(true)}
+              >
+                Import Form
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => setShowCreateModal(true)}
+              >
+                Create Form
+              </Button>
+            </div>
+          </div>
+          {loading ? (
+            <div className="mi-card__body text-center">Loading...</div>
+          ) : (
+            <div className="mi-table-wrap">
+              <table className="mi-tbl">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th className="text-center">Organizations</th>
+                    <th className="text-center">Status</th>
+                    <th className="text-center">Created</th>
+                    <th className="text-center">Fields</th>
+                    <th className="text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {forms.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" className="text-center">No forms found</td>
+                    </tr>
+                  ) : (
+                    forms.map((form) => (
+                      <tr key={form.id}>
+                        <td className="mi-ev-title">{form.title}</td>
+                        <td>
+                          {form.gform_url ? (
+                            <>
+                              <div>{form.description || 'Form imported from Google Forms'}</div>
+                              <small className="text-muted">
+                                URL Import
+                              </small>
+                            </>
+                          ) : (
+                            form.description || 'No description'
+                          )}
+                        </td>
+                        <td className="text-center">
+                          <OrganizationBadgesCompact
+                            organizations={form.organization_names}
+                            maxVisible={2}
+                          />
+                        </td>
+                        <td className="text-center">
+                          <span className={`mi-badge ${form.is_active ? 'mi-success' : 'mi-neutral'}`}>
+                            <span className="mi-led"></span> {form.is_active ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td className="text-center">{new Date(form.created_at).toLocaleDateString()}</td>
+                        <td className="text-center">{form.fields?.length || 0} fields</td>
+                        <td className="text-center">
+                          <div className="mi-row-actions" style={{ justifyContent: 'center' }}>
+                            <Button
+                              size="sm"
+                              variant="outline-primary"
+                              onClick={() => {
+                                setSelectedForm(form);
+                                setShowFormModal(true);
+                              }}
+                            >
+                              View
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline-warning"
+                              onClick={() => handleEditForm(form)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline-danger"
+                              onClick={() => confirmDeleteForm(form)}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {forms.length === 0 ? (
-                        <tr>
-                          <td colSpan="7" className="text-center">No forms found</td>
-                        </tr>
-                      ) : (
-                        forms.map((form) => (
-                          <tr key={form.id}>
-                            <td><strong>{form.title}</strong></td>
-                            <td>
-                              {form.gform_url ? (
-                                <>
-                                  <div>{form.description || 'Form imported from Google Forms'}</div>
-                                  <small className="text-muted">
-                                    URL Import
-                                  </small>
-                                </>
-                              ) : (
-                                form.description || 'No description'
-                              )}
-                            </td>
-                            <td className="organization-column text-center">
-                              <OrganizationBadgesCompact 
-                                organizations={form.organization_names} 
-                                maxVisible={2}
-                              />
-                            </td>
-                            <td className="text-center">
-                              <Badge bg={form.is_active ? 'success' : 'secondary'}>
-                                {form.is_active ? 'Active' : 'Inactive'}
-                              </Badge>
-                            </td>
-                            <td className="text-center">{new Date(form.created_at).toLocaleDateString()}</td>
-                            <td className="text-center">{form.fields?.length || 0} fields</td>
-                            <td className="table-actions text-center">
-                              <Button
-                                size="sm"
-                                variant="outline-primary"
-                                className="me-1"
-                                onClick={() => {
-                                  setSelectedForm(form);
-                                  setShowFormModal(true);
-                                }}
-                              >
-                                View
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline-warning"
-                                className="me-1"
-                                onClick={() => handleEditForm(form)}
-                              >
-                                Edit
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline-danger"
-                                onClick={() => confirmDeleteForm(form)}
-                              >
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </Table>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Form Answers Tab */}
       {activeTab === 'answers' && (
-        <Row>
-          <Col>
-            <Card>
-              <Card.Header>
-                <h5 className="mb-0">Form Answers</h5>
-              </Card.Header>
-              <Card.Body>
-                {loading ? (
-                  <div className="text-center">Loading...</div>
-                ) : formAnswers.length === 0 ? (
-                  <div className="text-center py-4">
-                    <h6 className="text-muted">No form answers found</h6>
+        <div className="mi-card">
+          <div className="mi-card__head">
+            <div className="mi-card__title">Form Answers</div>
+          </div>
+          <div className="mi-card__body">
+            {loading ? (
+              <div className="text-center">Loading...</div>
+            ) : formAnswers.length === 0 ? (
+              <div className="text-center py-4">
+                <h6 className="text-muted">No form answers found</h6>
+              </div>
+            ) : (
+              <div>
+                {Object.entries(groupedAnswers).map(([formId, formGroup]) => (
+                  <div key={formId} className="mi-card mb-3">
+                    <div
+                      className="mi-card__head"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => toggleFormExpansion(formId)}
+                    >
+                      <div>
+                        <div className="mi-card__title">
+                          <i className={`fas fa-chevron-${expandedForms.has(formId) ? 'down' : 'right'} me-2`}></i>
+                          {formGroup.formTitle}
+                        </div>
+                        <small className="text-muted">
+                          {formGroup.count} response{formGroup.count !== 1 ? 's' : ''}
+                        </small>
+                      </div>
+                      <span className="mi-badge mi-info"><span className="mi-led"></span> {formGroup.count}</span>
+                    </div>
+
+                    {expandedForms.has(formId) && (
+                      <div className="mi-table-wrap">
+                        <table className="mi-tbl">
+                          <thead>
+                            <tr>
+                              <th>Event</th>
+                              <th>Filled By</th>
+                              <th className="text-center">Filled At</th>
+                              <th className="text-center">IP Address</th>
+                              <th className="text-center">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {formGroup.answers.map((answer) => (
+                              <tr key={answer.id}>
+                                <td className="mi-ev-title">{answer.event_name || `Event #${answer.event}`}</td>
+                                <td>{answer.filled_by_username || 'Anonymous'}</td>
+                                <td className="text-center">{new Date(answer.filled_at).toLocaleString()}</td>
+                                <td className="text-center">{answer.ip_address || 'N/A'}</td>
+                                <td className="text-center">
+                                  <Button
+                                    size="sm"
+                                    variant="outline-info"
+                                    onClick={() => handleViewAnswer(answer)}
+                                  >
+                                    View
+                                  </Button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div>
-                    {Object.entries(groupedAnswers).map(([formId, formGroup]) => (
-                      <Card key={formId} className="mb-3">
-                        <Card.Header 
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => toggleFormExpansion(formId)}
-                          className="d-flex justify-content-between align-items-center"
-                        >
-                          <div>
-                            <h6 className="mb-0">
-                              <i className={`fas fa-chevron-${expandedForms.has(formId) ? 'down' : 'right'} me-2`}></i>
-                              {formGroup.formTitle}
-                            </h6>
-                            <small className="text-muted">
-                              {formGroup.count} response{formGroup.count !== 1 ? 's' : ''}
-                            </small>
-                          </div>
-                          <Badge bg="primary">{formGroup.count}</Badge>
-                        </Card.Header>
-                        
-                        {expandedForms.has(formId) && (
-                          <Card.Body className="p-0">
-                            <Table responsive hover className="mb-0">
-                              <thead>
-                                <tr>
-                                  <th>Event</th>
-                                  <th>Filled By</th>
-                                  <th className="text-center">Filled At</th>
-                                  <th className="text-center">IP Address</th>
-                                  <th className="text-center">Actions</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {formGroup.answers.map((answer) => (
-                                  <tr key={answer.id}>
-                                    <td>{answer.event_name || `Event #${answer.event}`}</td>
-                                    <td>{answer.filled_by_username || 'Anonymous'}</td>
-                                    <td className="text-center">{new Date(answer.filled_at).toLocaleString()}</td>
-                                    <td className="text-center">{answer.ip_address || 'N/A'}</td>
-                                    <td className="text-center">
-                                      <Button
-                                        size="sm"
-                                        variant="outline-info"
-                                        onClick={() => handleViewAnswer(answer)}
-                                      >
-                                        View
-                                      </Button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </Table>
-                          </Card.Body>
-                        )}
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Create Form Modal */}

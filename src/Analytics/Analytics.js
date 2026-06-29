@@ -761,101 +761,84 @@ function Analytics() {
     };
 
     return (
-        <div className="container-fluid mt-4 px-4 theme-transition">
+        <div className="mi-analytics theme-transition">
 
-            <div className="mb-4">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h2 className="mb-0">{dashboardType === 'event' ? 'Event Analytics Dashboard' : 'IP Analytics Dashboard'}</h2>
-                    
-                    <div className="btn-group mx-auto">
-                        <button 
-                            className={`btn ${dashboardType === 'event' ? 'btn-primary' : 'btn-outline-primary'}`}
-                            onClick={() => handleDashboardToggle('event')}
-                        >
-                            Event Analytics
-                        </button>
-                        <button 
-                            className={`btn ${dashboardType === 'ip' ? 'btn-primary' : 'btn-outline-primary'}`}
-                            onClick={() => handleDashboardToggle('ip')}
-                        >
-                            IP Analytics
-                        </button>
-                    </div>
-                    
-                    {dashboardType === 'event' ? (
-                        <div className="d-flex align-items-center gap-3">
-                            <span className="text-muted fw-bold">Filters:</span>
-                            <div className="d-flex gap-2" style={{ minWidth: '250px' }}>
-                                <select 
-                                    className="form-select"
-                                    value={attackTypeFilter}
-                                    onChange={handleAttackTypeFilterChange}
-                                    style={{ minWidth: '200px', transition: 'none' }}
-                                >
-                                    <option value="all">All Attack Types</option>
-                                    {Object.keys(stats.attackTypes || {}).filter(type => type !== "Unknown").map(type => (
-                                        <option key={type} value={type}>{type}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                    ) : (
-                        <div style={{ minWidth: '250px' }}></div> // Empty space to maintain alignment when filters are not visible
-                    )}
+            <div className="mi-page-head">
+                <div>
+                    <h1>{dashboardType === 'event' ? 'Event Analytics Dashboard' : 'IP Analytics Dashboard'}</h1>
+                    <div className="mi-sub">Threat intelligence metrics, sharing performance and IP reputation insights.</div>
                 </div>
+                {dashboardType === 'event' && (
+                    <div className="mi-page-head__actions">
+                        <div className="mi-field">
+                            <label>Attack Type</label>
+                            <select
+                                className="form-select"
+                                value={attackTypeFilter}
+                                onChange={handleAttackTypeFilterChange}
+                                style={{ minWidth: '200px', transition: 'none' }}
+                            >
+                                <option value="all">All Attack Types</option>
+                                {Object.keys(stats.attackTypes || {}).filter(type => type !== "Unknown").map(type => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Dashboard type toggle */}
+            <div className="mi-tabs">
+                <button
+                    className={"mi-tab" + (dashboardType === 'event' ? " active" : "")}
+                    onClick={() => handleDashboardToggle('event')}
+                >
+                    Event Analytics
+                </button>
+                <button
+                    className={"mi-tab" + (dashboardType === 'ip' ? " active" : "")}
+                    onClick={() => handleDashboardToggle('ip')}
+                >
+                    IP Analytics
+                </button>
             </div>
 
             {dashboardType === 'event' ? (
                 // Event Analytics Dashboard
                 <>
-                    <div className="row g-4 mb-4">
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Total Events</h5>
-                                    <h2 className="display-4 text-center my-3">{stats.totalEvents}</h2>
-                                </div>
-                            </div>
+                    <div className="mi-stats">
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Total Events</div>
+                            <div className="mi-stat__value">{stats.totalEvents}</div>
+                            <div className="mi-stat__delta">all attack types</div>
                         </div>
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Shared Events</h5>
-                                    <h2 className="display-4 text-center my-3">
-                                        {stats.totalEvents ? ((stats.shareStatus.sharedInTime + stats.shareStatus.sharedLate) / stats.totalEvents * 100).toFixed(1) : 0}%
-                                    </h2>
-                                </div>
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Shared Events</div>
+                            <div className="mi-stat__value">
+                                <span className="mi-accent">{stats.totalEvents ? ((stats.shareStatus.sharedInTime + stats.shareStatus.sharedLate) / stats.totalEvents * 100).toFixed(1) : 0}%</span>
                             </div>
+                            <div className="mi-stat__delta">of total events</div>
                         </div>
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">High Threat Events</h5>
-                                    <h2 className="display-4 text-center my-3">
-                                        {stats.threatLevels.high}
-                                    </h2>
-                                </div>
-                            </div>
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">High Threat Events</div>
+                            <div className="mi-stat__value">{stats.threatLevels.high}</div>
+                            <div className="mi-stat__delta">level 1 severity</div>
                         </div>
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Avg Response Time</h5>
-                                    <h2 className="display-4 text-center my-3">
-                                        {stats.responseMetrics.avgResponseTime.toFixed(1)}h
-                                    </h2>
-                                </div>
-                            </div>
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Avg Response Time</div>
+                            <div className="mi-stat__value">{stats.responseMetrics.avgResponseTime.toFixed(1)}h</div>
+                            <div className="mi-stat__delta">time to share</div>
                         </div>
                     </div>
 
                     <div className="row g-4 mb-4">
                         <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Threat Level Distribution</h5>
+                            <div className="mi-card h-100">
+                                <div className="mi-card__head"><div className="mi-card__title">Threat Level Distribution</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }} className="d-flex align-items-center">
-                                        <Doughnut 
+                                        <Doughnut
                                             data={chartConfigs.threatLevel.data}
                                             options={chartConfigs.threatLevel.options}
                                         />
@@ -863,13 +846,13 @@ function Analytics() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Share Status Distribution</h5>
+                            <div className="mi-card h-100">
+                                <div className="mi-card__head"><div className="mi-card__title">Share Status Distribution</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }} className="d-flex align-items-center">
-                                        <Doughnut 
+                                        <Doughnut
                                             data={chartConfigs.shareStatus.data}
                                             options={chartConfigs.shareStatus.options}
                                         />
@@ -879,11 +862,11 @@ function Analytics() {
                         </div>
 
                         <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Attack Types Distribution</h5>
+                            <div className="mi-card h-100">
+                                <div className="mi-card__head"><div className="mi-card__title">Attack Types Distribution</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }} className="d-flex align-items-center">
-                                        <Doughnut 
+                                        <Doughnut
                                             data={chartConfigs.attackTypes.data}
                                             options={chartConfigs.attackTypes.options}
                                         />
@@ -895,42 +878,42 @@ function Analytics() {
 
                     <div className="row g-4 mb-4">
                         <div className="col-md-12">
-                            <div className="card">
-                                <div className="card-body">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <div className="d-flex align-items-center">
-                                            <h5 className="card-title mb-0">Event Frequency</h5>
-                                            <span 
-                                                className="ms-2" 
-                                                style={{ cursor: 'help' }}
-                                                title="Distribution of events over the selected time period"
-                                            >
-                                                ⓘ
-                                            </span>
-                                        </div>
-                                        <div className="btn-group">
-                                            <button 
-                                                className={`btn ${timeRange === 'day' ? 'btn-primary' : 'btn-outline-primary'}`}
-                                                onClick={() => setTimeRange('day')}
-                                            >
-                                                Day
-                                            </button>
-                                            <button 
-                                                className={`btn ${timeRange === 'week' ? 'btn-primary' : 'btn-outline-primary'}`}
-                                                onClick={() => setTimeRange('week')}
-                                            >
-                                                Week
-                                            </button>
-                                            <button 
-                                                className={`btn ${timeRange === 'month' ? 'btn-primary' : 'btn-outline-primary'}`}
-                                                onClick={() => setTimeRange('month')}
-                                            >
-                                                Month
-                                            </button>
-                                        </div>
+                            <div className="mi-card">
+                                <div className="mi-card__head">
+                                    <div className="d-flex align-items-center">
+                                        <div className="mi-card__title">Event Frequency</div>
+                                        <span
+                                            className="ms-2"
+                                            style={{ cursor: 'help' }}
+                                            title="Distribution of events over the selected time period"
+                                        >
+                                            ⓘ
+                                        </span>
                                     </div>
+                                    <div className="btn-group">
+                                        <button
+                                            className={`btn ${timeRange === 'day' ? 'btn-primary' : 'btn-outline-primary'}`}
+                                            onClick={() => setTimeRange('day')}
+                                        >
+                                            Day
+                                        </button>
+                                        <button
+                                            className={`btn ${timeRange === 'week' ? 'btn-primary' : 'btn-outline-primary'}`}
+                                            onClick={() => setTimeRange('week')}
+                                        >
+                                            Week
+                                        </button>
+                                        <button
+                                            className={`btn ${timeRange === 'month' ? 'btn-primary' : 'btn-outline-primary'}`}
+                                            onClick={() => setTimeRange('month')}
+                                        >
+                                            Month
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }}>
-                                        <Bar 
+                                        <Bar
                                             data={chartConfigs.frequency.data}
                                             options={chartConfigs.frequency.options}
                                         />
@@ -942,11 +925,11 @@ function Analytics() {
 
                     <div className="row g-4">
                         <div className="col-md-12">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h5 className="card-title">Monthly Activity Trends</h5>
+                            <div className="mi-card">
+                                <div className="mi-card__head"><div className="mi-card__title">Monthly Activity Trends</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }}>
-                                        <Line 
+                                        <Line
                                             data={chartConfigs.monthlyTrends.data}
                                             options={chartConfigs.monthlyTrends.options}
                                         />
@@ -959,54 +942,36 @@ function Analytics() {
             ) : (
                 // IP Analytics Dashboard
                 <>
-                    <div className="row g-4 mb-4">
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Total IPs Analyzed</h5>
-                                    <h2 className="display-4 text-center my-3">{ipData.ipStats.totalIps}</h2>
-                                </div>
-                            </div>
+                    <div className="mi-stats">
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Total IPs Analyzed</div>
+                            <div className="mi-stat__value">{ipData.ipStats.totalIps}</div>
+                            <div className="mi-stat__delta">in reputation store</div>
                         </div>
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Malicious IPs</h5>
-                                    <h2 className="display-4 text-center my-3">
-                                        {ipData.ipStats.maliciousCount}
-                                    </h2>
-                                </div>
-                            </div>
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Malicious IPs</div>
+                            <div className="mi-stat__value">{ipData.ipStats.maliciousCount}</div>
+                            <div className="mi-stat__delta">flagged as threats</div>
                         </div>
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Average Threat Score</h5>
-                                    <h2 className="display-4 text-center my-3">
-                                        {ipData.ipStats.avgThreatScore.toFixed(1)}
-                                    </h2>
-                                </div>
-                            </div>
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Average Threat Score</div>
+                            <div className="mi-stat__value"><span className="mi-accent">{ipData.ipStats.avgThreatScore.toFixed(1)}</span></div>
+                            <div className="mi-stat__delta">across all IPs</div>
                         </div>
-                        <div className="col-md-3">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Kafka Source IPs</h5>
-                                    <h2 className="display-4 text-center my-3">
-                                        {Object.keys(ipData.ipStats.kafkaSourceIps || {}).length}
-                                    </h2>
-                                </div>
-                            </div>
+                        <div className="mi-stat">
+                            <div className="mi-stat__label">Kafka Source IPs</div>
+                            <div className="mi-stat__value">{Object.keys(ipData.ipStats.kafkaSourceIps || {}).length}</div>
+                            <div className="mi-stat__delta">seen in messages</div>
                         </div>
                     </div>
 
                     <div className="row g-4 mb-4">
                         <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">IP Status Distribution</h5>
+                            <div className="mi-card h-100">
+                                <div className="mi-card__head"><div className="mi-card__title">IP Status Distribution</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }} className="d-flex align-items-center">
-                                        <Doughnut 
+                                        <Doughnut
                                             data={ipChartConfigs.maliciousStatus.data}
                                             options={ipChartConfigs.maliciousStatus.options}
                                         />
@@ -1015,11 +980,11 @@ function Analytics() {
                             </div>
                         </div>
                         <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Threat Score Distribution</h5>
+                            <div className="mi-card h-100">
+                                <div className="mi-card__head"><div className="mi-card__title">Threat Score Distribution</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }} className="d-flex align-items-center">
-                                        <Doughnut 
+                                        <Doughnut
                                             data={ipChartConfigs.threatScoreRanges.data}
                                             options={ipChartConfigs.threatScoreRanges.options}
                                         />
@@ -1028,11 +993,11 @@ function Analytics() {
                             </div>
                         </div>
                         <div className="col-md-4">
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">Reporting Sources</h5>
+                            <div className="mi-card h-100">
+                                <div className="mi-card__head"><div className="mi-card__title">Reporting Sources</div></div>
+                                <div className="mi-card__body">
                                     <div style={{ height: '300px' }} className="d-flex align-items-center">
-                                        <Doughnut 
+                                        <Doughnut
                                             data={ipChartConfigs.reportingSources.data}
                                             options={ipChartConfigs.reportingSources.options}
                                         />
@@ -1043,53 +1008,51 @@ function Analytics() {
                     </div>
                     <div className="row g-4 mb-4">
                         <div className="col-md-12">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h5 className="card-title">IP Reputation Data</h5>
-                                    <div style={{ maxHeight: '400px', overflow: 'auto' }}>
-                                        <table className="table table-striped table-hover">
-                                            <thead className="sticky-top bg-body">
-                                                <tr>
-                                                    <th>IP Address</th>
-                                                    <th>Status</th>
-                                                    <th>Threat Score</th>
-                                                    <th>Confidence</th>
-                                                    <th>Sources</th>
-                                                    <th>Last Checked</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {ipData.ipRecords.map((ip, index) => (
-                                                    <tr key={index} className={ip.is_malicious ? (theme === 'dark' ? 'border border-danger' : 'table-danger') : ''} 
-                                                        style={ip.is_malicious && theme === 'dark' ? { backgroundColor: 'rgba(220, 53, 69, 0.2)' } : {}}>
-                                                        <td>{ip.ip_address}</td>
-                                                        <td>
-                                                            {ip.is_malicious === true && <span className="badge bg-danger">Malicious</span>}
-                                                            {ip.is_malicious === false && <span className="badge bg-success">Clean</span>}
-                                                            {ip.is_malicious === null && <span className="badge bg-secondary">Unknown</span>}
-                                                        </td>
-                                                        <td>
-                                                            <div className="progress" style={{ height: '20px' }}>
-                                                                <div 
-                                                                    className={`progress-bar ${ip.threat_score > 60 ? 'bg-danger' : ip.threat_score > 40 ? 'bg-warning' : 'bg-success'}`} 
-                                                                    role="progressbar" 
-                                                                    style={{ width: `${ip.threat_score}%` }}
-                                                                    aria-valuenow={ip.threat_score} 
-                                                                    aria-valuemin="0" 
-                                                                    aria-valuemax="100"
-                                                                >
-                                                                    {ip.threat_score.toFixed(1)}
-                                                                </div>
+                            <div className="mi-card">
+                                <div className="mi-card__head"><div className="mi-card__title">IP Reputation Data</div></div>
+                                <div className="mi-table-wrap" style={{ maxHeight: '400px', overflow: 'auto' }}>
+                                    <table className="mi-tbl">
+                                        <thead className="sticky-top" style={{ background: 'var(--mi-card-bg)' }}>
+                                            <tr>
+                                                <th>IP Address</th>
+                                                <th>Status</th>
+                                                <th>Threat Score</th>
+                                                <th>Confidence</th>
+                                                <th>Sources</th>
+                                                <th>Last Checked</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {ipData.ipRecords.map((ip, index) => (
+                                                <tr key={index} className={ip.is_malicious ? (theme === 'dark' ? 'border border-danger' : 'table-danger') : ''}
+                                                    style={ip.is_malicious && theme === 'dark' ? { backgroundColor: 'rgba(220, 53, 69, 0.2)' } : {}}>
+                                                    <td className="mi-ev-title">{ip.ip_address}</td>
+                                                    <td>
+                                                        {ip.is_malicious === true && <span className="mi-badge mi-danger"><span className="mi-led"></span> Malicious</span>}
+                                                        {ip.is_malicious === false && <span className="mi-badge mi-success"><span className="mi-led"></span> Clean</span>}
+                                                        {ip.is_malicious === null && <span className="mi-badge mi-neutral"><span className="mi-led"></span> Unknown</span>}
+                                                    </td>
+                                                    <td>
+                                                        <div className="progress" style={{ height: '20px' }}>
+                                                            <div
+                                                                className={`progress-bar ${ip.threat_score > 60 ? 'bg-danger' : ip.threat_score > 40 ? 'bg-warning' : 'bg-success'}`}
+                                                                role="progressbar"
+                                                                style={{ width: `${ip.threat_score}%` }}
+                                                                aria-valuenow={ip.threat_score}
+                                                                aria-valuemin="0"
+                                                                aria-valuemax="100"
+                                                            >
+                                                                {ip.threat_score.toFixed(1)}
                                                             </div>
-                                                        </td>
-                                                        <td>{ip.confidence_score.toFixed(1)}</td>
-                                                        <td>{ip.reported_by ? Object.keys(ip.reported_by).join(", ") : "None"}</td>
-                                                        <td>{new Date(ip.last_checked).toLocaleString()}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{ip.confidence_score.toFixed(1)}</td>
+                                                    <td>{ip.reported_by ? Object.keys(ip.reported_by).join(", ") : "None"}</td>
+                                                    <td>{new Date(ip.last_checked).toLocaleString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>

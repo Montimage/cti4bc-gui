@@ -237,22 +237,27 @@ const KafkaView = () => {
   
     return (
         <div className={`kafka-view container-fluid mt-4 ${isThemeChanging ? 'theme-changing' : ''}`}>
+            <div className="mi-page-head">
+                <div>
+                    <h1>Kafka</h1>
+                    <div className="mi-sub">Start a Kafka consumer on selected topics and stream incoming security messages in real time.</div>
+                </div>
+            </div>
             <div className="row kafka-main-row" style={{ minHeight: "calc(100vh - 80px)" }}>
                 {/* Left Column (1/3 width) */}
                 <div className="col-md-4">
-                    <div className="card h-100 shadow-sm">
-                        <div className={`card-header ${theme === 'light' ? 'bg-primary text-white' : 'bg-dark text-white'}`}>
-                            <h4 className="mb-0">Kafka Consumer Control</h4>
+                    <div className="mi-card h-100">
+                        <div className="mi-card__head">
+                            <div className="mi-card__title">Kafka Consumer Control</div>
                         </div>
-                        <div className="card-body">
+                        <div className="mi-card__body">
                             {/* Consumer Status */}
                             <div className="mb-4">
                                 <h5>Consumer Status</h5>
                                 <div className="d-flex align-items-center mb-2">
-                                    <div className={`status-indicator me-2 ${consumerStatus.status === 'running' ? 'bg-success' : 'bg-danger'}`} 
-                                        style={{ width: '12px', height: '12px', borderRadius: '50%' }}>
-                                    </div>
-                                    <span>{consumerStatus.status === 'running' ? 'Running' : 'Stopped'}</span>
+                                    <span className={`mi-badge ${consumerStatus.status === 'running' ? 'mi-success' : 'mi-danger'}`}>
+                                        <span className="mi-led"></span> {consumerStatus.status === 'running' ? 'Running' : 'Stopped'}
+                                    </span>
                                 </div>
                                 {consumerStatus.status === 'running' && (
                                     <div className="small text-muted">
@@ -408,9 +413,9 @@ const KafkaView = () => {
 
                 {/* Right Column (2/3 width) - Messages Box */}
                 <div className="col-md-8">
-                    <div className="card h-100 shadow-sm d-flex flex-column">
-                        <div className={`card-header ${theme === 'light' ? 'bg-primary text-white' : 'bg-dark text-white'}`}>
-                            <h4 className="mb-0">Kafka Messages</h4>
+                    <div className="mi-card h-100 d-flex flex-column">
+                        <div className="mi-card__head">
+                            <div className="mi-card__title">Kafka Messages</div>
                         </div>
                         <div className="card-body flex-grow-1 d-flex flex-column p-0">
                             <div className="message-container flex-grow-1" 

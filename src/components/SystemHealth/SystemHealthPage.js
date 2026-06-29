@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Table, Button, ButtonGroup, Badge } from 'react-bootstrap';
+import { Row, Col, Button, ButtonGroup, Badge } from 'react-bootstrap';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -393,212 +393,176 @@ function SystemHealthPage() {
   return (
     <div className={`system-health-page ${theme}`}>
       <div className="health-wrapper mt-4 px-4">
-        
+
         {/* Header Section */}
-        <div className={`health-header mb-4 ${theme}`}>
-          <div className="text-center">
-            <h1 className="page-title">
-              <i className="bi bi-activity me-3"></i>
+        <div className="mi-page-head">
+          <div>
+            <h1>
+              <i className="bi bi-activity me-2"></i>
               System Health Dashboard
             </h1>
-            <p className="page-subtitle">
+            <div className="mi-sub">
               Real-time monitoring of system performance and component status
-            </p>
-            <div className="mt-3">
-              <Badge 
-                bg={healthData.overall === 'healthy' ? 'success' : healthData.overall === 'warning' ? 'warning' : 'danger'}
-                className="fs-6 px-3 py-2"
-              >
-                <i className={`bi ${healthData.overall === 'healthy' ? 'bi-check-circle' : healthData.overall === 'warning' ? 'bi-exclamation-triangle' : 'bi-x-circle'} me-2`}></i>
-                System Status: {healthData.overall.toUpperCase()}
-              </Badge>
             </div>
+          </div>
+          <div className="mi-page-head__actions">
+            <Badge
+              bg={healthData.overall === 'healthy' ? 'success' : healthData.overall === 'warning' ? 'warning' : 'danger'}
+              className="fs-6 px-3 py-2"
+            >
+              <i className={`bi ${healthData.overall === 'healthy' ? 'bi-check-circle' : healthData.overall === 'warning' ? 'bi-exclamation-triangle' : 'bi-x-circle'} me-2`}></i>
+              System Status: {healthData.overall.toUpperCase()}
+            </Badge>
           </div>
         </div>
 
         {/* Overview Cards */}
-        <Row className="mb-4">
-          <Col md={3} sm={6} className="mb-3">
-            <Card className={`overview-card ${theme}`}>
-              <Card.Body className="text-center">
-                <div className="overview-icon overall-status">
-                  <i className={`bi ${getStatusIcon(healthData.overall)}`}></i>
-                </div>
-                <h4>Overall Status</h4>
-                <Badge bg={getStatusColor(healthData.overall)} className="status-badge">
-                  {healthData.overall.toUpperCase()}
-                </Badge>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={3} sm={6} className="mb-3">
-            <Card className={`overview-card ${theme}`}>
-              <Card.Body className="text-center">
-                <div className="overview-icon">
-                  <i className="bi bi-graph-up text-success"></i>
-                </div>
-                <h4>Uptime</h4>
-                <p className="metric-value">{healthData.uptime}</p>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={3} sm={6} className="mb-3">
-            <Card className={`overview-card ${theme}`}>
-              <Card.Body className="text-center">
-                <div className="overview-icon last-incident">
-                  <i className="bi bi-exclamation-triangle text-warning"></i>
-                </div>
-                <h4>Last Incident</h4>
-                <p className="metric-value">{healthData.lastIncident}</p>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={3} sm={6} className="mb-3">
-            <Card className={`overview-card ${theme}`}>
-              <Card.Body className="text-center">
-                <div className="overview-icon components">
-                  <i className="bi bi-grid-3x3-gap text-success"></i>
-                </div>
-                <h4>Components</h4>
-                <p className="metric-value">
-                  {healthData.components.filter(c => c.status === 'healthy').length}/
-                  {healthData.components.length}
-                </p>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+        <div className="mi-stats">
+          <div className="mi-stat">
+            <div className="mi-stat__label">Overall Status</div>
+            <div className="mi-stat__value">
+              <Badge bg={getStatusColor(healthData.overall)} className="status-badge">
+                <i className={`bi ${getStatusIcon(healthData.overall)} me-1`}></i>
+                {healthData.overall.toUpperCase()}
+              </Badge>
+            </div>
+          </div>
+          <div className="mi-stat">
+            <div className="mi-stat__label">Uptime</div>
+            <div className="mi-stat__value"><span className="mi-accent">{healthData.uptime}</span></div>
+          </div>
+          <div className="mi-stat">
+            <div className="mi-stat__label">Last Incident</div>
+            <div className="mi-stat__value">{healthData.lastIncident}</div>
+          </div>
+          <div className="mi-stat">
+            <div className="mi-stat__label">Components</div>
+            <div className="mi-stat__value">
+              <span className="mi-accent">{healthData.components.filter(c => c.status === 'healthy').length}</span>/
+              {healthData.components.length}
+            </div>
+          </div>
+        </div>
 
         {/* System Metrics */}
         <Row className="mb-4">
           <Col md={8}>
-            <Card className={`chart-card ${theme}`}>
-              <Card.Header>
-                <div className="d-flex justify-content-between align-items-center">
-                  <h5 className="mb-0">Response Time Trends</h5>
-                  <div className="d-flex align-items-center gap-3">
-                    {/* Manual refresh button - only shown for 1H view */}
-                    {timeRange === '1h' && (
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        onClick={() => {
-                          refreshHealth();
-                          refreshChartData();
-                        }}
-                        className="d-flex align-items-center gap-1"
-                        title="Refresh data and update chart"
-                      >
-                        <i className="bi bi-arrow-clockwise"></i>
-                        Refresh
-                      </Button>
-                    )}
-                    
-                    {/* Switch entre 1h et 24h */}
-                    <ButtonGroup size="sm">
-                      <Button
-                        variant={timeRange === '1h' ? 'primary' : 'outline-primary'}
-                        onClick={() => setTimeRange('1h')}
-                      >
-                        1H
-                      </Button>
-                      <Button
-                        variant={timeRange === '24h' ? 'primary' : 'outline-primary'}
-                        onClick={() => setTimeRange('24h')}
-                      >
-                        24H
-                      </Button>
-                    </ButtonGroup>
-                  </div>
+            <div className="mi-card h-100">
+              <div className="mi-card__head">
+                <div className="mi-card__title">Response Time Trends</div>
+                <div className="d-flex align-items-center gap-3">
+                  {/* Manual refresh button - only shown for 1H view */}
+                  {timeRange === '1h' && (
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => {
+                        refreshHealth();
+                        refreshChartData();
+                      }}
+                      className="d-flex align-items-center gap-1"
+                      title="Refresh data and update chart"
+                    >
+                      <i className="bi bi-arrow-clockwise"></i>
+                      Refresh
+                    </Button>
+                  )}
+
+                  {/* Switch entre 1h et 24h */}
+                  <ButtonGroup size="sm">
+                    <Button
+                      variant={timeRange === '1h' ? 'primary' : 'outline-primary'}
+                      onClick={() => setTimeRange('1h')}
+                    >
+                      1H
+                    </Button>
+                    <Button
+                      variant={timeRange === '24h' ? 'primary' : 'outline-primary'}
+                      onClick={() => setTimeRange('24h')}
+                    >
+                      24H
+                    </Button>
+                  </ButtonGroup>
                 </div>
-              </Card.Header>
-              <Card.Body>
+              </div>
+              <div className="mi-card__body">
                 <div className="chart-container">
                   <Line data={responseTimeData[timeRange]} options={chartOptions} />
                 </div>
-              </Card.Body>
-            </Card>
+              </div>
+            </div>
           </Col>
           <Col md={4}>
-            <Card className={`chart-card ${theme}`}>
-              <Card.Header>
-                <h5 className="mb-0">System Resource Usage</h5>
-              </Card.Header>
-              <Card.Body>
+            <div className="mi-card h-100">
+              <div className="mi-card__head">
+                <div className="mi-card__title">System Resource Usage</div>
+              </div>
+              <div className="mi-card__body">
                 <div className="chart-container">
                   <Doughnut data={systemMetricsData} options={doughnutOptions} />
                 </div>
-              </Card.Body>
-            </Card>
+              </div>
+            </div>
           </Col>
         </Row>
 
         {/* Components Status Table */}
-        <Row>
-          <Col>
-            <Card className={`components-card ${theme}`}>
-              <Card.Header>
-                <h5 className="mb-0">Component Status Details</h5>
-              </Card.Header>
-              <Card.Body>
-                <Table responsive hover>
-                  <thead>
-                    <tr>
-                      <th>Component</th>
-                      <th>Status</th>
-                      <th>Response Time</th>
-                      <th>Uptime</th>
-                      <th>Last Check</th>
-                      <th>Details</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {healthData.components.map((component, index) => (
-                      <tr key={index}>
-                        <td>
-                          <div>
-                            <strong>{component.name}</strong>
-                            <br />
-                            <small className="text-muted">{component.description}</small>
-                          </div>
-                        </td>
-                        <td>
-                          <Badge 
-                            bg={getStatusColor(component.status)} 
-                            className="d-flex align-items-center clickable-badge"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => handleComponentClick(component)}
-                            title="Click for detailed metrics"
-                          >
-                            <i className={`bi ${getStatusIcon(component.status)} me-1`}></i>
-                            {component.status}
-                          </Badge>
-                        </td>
-                        <td>
-                          <code>{component.responseTime}</code>
-                        </td>
-                        <td>{component.uptime}</td>
-                        <td>
-                          <small>{formatTime(component.lastCheck)}</small>
-                        </td>
-                        <td>
-                          <small className="text-muted">{getComponentDetails(component)}</small>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+        <div className="mi-card mb-4">
+          <div className="mi-card__head">
+            <div className="mi-card__title">Component Status Details</div>
+          </div>
+          <div className="mi-table-wrap">
+            <table className="mi-tbl">
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Status</th>
+                  <th>Response Time</th>
+                  <th>Uptime</th>
+                  <th>Last Check</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {healthData.components.map((component, index) => (
+                  <tr key={index}>
+                    <td>
+                      <div className="mi-ev-title">{component.name}</div>
+                      <small className="text-muted">{component.description}</small>
+                    </td>
+                    <td>
+                      <Badge
+                        bg={getStatusColor(component.status)}
+                        className="d-inline-flex align-items-center clickable-badge"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => handleComponentClick(component)}
+                        title="Click for detailed metrics"
+                      >
+                        <i className={`bi ${getStatusIcon(component.status)} me-1`}></i>
+                        {component.status}
+                      </Badge>
+                    </td>
+                    <td>
+                      <code>{component.responseTime}</code>
+                    </td>
+                    <td>{component.uptime}</td>
+                    <td>
+                      <small>{formatTime(component.lastCheck)}</small>
+                    </td>
+                    <td>
+                      <small className="text-muted">{getComponentDetails(component)}</small>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
         {/* Thresholds Configuration */}
-        <Row className="mb-4">
-          <Col>
-            <ThresholdsDisplay />
-          </Col>
-        </Row>
+        <div className="mb-4">
+          <ThresholdsDisplay />
+        </div>
       </div>
 
       {/* Component Details Modal */}

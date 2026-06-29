@@ -654,18 +654,18 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
     };
 
     return (
-        <div className="container-fluid mt-4">
-            <div style={{ minHeight: "calc(100vh - 80px)" }}>
+        <div className="mi-reports">
                 <Container fluid className="mt-4">
                     <Row>
                         <Col>
-                            <div className="d-flex justify-content-between align-items-center mb-4">
-                                <h2 className="text-primary">
-                                    Security Reports
-                                </h2>
-                                <div className="d-flex gap-2">
-                                    <Button 
-                                        variant="outline-secondary" 
+                            <div className="mi-page-head">
+                                <div>
+                                    <h1>Security Reports</h1>
+                                    <div className="mi-sub">Generate and manage AI-powered security analysis reports.</div>
+                                </div>
+                                <div className="mi-page-head__actions">
+                                    <Button
+                                        variant="outline-secondary"
                                         onClick={handleLLMSettings}
                                         disabled={loading}
                                         title="LLM Settings"
@@ -673,127 +673,105 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                     >
                                         <i className="fas fa-cog"></i>
                                     </Button>
-                                    <Button 
-                                        variant="primary" 
+                                    <Button
+                                        variant="primary"
                                         onClick={handleCreateReport}
                                         disabled={loading}
-                                        size="lg"
                                     >
                                         <i className="fas fa-plus me-2"></i>
                                         New Report
                                     </Button>
                                 </div>
                             </div>
-                        
+
                         {/* Stats Cards */}
-                        <Row className="mb-4">
-                            <Col md={4}>
-                                <Card className="text-center border-primary h-100 stats-card">
-                                    <Card.Body>
-                                        <i className="fas fa-chart-bar fa-2x text-primary mb-2"></i>
-                                        <h4 className="text-primary">{stats.total}</h4>
-                                        <p className="mb-0 text-muted">Total Reports</p>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                            <Col md={4}>
-                                <Card className="text-center border-info h-100 stats-card">
-                                    <Card.Body>
-                                        <div className="position-relative">
-                                            <i className="fas fa-robot fa-2x text-info mb-2"></i>
-                                            {loadingLLM && (
-                                                <div className="position-absolute top-0 end-0">
-                                                    <Spinner animation="border" size="sm" variant="info" />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <h5 className="text-info mb-1">
-                                            {currentProvider ? currentProvider.charAt(0).toUpperCase() + currentProvider.slice(1) : 'No LLM'}
-                                        </h5>
-                                        <small className="text-muted d-block mb-2">
-                                            {currentProvider === 'gemini' ? 'Gemini 1.5 Flash' : (currentModel || 'No model selected')}
-                                        </small>
-                                        <div className="d-flex justify-content-center gap-2">
-                                            <p className="mb-0 text-muted flex-grow-1">Current LLM & Model</p>
-                                            <Button 
-                                                variant="outline-info" 
-                                                size="sm" 
-                                                onClick={loadLLMProviders}
-                                                disabled={loadingLLM}
-                                                className="border-0"
-                                                title="Refresh LLM Configuration"
-                                            >
-                                                <i className={`fas fa-sync-alt ${loadingLLM ? 'fa-spin' : ''}`}></i>
-                                            </Button>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                            <Col md={4}>
-                                <Card className="text-center border-warning h-100 stats-card">
-                                    <Card.Body>
-                                        <i className="fas fa-brain fa-2x text-warning mb-2"></i>
-                                        <h4 className="text-warning">
-                                            {reports.filter(r => r.llm_provider === 'ollama').length > 
-                                             reports.filter(r => r.llm_provider !== 'ollama').length 
-                                             ? 'Ollama' : 'Gemini'}
-                                        </h4>
-                                        <p className="mb-0 text-muted">Most Used LLM</p>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        </Row>
+                        <div className="mi-stats" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+                            <div className="mi-stat">
+                                <div className="mi-stat__label">Total Reports</div>
+                                <div className="mi-stat__value">{stats.total}</div>
+                                <div className="mi-stat__delta">all generated reports</div>
+                            </div>
+                            <div className="mi-stat">
+                                <div className="mi-stat__label">Current LLM &amp; Model</div>
+                                <div className="mi-stat__value">
+                                    {currentProvider ? currentProvider.charAt(0).toUpperCase() + currentProvider.slice(1) : 'No LLM'}
+                                    {loadingLLM && (
+                                        <Spinner animation="border" size="sm" variant="info" className="ms-2" />
+                                    )}
+                                </div>
+                                <div className="mi-stat__delta d-flex justify-content-between align-items-center gap-2">
+                                    <span>{currentProvider === 'gemini' ? 'Gemini 1.5 Flash' : (currentModel || 'No model selected')}</span>
+                                    <Button
+                                        variant="outline-info"
+                                        size="sm"
+                                        onClick={loadLLMProviders}
+                                        disabled={loadingLLM}
+                                        className="border-0"
+                                        title="Refresh LLM Configuration"
+                                    >
+                                        <i className={`fas fa-sync-alt ${loadingLLM ? 'fa-spin' : ''}`}></i>
+                                    </Button>
+                                </div>
+                            </div>
+                            <div className="mi-stat">
+                                <div className="mi-stat__label">Most Used LLM</div>
+                                <div className="mi-stat__value">
+                                    <span className="mi-accent">
+                                        {reports.filter(r => r.llm_provider === 'ollama').length >
+                                         reports.filter(r => r.llm_provider !== 'ollama').length
+                                         ? 'Ollama' : 'Gemini'}
+                                    </span>
+                                </div>
+                                <div className="mi-stat__delta">across all reports</div>
+                            </div>
+                        </div>
 
                         {/* Search and Filter */}
-                        <Row className="mb-4">
-                            <Col md={8}>
-                                <InputGroup>
-                                    <InputGroup.Text>
-                                        <i className="fas fa-search"></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Search reports by title or content..."
-                                        value={searchTerm}
-                                        onChange={(e) => setSearchTerm(e.target.value)}
-                                    />
-                                </InputGroup>
-                            </Col>
-                            <Col md={4} className="text-end">
-                                <small className="text-muted">
-                                    Showing {filteredReports.length} of {reports.length} reports
-                                </small>
-                            </Col>
-                        </Row>
+                        <div className="mi-toolbar">
+                            <div className="mi-field" style={{ flex: '1 1 240px' }}>
+                                <label>Search</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search reports by title or content..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <div className="mi-toolbar__spacer"></div>
+                            <small className="text-muted">
+                                Showing {filteredReports.length} of {reports.length} reports
+                            </small>
+                        </div>
 
                         {/* Reports Table */}
-                        <Card className="shadow-sm reports-table">
-                            <Card.Header>
-                                <h5 className="mb-0">
+                        <div className="mi-card">
+                            <div className="mi-card__head">
+                                <div className="mi-card__title">
                                     <i className="fas fa-list me-2"></i>
                                     Reports Management
-                                </h5>
-                            </Card.Header>
-                            <Card.Body className="p-0">
-                                {reports.length === 0 ? (
-                                    <div className="text-center py-5">
-                                        <h5>No Reports Found</h5>
-                                        <p className="text-muted">Create your first security report to get started.</p>
-                                        <Button variant="primary" onClick={handleCreateReport} size="lg">
-                                            <i className="fas fa-plus me-2"></i>
-                                            Create Your First Report
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <Table responsive striped hover className="mb-0">
+                                </div>
+                            </div>
+                            {reports.length === 0 ? (
+                                <div className="mi-card__body text-center py-5">
+                                    <h5>No Reports Found</h5>
+                                    <p className="text-muted">Create your first security report to get started.</p>
+                                    <Button variant="primary" onClick={handleCreateReport} size="lg">
+                                        <i className="fas fa-plus me-2"></i>
+                                        Create Your First Report
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="mi-table-wrap">
+                                    <table className="mi-tbl">
                                         <thead>
                                             <tr>
                                                 <th>Report Title</th>
-                                                <th className="text-center">Events</th>
-                                                <th className="text-center">LLM Model</th>
-                                                <th className="text-center">Generated</th>
-                                                <th className="text-center">Status</th>
-                                                <th className="text-center">Actions</th>
+                                                <th style={{ textAlign: 'center' }}>Events</th>
+                                                <th style={{ textAlign: 'center' }}>LLM Model</th>
+                                                <th style={{ textAlign: 'center' }}>Generated</th>
+                                                <th style={{ textAlign: 'center' }}>Status</th>
+                                                <th style={{ textAlign: 'center' }}>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -801,64 +779,61 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                 <tr key={report.id}>
                                                     <td>
                                                         <div className="d-flex flex-column">
-                                                            <strong className="text-primary">{report.title || 'Untitled Report'}</strong>
+                                                            <span className="mi-ev-title">{report.title || 'Untitled Report'}</span>
                                                             {report.prompt && (
                                                                 <small className="text-muted text-truncate" style={{ maxWidth: '300px' }}>
-                                                                    {report.prompt.length > 80 
-                                                                        ? `${report.prompt.substring(0, 80)}...` 
+                                                                    {report.prompt.length > 80
+                                                                        ? `${report.prompt.substring(0, 80)}...`
                                                                         : report.prompt
                                                                     }
                                                                 </small>
                                                             )}
                                                         </div>
                                                     </td>
-                                                    <td className="text-center">
-                                                        <Badge 
-                                                            bg="info" 
-                                                            className="fs-6"
+                                                    <td style={{ textAlign: 'center' }}>
+                                                        <span
+                                                            className="mi-badge mi-info"
                                                             style={{ cursor: 'pointer' }}
                                                             onClick={() => handleShowEvents(report)}
                                                             title="Click to view events"
                                                         >
                                                             {report.events_count || 0} events
-                                                        </Badge>
+                                                        </span>
                                                     </td>
-                                                    <td className="text-center">
+                                                    <td style={{ textAlign: 'center' }}>
                                                         <div className="d-flex flex-column align-items-center">
-                                                            <Badge 
-                                                                bg={report.llm_provider === 'ollama' ? 'warning' : 'primary'} 
-                                                                className="mb-1"
+                                                            <span
+                                                                className={`mi-badge ${report.llm_provider === 'ollama' ? 'mi-warning' : 'mi-info'} mb-1`}
                                                                 style={{ cursor: 'pointer' }}
                                                                 onClick={() => handleShowLLMInfo(report)}
                                                                 title="Click to view LLM details"
                                                             >
                                                                 <i className={`fas ${report.llm_provider === 'ollama' ? 'fa-server' : 'fa-brain'} me-1`}></i>
                                                                 {report.llm_provider === 'ollama' ? 'Ollama' : 'Gemini'}
-                                                            </Badge>
+                                                            </span>
                                                             {report.llm_model && (
                                                                 <small className="text-muted">{report.llm_model}</small>
                                                             )}
                                                         </div>
                                                     </td>
-                                                    <td className="text-center">
+                                                    <td style={{ textAlign: 'center' }}>
                                                         <div className="d-flex flex-column align-items-center">
                                                             <small>{formatDate(report.created_at)}</small>
                                                             {report.generation_time && (
                                                                 <small className="text-muted">
-                                                                    {report.generation_time < 60 
-                                                                        ? `${Math.round(report.generation_time)}s` 
+                                                                    {report.generation_time < 60
+                                                                        ? `${Math.round(report.generation_time)}s`
                                                                         : `${Math.round(report.generation_time / 60)}m`
                                                                     }
                                                                 </small>
                                                             )}
                                                         </div>
                                                     </td>
-                                                    <td className="text-center">
+                                                    <td style={{ textAlign: 'center' }}>
                                                         <div className="d-flex flex-column align-items-center">
-                                                            <Badge bg="success" className="mb-1">
-                                                                <i className="fas fa-check me-1"></i>
-                                                                Generated
-                                                            </Badge>
+                                                            <span className="mi-badge mi-success mb-1">
+                                                                <span className="mi-led"></span> Generated
+                                                            </span>
                                                             {report.content && (
                                                                 <small className="text-muted">
                                                                     {(report.content.length / 1024).toFixed(1)} KB
@@ -866,7 +841,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                             )}
                                                         </div>
                                                     </td>
-                                                    <td className="text-center">
+                                                    <td style={{ textAlign: 'center' }}>
                                                         <div className="btn-group" role="group">
                                                             <Button
                                                                 variant="outline-primary"
@@ -876,11 +851,11 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                             >
                                                                 <i className="fas fa-eye"></i>
                                                             </Button>
-                                                            
+
                                                             {/* Download Dropdown */}
                                                             <Dropdown>
-                                                                <Dropdown.Toggle 
-                                                                    variant="outline-success" 
+                                                                <Dropdown.Toggle
+                                                                    variant="outline-success"
                                                                     size="sm"
                                                                     title="Download Report"
                                                                 >
@@ -904,7 +879,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                                     </Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
-                                                            
+
                                                             <Button
                                                                 variant="outline-danger"
                                                                 size="sm"
@@ -918,10 +893,10 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                 </tr>
                                             ))}
                                         </tbody>
-                                    </Table>
-                                )}
-                            </Card.Body>
-                        </Card>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
 
                         {/* Create Report Modal */}
                         <Modal show={showCreateModal} onHide={closeModals} size="lg">
@@ -1629,7 +1604,6 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                     </Col>
                 </Row>
             </Container>
-            </div>
         </div>
     );
 };

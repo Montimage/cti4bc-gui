@@ -309,42 +309,45 @@ function Settings() {
 
   return (
     <div className={`settings-container ${theme}`}>
-      <div className="settings-header">
-        <button 
-          className={`btn btn-outline-${theme === 'dark' ? 'light' : 'dark'} me-3`}
-          onClick={() => navigate(-1)}
-        >
-          <i className="bi bi-arrow-left me-2"></i>
-          Back
-        </button>
-        <h2 className="mb-0">
-          <i className="bi bi-gear me-2"></i>
-          Settings
-        </h2>
+      <div className="mi-page-head">
+        <div>
+          <h1>Settings</h1>
+          <div className="mi-sub">Manage your profile, security and application preferences.</div>
+        </div>
+        <div className="mi-page-head__actions">
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => navigate(-1)}
+          >
+            <i className="bi bi-arrow-left me-2"></i>
+            Back
+          </button>
+        </div>
       </div>
 
       <div className="row">
         {/* Module Directory */}
         <div className="col-lg-3 mb-4">
-          <div className={`settings-directory ${theme}`}>
-            <h5 className="directory-title">
-              <i className="bi bi-list me-2"></i>
-              Modules
-            </h5>
-            <div className="directory-modules">
+          <div className="mi-card">
+            <div className="mi-card__head">
+              <div className="mi-card__title">
+                <i className="bi bi-list me-2"></i>
+                Modules
+              </div>
+            </div>
+            <div className="mi-card__body" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {modules.map((module) => (
                 <button
                   key={module.id}
-                  className={`directory-module ${activeModule === module.id ? 'active' : ''} ${theme}`}
+                  className={`mi-tab ${activeModule === module.id ? 'active' : ''}`}
+                  style={{ width: '100%', textAlign: 'left', border: '1px solid var(--mi-card-border)', borderRadius: '12px', padding: '12px 14px', alignItems: 'flex-start', borderBottom: activeModule === module.id ? '1px solid var(--mi-amber)' : '1px solid var(--mi-card-border)' }}
                   onClick={() => handleModuleChange(module.id)}
                 >
-                  <div className="module-icon">
-                    <i className={`bi ${module.icon}`}></i>
-                  </div>
-                  <div className="module-info">
-                    <div className="module-name">{module.name}</div>
-                    <div className="module-description">{module.description}</div>
-                  </div>
+                  <i className={`bi ${module.icon}`} style={{ fontSize: '1.1rem', marginTop: '2px' }}></i>
+                  <span style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    <span style={{ fontWeight: 600 }}>{module.name}</span>
+                    <span style={{ fontSize: '.78rem', fontWeight: 400, color: 'var(--mi-muted)' }}>{module.description}</span>
+                  </span>
                 </button>
               ))}
             </div>
@@ -354,48 +357,43 @@ function Settings() {
         {/* Profile Card - Only show in Info module */}
         {activeModule === 'info' && (
           <div className="col-lg-4 mb-4">
-            <div className={`settings-profile-card ${theme}`}>
-              <div className="profile-header">
-                <div className={`profile-avatar-large ${theme}`}>
-                  {getUserInitials(userInfo?.username)}
-                </div>
-                <h4 className="profile-name">{userInfo?.username}</h4>
-                <p className="profile-email">{userInfo?.email || 'No email set'}</p>
-              </div>
-              
-              <div className="profile-details">
-                <div className="detail-row">
-                  <i className="bi bi-person-badge"></i>
-                  <span>
-                    <strong>Status:</strong> {userInfo?.is_staff ? 'Administrator' : 'User'}
-                  </span>
-                </div>
-                
-                <div className="detail-row">
-                  <i className="bi bi-shield-check"></i>
-                  <span>
-                    <strong>Superuser:</strong> {userInfo?.is_superuser ? 'Yes' : 'No'}
-                  </span>
+            <div className="mi-card">
+              <div className="mi-card__body">
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', paddingBottom: '16px', borderBottom: '1px solid var(--mi-card-border)' }}>
+                  <div
+                    style={{
+                      width: '72px', height: '72px', borderRadius: '50%',
+                      background: 'var(--mi-amber)', color: 'var(--bs-primary-text-emphasis)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: 'var(--mi-font-display)', fontSize: '1.8rem', fontWeight: 600, marginBottom: '12px'
+                    }}
+                  >
+                    {getUserInitials(userInfo?.username)}
+                  </div>
+                  <div className="mi-card__title">{userInfo?.username}</div>
+                  <div className="mi-sub">{userInfo?.email || 'No email set'}</div>
                 </div>
 
-                <div className="detail-row">
-                  <i className="bi bi-check-circle"></i>
-                  <span>
-                    <strong>Active:</strong> {userInfo?.is_active ? 'Yes' : 'No'}
+                <div className="mi-meta-chips" style={{ flexDirection: 'column', alignItems: 'stretch', marginTop: '16px' }}>
+                  <span className="mi-chip" style={{ justifyContent: 'flex-start' }}>
+                    <i className="bi bi-person-badge"></i>
+                    <span><strong>Status:</strong> {userInfo?.is_staff ? 'Administrator' : 'User'}</span>
                   </span>
-                </div>
-
-                <div className="detail-row">
-                  <i className="bi bi-calendar-plus"></i>
-                  <span>
-                    <strong>Joined:</strong> {formatDate(userInfo?.date_joined)}
+                  <span className="mi-chip" style={{ justifyContent: 'flex-start' }}>
+                    <i className="bi bi-shield-check"></i>
+                    <span><strong>Superuser:</strong> {userInfo?.is_superuser ? 'Yes' : 'No'}</span>
                   </span>
-                </div>
-
-                <div className="detail-row">
-                  <i className="bi bi-clock"></i>
-                  <span>
-                    <strong>Last login:</strong> {formatDate(userInfo?.last_login)}
+                  <span className="mi-chip" style={{ justifyContent: 'flex-start' }}>
+                    <i className="bi bi-check-circle"></i>
+                    <span><strong>Active:</strong> {userInfo?.is_active ? 'Yes' : 'No'}</span>
+                  </span>
+                  <span className="mi-chip" style={{ justifyContent: 'flex-start' }}>
+                    <i className="bi bi-calendar-plus"></i>
+                    <span><strong>Joined:</strong> {formatDate(userInfo?.date_joined)}</span>
+                  </span>
+                  <span className="mi-chip" style={{ justifyContent: 'flex-start' }}>
+                    <i className="bi bi-clock"></i>
+                    <span><strong>Last login:</strong> {formatDate(userInfo?.last_login)}</span>
                   </span>
                 </div>
               </div>
@@ -407,18 +405,18 @@ function Settings() {
         <div className={activeModule === 'info' ? 'col-lg-5' : 'col-lg-9'}>
           {/* Info Module */}
           {activeModule === 'info' && (
-            <div className={`settings-forms-card ${theme}`}>
-              <div className="settings-tabs">
-                <button 
-                  className={`tab-button ${activeTab === 'profile' ? 'active' : ''} ${theme}`}
-                  onClick={() => setActiveTab('profile')}
-                >
-                  <i className="bi bi-person me-2"></i>
-                  Profile Information
-                </button>
-              </div>
+            <div className="mi-card">
+              <div className="mi-card__body">
+                <div className="mi-tabs">
+                  <button
+                    className={`mi-tab ${activeTab === 'profile' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('profile')}
+                  >
+                    <i className="bi bi-person"></i>
+                    Profile Information
+                  </button>
+                </div>
 
-              <div className="tab-content">
                 <form onSubmit={handleProfileSubmit}>
                   <h5 className="mb-4">
                     <i className="bi bi-person me-2"></i>
@@ -499,23 +497,19 @@ function Settings() {
 
           {/* Security Module */}
           {activeModule === 'security' && (
-            <div className={`settings-forms-card ${theme}`}>
-              <div className="settings-tabs">
-                <button 
-                  className={`tab-button active ${theme}`}
-                >
-                  <i className="bi bi-shield-lock me-2"></i>
-                  Change Password
-                </button>
-              </div>
-
-              <div className="tab-content">
-                <form onSubmit={handlePasswordSubmit}>
-                  <h5 className="mb-4">
-                    <i className="bi bi-shield-lock me-2"></i>
+            <div className="mi-card">
+              <div className="mi-card__body">
+                <div className="mi-tabs">
+                  <button
+                    className="mi-tab active"
+                  >
+                    <i className="bi bi-shield-lock"></i>
                     Change Password
-                  </h5>
-                  
+                  </button>
+                </div>
+
+                <form onSubmit={handlePasswordSubmit}>
+
                   <div className="mb-3">
                     <label htmlFor="current_password" className="form-label">Current Password</label>
                     <input
@@ -552,9 +546,9 @@ function Settings() {
                     />
                   </div>
 
-                  <button 
-                    type="submit" 
-                    className="btn btn-warning"
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
                     disabled={saving}
                   >
                     {saving ? (
@@ -576,23 +570,19 @@ function Settings() {
 
           {/* Preferences Module */}
           {activeModule === 'preferences' && (
-            <div className={`settings-forms-card ${theme}`}>
-              <div className="settings-tabs">
-                <button 
-                  className={`tab-button active ${theme}`}
-                >
-                  <i className="bi bi-gear me-2"></i>
-                  Preferences
-                </button>
-              </div>
+            <div className="mi-card">
+              <div className="mi-card__body">
+                <div className="mi-tabs">
+                  <button
+                    className="mi-tab active"
+                  >
+                    <i className="bi bi-gear"></i>
+                    Preferences
+                  </button>
+                </div>
 
-              <div className="tab-content">
                 <form onSubmit={handlePreferencesSubmit}>
-                  <h5 className="mb-4">
-                    <i className="bi bi-gear me-2"></i>
-                    Application Preferences
-                  </h5>
-                  
+
                   {/* Theme Settings */}
                   <div className="preference-section">
                     <h6 className="preference-section-title">

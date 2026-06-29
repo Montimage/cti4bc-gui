@@ -260,149 +260,121 @@ const MyFormAnswers = () => {
     <>
       <div className="container-fluid mt-4">
         <Container fluid className={`my-form-answers-container ${theme === 'dark' ? 'dark-theme' : ''}`}>
-          <Row className="mb-4">
-            <Col>
-              <div className="d-flex justify-content-between align-items-center">
-                <div>
-                  <h2 className="mb-0">
-                    <i className="bi bi-file-earmark-text me-3 text-primary"></i>
-                    My Form Responses
-                  </h2>
-                  <p className="text-muted mt-1 mb-0">View and edit your submitted form responses</p>
-                </div>
-              </div>
-            </Col>
-          </Row>
+          <div className="mi-page-head">
+            <div>
+              <h1>My Form Responses</h1>
+              <div className="mi-sub">View and edit your submitted form responses</div>
+            </div>
+            <div className="mi-page-head__actions">
+              <button className="btn btn-outline-primary" onClick={() => navigate('/events')}>
+                <i className="bi bi-calendar-event me-1"></i> Go to Events
+              </button>
+            </div>
+          </div>
 
-          <Row>
-            <Col>
-              <Card className="shadow-sm">
-                <Card.Header className="bg-primary text-white">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <h5 className="mb-0">
-                      <i className="bi bi-list-ul me-2"></i>
-                      Your Form Responses
-                    </h5>
-                    <Badge bg="light" className={`fs-6 ${theme === 'dark' ? 'text-dark' : ''}`}>
-                      {myAnswers.length} response{myAnswers.length !== 1 ? 's' : ''}
-                    </Badge>
-                  </div>
-                </Card.Header>
-                <Card.Body className="p-0">
-                  {loading ? (
-                    <div className="text-center py-5">
-                      <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
-                        <span className="visually-hidden">Loading...</span>
-                      </div>
-                      <p className="mt-3 text-muted">Loading your responses...</p>
-                    </div>
-                  ) : myAnswers.length === 0 ? (
-                    <div className="text-center py-5">
-                      <div className="mb-4">
-                        <i className="bi bi-inbox display-1 text-muted"></i>
-                      </div>
-                      <h4 className="text-muted mb-3">No responses found</h4>
-                      <p className="text-muted mb-4">You haven't filled any forms yet.</p>
-                      <Button variant="primary" onClick={() => navigate('/events')} className="px-4">
+          <div className="mi-card">
+            <div className="mi-card__head">
+              <div className="mi-card__title">
+                <i className="bi bi-list-ul me-2"></i>
+                Your Form Responses
+              </div>
+              <div className="mi-meta-chips">
+                <span className="mi-chip">
+                  <i className="bi bi-file-earmark-text"></i>
+                  {myAnswers.length} response{myAnswers.length !== 1 ? 's' : ''}
+                </span>
+              </div>
+            </div>
+            {loading ? (
+              <div className="text-center py-5">
+                <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="mt-3 text-muted">Loading your responses...</p>
+              </div>
+            ) : myAnswers.length === 0 ? (
+              <div className="text-center py-5">
+                <div className="mb-4">
+                  <i className="bi bi-inbox display-1 text-muted"></i>
+                </div>
+                <h4 className="text-muted mb-3">No responses found</h4>
+                <p className="text-muted mb-4">You haven't filled any forms yet.</p>
+                <Button variant="primary" onClick={() => navigate('/events')} className="px-4">
+                  <i className="bi bi-calendar-event me-2"></i>
+                  Go to Events
+                </Button>
+              </div>
+            ) : (
+              <div className="mi-table-wrap">
+                <table className="mi-tbl">
+                  <thead>
+                    <tr>
+                      <th>
+                        <i className="bi bi-file-text me-2"></i>
+                        Form Title
+                      </th>
+                      <th>
                         <i className="bi bi-calendar-event me-2"></i>
-                        Go to Events
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="table-responsive">
-                      <Table hover className="mb-0">
-                        <thead className="table-light">
-                          <tr>
-                            <th className="border-0 px-4 py-3">
-                              <i className="bi bi-file-text me-2 text-primary"></i>
-                              Form Title
-                            </th>
-                            <th className="border-0 px-4 py-3">
-                              <i className="bi bi-calendar-event me-2 text-primary"></i>
-                              Event
-                            </th>
-                            <th className="border-0 px-4 py-3">
-                              <i className="bi bi-clock me-2 text-primary"></i>
-                              Submitted At
-                            </th>
-                            <th className="border-0 px-4 py-3 text-center">
-                              <i className="bi bi-check-circle me-2 text-primary"></i>
-                              Status
-                            </th>
-                            <th className="border-0 px-4 py-3 text-center">
-                              <i className="bi bi-gear me-2 text-primary"></i>
-                              Actions
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {myAnswers.map((answer, index) => (
-                            <tr key={answer.id} className="border-bottom">
-                              <td className="px-4 py-3">
-                                <div className="d-flex align-items-center">
-                                  <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                       style={{ width: '40px', height: '40px' }}>
-                                    <i className="bi bi-file-earmark-text text-primary"></i>
-                                  </div>
-                                  <div>
-                                    <strong>{answer.form_title || `Form #${answer.form}`}</strong>
-                                    <div className="text-muted small">ID: {answer.form}</div>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3">
-                                <div className="d-flex align-items-center">
-                                  <div className="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                       style={{ width: '32px', height: '32px' }}>
-                                    <i className="bi bi-calendar-event text-info small"></i>
-                                  </div>
-                                  <span>{answer.event_name || `Event #${answer.event}`}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3">
-                                <div className="d-flex align-items-center">
-                                  <i className="bi bi-clock text-muted me-2"></i>
-                                  <span>{formatDate(answer.filled_at)}</span>
-                                </div>
-                              </td>
-                              <td className="px-4 py-3 text-center">
-                                <Badge bg="success" className="px-3 py-2">
-                                  <i className="bi bi-check-circle me-1"></i>
-                                  Submitted
-                                </Badge>
-                              </td>
-                              <td className="px-4 py-3">
-                                <div className="d-flex justify-content-center gap-2">
-                                  <Button
-                                    size="sm"
-                                    variant="outline-info"
-                                    onClick={() => handleViewAnswer(answer)}
-                                    className="px-3"
-                                  >
-                                    <i className="bi bi-eye me-1"></i>
-                                    View
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline-primary"
-                                    onClick={() => handleEditAnswer(answer)}
-                                    className="px-3"
-                                  >
-                                    <i className="bi bi-pencil me-1"></i>
-                                    Edit
-                                  </Button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </div>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+                        Event
+                      </th>
+                      <th>
+                        <i className="bi bi-clock me-2"></i>
+                        Submitted At
+                      </th>
+                      <th style={{ textAlign: 'center' }}>
+                        <i className="bi bi-check-circle me-2"></i>
+                        Status
+                      </th>
+                      <th style={{ textAlign: 'right' }}>
+                        <i className="bi bi-gear me-2"></i>
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {myAnswers.map((answer, index) => (
+                      <tr key={answer.id}>
+                        <td>
+                          <div className="mi-ev-title">{answer.form_title || `Form #${answer.form}`}</div>
+                          <div className="mi-ev-sub">ID: {answer.form}</div>
+                        </td>
+                        <td>{answer.event_name || `Event #${answer.event}`}</td>
+                        <td>{formatDate(answer.filled_at)}</td>
+                        <td style={{ textAlign: 'center' }}>
+                          <span className="mi-badge mi-success">
+                            <span className="mi-led"></span>
+                            Submitted
+                          </span>
+                        </td>
+                        <td>
+                          <div className="mi-row-actions" style={{ justifyContent: 'flex-end' }}>
+                            <Button
+                              size="sm"
+                              variant="outline-info"
+                              onClick={() => handleViewAnswer(answer)}
+                              className="px-3"
+                            >
+                              <i className="bi bi-eye me-1"></i>
+                              View
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline-primary"
+                              onClick={() => handleEditAnswer(answer)}
+                              className="px-3"
+                            >
+                              <i className="bi bi-pencil me-1"></i>
+                              Edit
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
 
           {/* View Answer Modal */}
           <Modal show={showDetailModal} onHide={() => setShowDetailModal(false)} size="lg" centered>
