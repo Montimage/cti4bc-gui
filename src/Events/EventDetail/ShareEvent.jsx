@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import { useParams, useNavigate } from "react-router-dom";
 import EventDetails from "./EventDetailsTab";
 import EventAttributes from "./AttributesTab";
 import JsonViewer from "./JsonViewer";
@@ -16,6 +15,7 @@ const SERVER_URL = process.env.REACT_APP_API_URL;
 const ShareEventView = () => {
     const { showError, showSuccess, showInfo } = useToast();
     const { id } = useParams();
+    const navigate = useNavigate();
     const [jsonData, setJsonData] = useState(null);
     const [eventFiles, setEventFiles] = useState([]);
     const [activeTab, setActiveTab] = useState("details");
@@ -320,17 +320,56 @@ const ShareEventView = () => {
                 onFormsLoaded={handleFormsLoaded}
             />
             
-            <div className="d-flex">
-                <Sidebar 
-                    setActiveSection={setActiveTab} 
-                    activeSection={activeTab} 
-                    onShare={handleSave}
-                    onUnshare={handleUnshareEvent}
-                    isShared={jsonData?.shared}
-                    disabled={loading} 
-                />
-                
-                <div className="flex-grow-1 p-4 theme-transition" style={{ marginLeft: "250px", minHeight: "100vh" }}>
+            <div className="mi-event-detail">
+                <div className="mi-page-head">
+                    <div>
+                        <h1>{(jsonData && jsonData.info) ? jsonData.info : `Event #${id}`}</h1>
+                        <div className="mi-meta-chips">
+                            <span className="mi-chip"><i className="bi bi-hash"></i> Event {id}</span>
+                            {jsonData?.date?.value && (
+                                <span className="mi-chip"><i className="bi bi-calendar3"></i> {jsonData.date.value}</span>
+                            )}
+                            {jsonData?.shared
+                                ? <span className="mi-badge mi-success"><span className="mi-led"></span> Shared</span>
+                                : <span className="mi-badge mi-warning"><span className="mi-led"></span> Not shared</span>}
+                        </div>
+                    </div>
+                    <div className="mi-page-head__actions">
+                        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)} disabled={loading}>
+                            <i className="bi bi-arrow-left me-1"></i> Go Back
+                        </button>
+                        {jsonData?.shared ? (
+                            <button className="btn btn-outline-danger" onClick={handleUnshareEvent} disabled={loading}>
+                                <i className="bi bi-x-circle me-1"></i> Unshare
+                            </button>
+                        ) : (
+                            <button className="btn btn-primary" onClick={handleSave} disabled={loading}>
+                                <i className="bi bi-share-fill me-1"></i> Share
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                <div className="mi-tabs">
+                    {[
+                        { key: "details", label: "Details", icon: "bi-info-circle" },
+                        { key: "attributes", label: "Attributes", icon: "bi-list-check" },
+                        { key: "artifacts", label: "Artifacts", icon: "bi-file-earmark" },
+                        { key: "jsonfile", label: "JSON", icon: "bi-code-slash" },
+                        { key: "sharing-strategies", label: "Sharing Strategies", icon: "bi-share" },
+                    ].map((tab) => (
+                        <button
+                            key={tab.key}
+                            className={`mi-tab ${activeTab === tab.key ? "active" : ""}`}
+                            onClick={() => setActiveTab(tab.key)}
+                            disabled={loading}
+                        >
+                            <i className={`bi ${tab.icon}`}></i> {tab.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="mi-tab-content">
                     {activeTab === "details" && jsonData && <EventDetails jsonData={jsonData} onUpdate={setJsonData}/>}
                     {activeTab === "attributes" && jsonData && <EventAttributes jsonData={jsonData} onUpdate={setJsonData} />}
                     {activeTab === "jsonfile" && jsonData && <JsonViewer data={jsonData} />}

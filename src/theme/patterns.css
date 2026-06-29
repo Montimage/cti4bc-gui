@@ -100,3 +100,27 @@ table.mi-tbl { width: 100%; border-collapse: collapse; font-size: .9rem; color: 
 
 @media (max-width: 992px) { .mi-stats { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .mi-stats { grid-template-columns: 1fr; } }
+
+/* ------------------------------- Tabs ------------------------------- */
+.mi-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--mi-card-border); margin-bottom: 20px; flex-wrap: wrap; }
+.mi-tab {
+  padding: 11px 16px; cursor: pointer; font-weight: 600; font-size: .92rem; color: var(--mi-muted);
+  border: none; border-bottom: 2px solid transparent; background: none; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.mi-tab:hover { color: var(--bs-body-color); }
+.mi-tab.active { color: var(--bs-primary-text-emphasis); border-bottom-color: var(--mi-amber); }
+.mi-tab:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ------------------------------- Chips ------------------------------ */
+.mi-meta-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+.mi-chip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 999px;
+  background: var(--mi-card-bg); color: var(--mi-muted); font-size: .78rem; font-weight: 500;
+  border: 1px solid var(--mi-card-border);
+}
+.mi-chip i { color: var(--mi-amber); }
+
+/* Detail two-column grid (attributes | json/sharing) */
+.mi-detail-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
+@media (max-width: 992px) { .mi-detail-grid { grid-template-columns: 1fr; } }
