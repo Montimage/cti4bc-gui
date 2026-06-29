@@ -723,7 +723,7 @@ const FormsView = () => {
                 <h5 className="mb-0">Forms</h5>
                 <div className="d-flex gap-2">
                   <Button
-                    variant="outline-info"
+                    variant="outline-primary"
                     onClick={() => window.location.href = '/admin/form-stats'}
                   >
                     Statistics & KPIs
@@ -735,7 +735,7 @@ const FormsView = () => {
                     Import Form
                   </Button>
                   <Button
-                    variant="success"
+                    variant="primary"
                     onClick={() => setShowCreateModal(true)}
                   >
                     Create Form

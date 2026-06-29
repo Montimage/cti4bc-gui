@@ -467,14 +467,14 @@ const EventShareLogs = () => {
                                     Reset Filters
                                 </button>
                                 <button 
-                                    className="btn btn-info text-white" 
+                                    className="btn btn-primary"
                                     onClick={handleViewData}
                                     style={{ transition: 'none', width: '150px' }}
                                 >
                                     {showData ? `Hide ${dataFormat.toUpperCase()}` : `View ${dataFormat.toUpperCase()}`}
                                 </button>
                                 <button 
-                                    className="btn btn-success" 
+                                    className="btn btn-primary"
                                     onClick={handleExport}
                                     style={{ transition: 'none', width: '150px' }}
                                 >
