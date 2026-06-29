@@ -374,7 +374,7 @@ const KafkaView = () => {
                             {/* Control Buttons */}
                             <div className="d-flex gap-2 mb-3">
                                 <button 
-                                    className="btn btn-success flex-grow-1" 
+                                    className="btn btn-primary flex-grow-1"
                                     onClick={handleStart}
                                     disabled={!topics || consumerStatus.status === 'running'}
                                 >

@@ -354,7 +354,7 @@ const FormStats = () => {
                   <Card className="text-center h-100">
                     <Card.Body>
                       <h5>Avg Responses/Form</h5>
-                      <h2 className="text-info">{overviewStats.average_responses_per_form}</h2>
+                      <h2 className="text-primary">{overviewStats.average_responses_per_form}</h2>
                     </Card.Body>
                   </Card>
                 </Col>
@@ -418,7 +418,7 @@ const FormStats = () => {
                         </tbody>
                       </Table>
                     ) : (
-                      <Alert variant="info">No forms available</Alert>
+                      <Alert variant="secondary">No forms available</Alert>
                     )}
                   </Card.Body>
                 </Card>
@@ -457,7 +457,7 @@ const FormStats = () => {
                         <Card className="text-center h-100">
                           <Card.Body>
                             <h5>Questions with Choices</h5>
-                            <h3 className="text-info">{Object.keys(formStats.field_stats).length}</h3>
+                            <h3 className="text-primary">{Object.keys(formStats.field_stats).length}</h3>
                           </Card.Body>
                         </Card>
                       </Col>
