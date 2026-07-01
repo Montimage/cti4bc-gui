@@ -14,28 +14,6 @@
   margin: 0 auto;
 }
 
-.health-header {
-  background: linear-gradient(135deg, rgba(233, 171, 52, 0.1) 0%, rgba(212, 154, 46, 0.05) 100%);
-  border-radius: 20px;
-  padding: 3rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(233, 171, 52, 0.1);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-.health-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(233, 171, 52, 0.1) 0%, transparent 70%);
-  pointer-events: none;
-}
-
 .health-header.dark {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
   border-color: var(--bs-border-color-translucent);
@@ -67,58 +45,17 @@
   z-index: 1;
 }
 
-/* Overview Cards */
-.overview-card {
-  border: none;
-  border-radius: 16px;
-  background: var(--bs-body-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 100%;
-}
-
 .overview-card.dark {
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.overview-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 .overview-card.dark:hover {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-.overview-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin: 0 auto 1rem;
-  background: linear-gradient(135deg, var(--bs-primary) 0%, #D49A2E 100%);
-  color: white;
-}
-
-.overview-icon.overall-status {
-  background: linear-gradient(135deg, var(--bs-success) 0%, #146c43 100%);
-}
-
-.overview-icon.last-incident {
-  background: linear-gradient(135deg, var(--bs-warning) 0%, #ffca2c 100%);
-}
-
 .overview-icon.components {
   background: linear-gradient(135deg, var(--bs-success) 0%, #146c43 100%);
-}
-
-/* Force all icons to be white inside colored circles */
-.overview-icon i {
-  color: white !important;
 }
 
 /* Ensure all icons in overview-icon containers are white */
@@ -129,26 +66,10 @@
   color: white !important;
 }
 
-.metric-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--bs-body-color);
-}
-
 .status-badge {
   font-size: 0.9rem;
   padding: 0.5rem 1rem;
   border-radius: 25px;
-}
-
-/* Chart Cards */
-.chart-card {
-  border: none;
-  border-radius: 16px;
-  background: var(--bs-body-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  height: 100%;
 }
 
 .chart-card.dark {
@@ -159,14 +80,6 @@
 .chart-container {
   height: 300px;
   position: relative;
-}
-
-/* Components Card */
-.components-card {
-  border: none;
-  border-radius: 16px;
-  background: var(--bs-body-bg);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .components-card.dark {
@@ -237,24 +150,6 @@ code {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.overview-card,
-.chart-card,
-.components-card {
-  animation: fadeInUp 0.5s ease forwards;
-}
-
-/* Controls pour les graphiques */
-.chart-controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.auto-refresh-indicator {
-  animation: pulse 2s infinite;
-  color: var(--bs-success);
 }
 
 @keyframes pulse {
@@ -385,25 +280,12 @@ code {
     font-size: 2rem;
   }
   
-  .health-header {
-    padding: 1.5rem;
-  }
-  
   .chart-container {
     height: 250px;
-  }
-  
-  .overview-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.25rem;
   }
 }
 
 @media (max-width: 576px) {
-  .health-header {
-    text-align: center;
-  }
   
   .page-title {
     font-size: 1.75rem;

@@ -1,22 +1,4 @@
-/* Event Details container */
-.event-details-container {
-    background: var(--bs-body-bg);
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
 
-/* Section headers */
-.section-header {
-    color: var(--bs-body-color);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--bs-border-color);
-}
 
 /* Textarea improvements */
 textarea {
@@ -80,67 +62,6 @@ select:focus {
     outline: none;
     border-color: var(--bs-primary-text-emphasis);
     box-shadow: 0 0 0 2px rgba(233, 171, 52, 0.25);
-}
-
-/* Comment section */
-.comment-section {
-    margin-top: 1rem;
-}
-
-.comment-textarea {
-    width: 100%;
-    border: 1px solid var(--bs-border-color);
-    border-radius: 4px;
-    padding: 8px;
-    margin-top: 4px;
-    background-color: var(--bs-form-control-bg, var(--bs-body-bg));
-    color: var(--bs-body-color);
-    transition: all 0.3s ease;
-}
-
-/* Action buttons */
-.action-button {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.action-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Attribute tables */
-.attribute-table {
-    margin-top: 1.5rem;
-    border: 1px solid var(--bs-border-color);
-    border-radius: 8px;
-    overflow: hidden;
-    color: var(--bs-body-color);
-}
-
-.attribute-table thead {
-    background-color: var(--bs-tertiary-bg);
-}
-
-.attribute-table th {
-    font-weight: 600;
-    color: var(--bs-body-color);
-}
-
-/* Strategy section */
-.strategy-section {
-    background-color: var(--bs-tertiary-bg);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.strategy-title {
-    color: var(--bs-body-color);
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
 }
 
 /* Form group spacing */

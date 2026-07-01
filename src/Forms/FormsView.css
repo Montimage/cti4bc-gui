@@ -75,7 +75,6 @@
   vertical-align: middle;
 }
 
-
 .forms-container .badge {
   font-size: 0.75rem;
 }
@@ -444,12 +443,6 @@
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 8px !important;
-}
-
-/* Action buttons in table */
-.table-actions {
-  white-space: nowrap;
-  min-width: 140px;
 }
 
 .table-actions .btn {

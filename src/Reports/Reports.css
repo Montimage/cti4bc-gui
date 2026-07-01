@@ -30,21 +30,6 @@ select {
     transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out !important;
 }
 
-/* LLM Settings Styles */
-.llm-settings-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
-}
-
-.llm-settings-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-}
-
-.llm-provider-badge {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-}
-
 .llm-info-card {
     border: 2px solid transparent;
     transition: border-color 0.2s ease-in-out !important;
@@ -126,23 +111,6 @@ select {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.reports-table {
-    border-radius: 0.5rem;
-    overflow: hidden;
-}
-
-.reports-table thead th {
-    border: none;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.05rem;
-}
-
-.reports-table tbody tr:hover {
-    background-color: rgba(233, 171, 52, 0.05);
-}
-
 @media (max-width: 768px) {
     .btn-group {
         flex-direction: column;
@@ -219,10 +187,6 @@ select {
 }
 
 .table-responsive {
-    overflow: visible !important;
-}
-
-.reports-table {
     overflow: visible !important;
 }
 
