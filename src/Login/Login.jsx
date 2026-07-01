@@ -11,7 +11,7 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     // const [email, setEmail] = useState("");
-    const [activeTab, setActiveTab] = useState("login"); // "login" ou "register"
+    // const [activeTab, setActiveTab] = useState("login"); // re-enable with the register tab
     const { theme, toggleTheme } = useTheme();
     const { showError } = useToast(); // { showError, showSuccess } if needed
 
@@ -80,10 +80,6 @@ const Login = () => {
             showError(error.message);
         }
     }; */
-
-    const changeTab = (tab) => {
-        setActiveTab(tab);
-    };
 
     return (
         <div className="mi-auth">
