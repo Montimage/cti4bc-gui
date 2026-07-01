@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
 import { useTheme } from '../ThemeContext';
 import { useToast } from '../components/Toast';
-import { Button, Nav } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -86,103 +86,78 @@ const Login = () => {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-theme-toggle">
-                <Button 
-                    variant={theme === 'dark' ? 'outline-light' : 'outline-dark'}
-                    size="sm"
-                    onClick={toggleTheme}
-                    aria-label="Toggle theme"
-                >
-                    {theme === 'dark' ? (
-                        <>
-                            <i className="bi bi-sun-fill me-1"></i>
-                            Light
-                        </>
-                    ) : (
-                        <>
-                            <i className="bi bi-moon-stars-fill me-1"></i>
-                            Dark
-                        </>
-                    )}
-                </Button>
-            </div>
-            
-            <h1 className="login-title">Welcome to CTI4BC</h1>
-            
-            <div className="login-card">
-                <Nav variant="tabs" className="login-nav-tabs">
-                    <Nav.Item>
-                        <Nav.Link 
-                            active={activeTab === "login"}
-                            onClick={() => changeTab("login")}
-                            className={`${activeTab === "login" ? 'active' : ''}`}
-                        >
-                            Login
-                        </Nav.Link>
-                    </Nav.Item>
-                    {/* <Nav.Item>
-                        <Nav.Link 
-                            active={activeTab === "register"}
-                            onClick={() => changeTab("register")}
-                            className={`${activeTab === "register" ? 'active' : ''}`}
-                        >
-                            New User
-                        </Nav.Link>
-                    </Nav.Item> */}
-                </Nav>
-                
-                <div className="login-card-body">
-                    {/* Registration form is hidden for now, uncomment to enable */}
-                    {/*
-                    {activeTab === "register" ? (
-                        <form onSubmit={handleRegister}>
-                            <div className="login-form-group">
-                                <label htmlFor="email" className="login-form-label">Email</label>
-                                <input 
-                                    type="email" 
-                                    className="login-form-control" 
-                                    id="email" 
-                                    name="email" 
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)} 
-                                    required 
-                                />
-                            </div>
-                            <button type="submit" className="login-submit-btn">Register</button>
-                        </form>
-                    ) : (
-                    */}
-                        <form onSubmit={handleSubmit}>
-                            <div className="login-form-group">
-                                <label htmlFor="username" className="login-form-label">Username</label>
-                                <input 
-                                    type="text" 
-                                    className="login-form-control" 
-                                    id="username" 
-                                    name="username" 
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)} 
-                                    required 
-                                />
-                            </div>
-                            <div className="login-form-group">
-                                <label htmlFor="password" className="login-form-label">Password</label>
-                                <input 
-                                    type="password" 
-                                    className="login-form-control" 
-                                    id="password" 
-                                    name="password" 
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)} 
-                                    required 
-                                />
-                            </div>
-                            <button type="submit" className="login-submit-btn">Login</button>
-                        </form>
-                    {/* )} */}
+        <div className="mi-auth">
+            {/* Left: Montimage brand panel */}
+            <aside className="mi-auth__brand">
+                <div className="mi-auth__brand-inner">
+                    <div className="mi-auth__mark">C</div>
+                    <div className="mi-auth__brand-name">CTI4BC</div>
+                    <h2 className="mi-auth__brand-title">Cyber Threat Intelligence for Business Continuity</h2>
+                    <p className="mi-auth__brand-sub">
+                        Collect, refine, anonymize and share cyber threat intelligence across partner
+                        organizations — securely and on time.
+                    </p>
+                    <div className="mi-auth__brand-foot">Dynabic · EU Horizon Europe programme</div>
                 </div>
-            </div>
+            </aside>
+
+            {/* Right: sign-in form */}
+            <section className="mi-auth__form">
+                <div className="mi-auth__toggle">
+                    <Button
+                        variant={theme === 'dark' ? 'outline-light' : 'outline-dark'}
+                        size="sm"
+                        onClick={toggleTheme}
+                        aria-label="Toggle theme"
+                    >
+                        {theme === 'dark' ? (
+                            <>
+                                <i className="bi bi-sun-fill me-1"></i>
+                                Light
+                            </>
+                        ) : (
+                            <>
+                                <i className="bi bi-moon-stars-fill me-1"></i>
+                                Dark
+                            </>
+                        )}
+                    </Button>
+                </div>
+
+                <div className="mi-auth__form-inner">
+                    <h1 className="mi-auth__title">Welcome back</h1>
+                    <p className="mi-auth__subtitle">Sign in to your CTI4BC account</p>
+
+                    {/* Registration form is hidden for now; handleRegister above is ready to re-enable */}
+                    <form onSubmit={handleSubmit}>
+                        <div className="login-form-group">
+                            <label htmlFor="username" className="login-form-label">Username</label>
+                            <input
+                                type="text"
+                                className="login-form-control"
+                                id="username"
+                                name="username"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="login-form-group">
+                            <label htmlFor="password" className="login-form-label">Password</label>
+                            <input
+                                type="password"
+                                className="login-form-control"
+                                id="password"
+                                name="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="login-submit-btn">Sign in</button>
+                    </form>
+                </div>
+            </section>
         </div>
     );
 };

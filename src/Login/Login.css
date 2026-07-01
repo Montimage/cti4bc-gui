@@ -168,3 +168,106 @@
 [data-bs-theme="light"] .login-card {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
+
+/* =====================================================================
+   Split-screen auth layout (Montimage DA) — brand panel + sign-in form
+   ===================================================================== */
+.mi-auth {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  min-height: 100vh;
+  background: var(--bs-body-bg);
+}
+
+/* Left brand panel — always warm-dark with amber glow */
+.mi-auth__brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px;
+  overflow: hidden;
+  background: linear-gradient(150deg, #1E1A15 0%, #2A2520 55%, #161310 100%);
+  color: #fff;
+}
+.mi-auth__brand::after {
+  content: "";
+  position: absolute;
+  width: 520px; height: 520px;
+  top: -140px; right: -160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 171, 52, 0.28), transparent 70%);
+  pointer-events: none;
+}
+.mi-auth__brand::before {
+  content: "";
+  position: absolute;
+  width: 360px; height: 360px;
+  bottom: -120px; left: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 171, 52, 0.12), transparent 70%);
+  pointer-events: none;
+}
+.mi-auth__brand-inner { position: relative; max-width: 480px; }
+.mi-auth__mark {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--mi-amber), var(--mi-amber-hover));
+  color: #1A1A1A;
+  font-family: var(--mi-font-display);
+  font-weight: 700; font-size: 1.8rem;
+  box-shadow: 0 10px 34px rgba(233, 171, 52, 0.45);
+}
+.mi-auth__brand-name {
+  font-family: var(--mi-font-display);
+  font-weight: 700; font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  margin-top: 22px;
+}
+.mi-auth__brand-title {
+  font-family: var(--mi-font-display);
+  font-weight: 600; font-size: 2.1rem; line-height: 1.18;
+  letter-spacing: -0.01em;
+  margin: 28px 0 0;
+  color: #fff;
+}
+.mi-auth__brand-sub {
+  color: #C9BFB0;
+  font-size: 1.02rem; line-height: 1.65;
+  margin-top: 18px;
+}
+.mi-auth__brand-foot {
+  margin-top: 48px;
+  color: #8B7D6B;
+  font-size: 0.85rem;
+}
+
+/* Right form panel */
+.mi-auth__form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  background: var(--bs-body-bg);
+}
+.mi-auth__toggle { position: absolute; top: 24px; right: 24px; }
+.mi-auth__form-inner { width: 100%; max-width: 380px; }
+.mi-auth__title {
+  font-family: var(--mi-font-display);
+  font-weight: 600; font-size: 1.95rem;
+  letter-spacing: -0.01em;
+  color: var(--bs-body-color);
+  margin: 0;
+}
+.mi-auth__subtitle {
+  color: var(--bs-secondary-color);
+  margin: 6px 0 28px;
+}
+
+@media (max-width: 860px) {
+  .mi-auth { grid-template-columns: 1fr; }
+  .mi-auth__brand { display: none; }
+  .mi-auth__form { padding: 32px 20px; }
+}
