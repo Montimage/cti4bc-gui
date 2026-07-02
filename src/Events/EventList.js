@@ -18,6 +18,7 @@ function EventList() {
     const [searchInfo, setSearchInfo] = useState('');
     const [organizations, setOrganizations] = useState([]);
     const [selectedOrg, setSelectedOrg] = useState('all');
+    const [selectedSector, setSelectedSector] = useState('all');
 
     const navigate = useNavigate();
     const threatLevels = {
@@ -174,7 +175,11 @@ function EventList() {
         if (selectedOrg !== 'all') {
             filtered = filtered.filter(event => event.organization === selectedOrg);
         }
-        
+
+        if (selectedSector !== 'all') {
+            filtered = filtered.filter(event => (event.sectors || []).includes(selectedSector));
+        }
+
         filtered.sort((a, b) => {
             let comparison = 0;
             
@@ -202,6 +207,9 @@ function EventList() {
                     else if (!b.shared) comparison = -1;
                     else comparison = new Date(a.shared_at) - new Date(b.shared_at);
                     break;
+                case 'sectors':
+                    comparison = (a.sectors || []).join(', ').localeCompare((b.sectors || []).join(', '));
+                    break;
                 default:
                     comparison = 0;
             }
@@ -213,6 +221,7 @@ function EventList() {
     };
 
     const filteredEvents = getFilteredAndSortedEvents();
+    const sectorOptions = [...new Set(events.flatMap(event => event.sectors || []))].sort();
 
     const resetFilters = () => {
         setActiveCard(null);
@@ -220,6 +229,7 @@ function EventList() {
         setSortDirection('desc');
         setSearchInfo('');
         setSelectedOrg('all');
+        setSelectedSector('all');
     };
 
     return (
@@ -299,6 +309,19 @@ function EventList() {
                     ))}
                 </select>
             </div>
+            <div className="mi-field">
+                <label>Sector</label>
+                <select
+                    className="form-select"
+                    value={selectedSector}
+                    onChange={(e) => setSelectedSector(e.target.value)}
+                >
+                    <option value="all">All Sectors</option>
+                    {sectorOptions.map(sector => (
+                        <option key={sector} value={sector}>{sector}</option>
+                    ))}
+                </select>
+            </div>
         </div>
 
         {/* Events table */}
@@ -329,6 +352,7 @@ function EventList() {
                             </th>
                             <th className="mi-sortable" onClick={() => handleSortChange('info')}>Info{getSortIndicator('info')}</th>
                             <th className="mi-sortable" onClick={() => handleSortChange('organization')}>Organization{getSortIndicator('organization')}</th>
+                            <th className="mi-sortable" onClick={() => handleSortChange('sectors')}>Sectors{getSortIndicator('sectors')}</th>
                             <th className="mi-sortable" onClick={() => handleSortChange('threat_level')}>Threat Level{getSortIndicator('threat_level')}</th>
                             <th className="mi-sortable" onClick={() => handleSortChange('share_status')}>Share Status{getSortIndicator('share_status')}</th>
                             <th className="mi-sortable" onClick={() => handleSortChange('date')}>Arrival Date{getSortIndicator('date')}</th>
@@ -356,6 +380,17 @@ function EventList() {
                                     </td>
                                     <td className="mi-ev-title">{event.info}</td>
                                     <td>{event.organization || "N/A"}</td>
+                                    <td>
+                                        {(event.sectors && event.sectors.length > 0) ? (
+                                            <div className="mi-sectors-cell">
+                                                {event.sectors.map(sector => (
+                                                    <span key={sector} className="mi-chip">{sector}</span>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <span style={{ color: 'var(--mi-muted)' }}>—</span>
+                                        )}
+                                    </td>
                                     <td><span className={`mi-badge ${tlClass}`}><span className="mi-led"></span> {tl}</span></td>
                                     <td><span className={`mi-badge ${statusClass}`}><span className="mi-led"></span> {status}</span></td>
                                     <td>{event.date}</td>
@@ -376,7 +411,7 @@ function EventList() {
 
                         {filteredEvents.length === 0 && (
                             <tr>
-                                <td colSpan="8" style={{ textAlign: 'center', padding: '24px', color: 'var(--mi-muted)' }}>
+                                <td colSpan="9" style={{ textAlign: 'center', padding: '24px', color: 'var(--mi-muted)' }}>
                                     No events match the selected filter criteria.
                                 </td>
                             </tr>

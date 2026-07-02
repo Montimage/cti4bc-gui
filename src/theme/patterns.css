@@ -124,3 +124,7 @@ table.mi-tbl { width: 100%; border-collapse: collapse; font-size: .9rem; color: 
 /* Detail two-column grid (attributes | json/sharing) */
 .mi-detail-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
 @media (max-width: 992px) { .mi-detail-grid { grid-template-columns: 1fr; } }
+
+/* Sectors column: wrap multiple NIS2 sector chips in a table cell */
+.mi-sectors-cell { display: flex; flex-wrap: wrap; gap: 4px; max-width: 320px; }
+.mi-sectors-cell .mi-chip { font-size: .72rem; padding: 2px 8px; }
