@@ -34,17 +34,18 @@ const Toast = ({ toast }) => {
     }
   };
 
+  // Montimage charter colours (mirror --mi-* tokens) instead of Bootstrap defaults.
   const getProgressColor = () => {
     switch (toast.type) {
       case 'success':
-        return '#28a745';
+        return '#22C55E';
       case 'error':
-        return '#dc3545';
+        return '#EF4444';
       case 'warning':
-        return '#ffc107';
+        return '#F59E0B';
       case 'info':
       default:
-        return '#17a2b8';
+        return '#3B82F6';
     }
   };
 

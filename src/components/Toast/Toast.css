@@ -101,7 +101,7 @@
   bottom: 0;
   left: 0;
   height: 3px;
-  background: var(--progress-color, #17a2b8);
+  background: var(--progress-color, var(--mi-info, #3B82F6));
   width: 100%;
   transform-origin: left;
   animation: toast-progress var(--duration, 5000ms) linear forwards;
@@ -116,43 +116,43 @@
   }
 }
 
-/* Toast Type Variants */
+/* Toast Type Variants — Montimage charter colours (was Bootstrap defaults) */
 .toast-success {
-  border-left: 4px solid #28a745;
+  border-left: 4px solid var(--mi-success, #22C55E);
 }
 
 .toast-success .toast-icon {
-  color: #28a745;
+  color: var(--mi-success, #22C55E);
 }
 
 .toast-error {
-  border-left: 4px solid #dc3545;
+  border-left: 4px solid var(--mi-danger, #EF4444);
 }
 
 .toast-error .toast-icon {
-  color: #dc3545;
+  color: var(--mi-danger, #EF4444);
 }
 
 .toast-warning {
-  border-left: 4px solid #ffc107;
+  border-left: 4px solid var(--mi-warning, #F59E0B);
 }
 
 .toast-warning .toast-icon {
-  color: #ffc107;
+  color: var(--mi-warning, #F59E0B);
 }
 
 .toast-info {
-  border-left: 4px solid #17a2b8;
+  border-left: 4px solid var(--mi-info, #3B82F6);
 }
 
 .toast-info .toast-icon {
-  color: #17a2b8;
+  color: var(--mi-info, #3B82F6);
 }
 
-/* Dark Theme Adjustments */
+/* Dark Theme Adjustments — warm surface (mockup --surface #221E18) not neutral #212529 */
 .toast-item.dark {
-  background: rgba(33, 37, 41, 0.95);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(34, 30, 24, 0.96);
+  border-color: var(--mi-card-border, rgba(255, 255, 255, 0.1));
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 

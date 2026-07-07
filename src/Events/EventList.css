@@ -2,7 +2,7 @@
 
 /* Stats cards */
 .card-title {
-    color: #495057;
+    color: var(--bs-body-color);
     font-size: 1.1rem;
     margin-bottom: 1rem;
     font-weight: 600;
@@ -19,7 +19,7 @@
 
 .card-text + p {
     font-size: 0.9rem;
-    color: #6c757d;
+    color: var(--mi-muted, #8B7D6B);
     transition: color 0.3s ease;
 }
 
@@ -82,23 +82,23 @@ td .badge {
 }
 
 [data-bs-theme="dark"] .card-title {
-    color: #e0e0e0;
+    color: var(--bs-body-color);
 }
 
 [data-bs-theme="dark"] .card-text {
-    color: #F0BC52;
+    color: var(--mi-amber-light, #F0BC52);
 }
 
 [data-bs-theme="dark"] .card-text + p {
-    color: #b0b0b0;
+    color: var(--mi-muted, #9A8E7C);
 }
 
 [data-bs-theme="dark"] .btn-link {
-    color: #F0BC52;
+    color: var(--mi-amber-light, #F0BC52);
 }
 
 [data-bs-theme="dark"] .btn-link:hover {
-    color: #90caf9;
+    color: var(--mi-amber, #E9AB34);
 }
 
 [data-bs-theme="dark"] .table-hover tbody tr:hover {

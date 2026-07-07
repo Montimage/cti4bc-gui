@@ -71,7 +71,7 @@ code {
 }
 
 .form-control:focus, .form-select:focus {
-  border-color: #80bdff;
+  border-color: var(--mi-amber-light, #F0BC52);
   box-shadow: 0 0 0 0.2rem rgba(233, 171, 52,0.25);
 }
 
@@ -183,31 +183,31 @@ code {
   transition: none !important;
 }
 
-/* Card styles for Stats Dashboard */
+/* Card styles for Stats Dashboard — warm charter (was neutral/cool-blue old theme) */
 [data-bs-theme="dark"] .clickable-card {
-  background: linear-gradient(145deg, #333333, #2a2a2a) !important;
+  background: linear-gradient(145deg, var(--mi-surface-dark, #2A2520), var(--mi-card-bg, #221E18)) !important;
   color: var(--bs-body-color);
   transition: none !important;
 }
 
 [data-bs-theme="dark"] .active-card {
-  background: linear-gradient(145deg, #1a3f5f, #164e7b) !important;
+  background: linear-gradient(145deg, #3a2c10, var(--mi-surface-dark, #2A2520)) !important;
   transition: none !important;
 }
 
 /* Improve contrast for cards in dark mode */
 [data-bs-theme="dark"] .card-title {
-  color: #e0e0e0 !important;
+  color: var(--bs-body-color) !important;
   transition: none !important;
 }
 
 [data-bs-theme="dark"] .card-text {
-  color: #F0BC52 !important;
+  color: var(--mi-amber-light, #F0BC52) !important;
   transition: none !important;
 }
 
 [data-bs-theme="dark"] .card-text + p {
-  color: #b0b0b0 !important;
+  color: var(--mi-muted, #9A8E7C) !important;
   transition: none !important;
 }
 

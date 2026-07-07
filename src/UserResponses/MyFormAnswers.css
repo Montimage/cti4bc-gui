@@ -21,8 +21,8 @@
 }
 
 .my-form-answers-container.dark-theme .card {
-  background-color: #2d2d2d;
-  border-color: #404040;
+  background-color: var(--mi-card-bg, #221E18);
+  border-color: var(--mi-card-border, #3A332B);
   color: #ffffff;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .my-form-answers-container.dark-theme .card-header {
-  border-color: #404040;
+  border-color: var(--mi-card-border, #3A332B);
 }
 
 /* Table styling */
@@ -60,10 +60,10 @@
 }
 
 .my-form-answers-container.dark-theme .table th {
-  border-color: #404040;
-  background-color: #333333;
+  border-color: var(--mi-card-border, #3A332B);
+  background-color: var(--mi-surface-dark, #2A2520);
   color: #ffffff;
-  border-bottom: 2px solid #404040;
+  border-bottom: 2px solid var(--mi-card-border, #3A332B);
 }
 
 .my-form-answers-container .table td {
@@ -88,18 +88,18 @@
 }
 
 .my-form-answers-container.dark-theme .table td {
-  border-color: #404040;
-  background-color: #2d2d2d;
-  border-top: 1px solid #404040;
-  border-bottom: 1px solid #404040;
+  border-color: var(--mi-card-border, #3A332B);
+  background-color: var(--mi-card-bg, #221E18);
+  border-top: 1px solid var(--mi-card-border, #3A332B);
+  border-bottom: 1px solid var(--mi-card-border, #3A332B);
 }
 
 .my-form-answers-container.dark-theme .table td:first-child {
-  border-left: 1px solid #404040;
+  border-left: 1px solid var(--mi-card-border, #3A332B);
 }
 
 .my-form-answers-container.dark-theme .table td:last-child {
-  border-right: 1px solid #404040;
+  border-right: 1px solid var(--mi-card-border, #3A332B);
 }
 
 .my-form-answers-container .table-hover tbody tr:hover td {
@@ -107,17 +107,17 @@
 }
 
 .my-form-answers-container.dark-theme .table-hover tbody tr:hover td {
-  background-color: #404040;
+  background-color: var(--mi-surface-dark, #2A2520);
 }
 
 /* Override Bootstrap table-light in dark mode */
 .my-form-answers-container.dark-theme .table-light {
-  background-color: #333333 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
 .my-form-answers-container.dark-theme .table-light th {
-  background-color: #333333 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
@@ -127,7 +127,7 @@
 }
 
 .my-form-answers-container.dark-theme .border-bottom {
-  border-bottom-color: #404040 !important;
+  border-bottom-color: var(--mi-card-border, #3A332B) !important;
 }
 
 /* Modal styling */
@@ -138,7 +138,7 @@
 }
 
 .my-form-answers-container.dark-theme .modal-content {
-  background-color: #2d2d2d;
+  background-color: var(--mi-card-bg, #221E18);
   color: #ffffff;
 }
 
@@ -156,17 +156,17 @@
 
 .my-form-answers-container.dark-theme .modal-header,
 .my-form-answers-container.dark-theme .modal-footer {
-  border-color: #404040;
+  border-color: var(--mi-card-border, #3A332B);
 }
 
 /* Answer content styling for modals */
 .my-form-answers-container.dark-theme .border.rounded.p-3.bg-light {
   background-color: rgba(255, 255, 255, 0.05) !important;
-  border-color: #404040 !important;
+  border-color: var(--mi-card-border, #3A332B) !important;
 }
 
 .my-form-answers-container.dark-theme .bg-white.rounded {
-  background-color: #333333 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
 }
 
 /* Emergency override - test if this works */
@@ -206,7 +206,7 @@
 /* Bootstrap modal override for dark theme */
 .my-form-answers-container.dark-theme .modal-header.bg-dark,
 .my-form-answers-container.dark-theme .modal-footer.bg-dark {
-  background-color: #333333 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
@@ -214,28 +214,28 @@
 .my-form-answers-container.dark-theme .alert.bg-dark {
   background-color: rgba(255, 255, 255, 0.05) !important;
   color: #ffffff !important;
-  border-color: #404040 !important;
+  border-color: var(--mi-card-border, #3A332B) !important;
 }
 
 /* Form control overrides for modals */
 .my-form-answers-container.dark-theme .border.rounded.p-3.bg-dark {
   background-color: rgba(255, 255, 255, 0.05) !important;
-  border-color: #404040 !important;
+  border-color: var(--mi-card-border, #3A332B) !important;
 }
 
 /* Badge styling in modals */
 .my-form-answers-container.dark-theme .answer-content .badge {
-  background-color: #404040 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
 /* Link styling in dark mode */
 .my-form-answers-container.dark-theme .answer-content a {
-  color: #66b3ff !important;
+  color: var(--mi-amber-light, #F0BC52) !important;
 }
 
 .my-form-answers-container.dark-theme .answer-content a:hover {
-  color: #3399ff !important;
+  color: var(--mi-amber, #E9AB34) !important;
 }
 
 /* Form controls styling */
@@ -254,14 +254,14 @@
 
 .my-form-answers-container.dark-theme .form-control,
 .my-form-answers-container.dark-theme .form-select {
-  background-color: #404040;
-  border-color: #555555;
+  background-color: var(--mi-surface-dark, #2A2520);
+  border-color: var(--mi-card-border, #3A332B);
   color: #ffffff;
 }
 
 .my-form-answers-container.dark-theme .form-control:focus,
 .my-form-answers-container.dark-theme .form-select:focus {
-  background-color: #404040;
+  background-color: var(--mi-surface-dark, #2A2520);
   border-color: var(--bs-primary-text-emphasis);
   color: #ffffff;
   box-shadow: 0 0 0 0.25rem rgba(233, 171, 52, 0.25);
@@ -393,7 +393,7 @@
 }
 
 .my-form-answers-container.dark-theme .text-muted {
-  color: #adb5bd !important;
+  color: var(--mi-muted, #9A8E7C) !important;
   opacity: 0.8;
 }
 
@@ -418,19 +418,19 @@
 
 /* Badge styling improvements for dark mode */
 .my-form-answers-container.dark-theme .badge.bg-light {
-  background-color: #404040 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
 .my-form-answers-container.dark-theme .badge[data-bs-theme="dark"] {
-  background-color: #404040 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
 /* Modal header and footer overrides */
 .my-form-answers-container.dark-theme .modal-header.bg-light,
 .my-form-answers-container.dark-theme .modal-footer.bg-light {
-  background-color: #333333 !important;
+  background-color: var(--mi-surface-dark, #2A2520) !important;
   color: #ffffff !important;
 }
 
