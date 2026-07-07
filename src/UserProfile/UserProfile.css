@@ -20,10 +20,10 @@
   background-color: rgba(255, 255, 255, 0.08);
 }
 
+/* Mockup shows the avatar only in the topbar — hide the username label.
+   (Identity is still available in the profile dropdown on click.) */
 .user-name {
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--bs-body-color);
+  display: none;
 }
 
 .user-avatar {
@@ -90,8 +90,8 @@
 }
 
 .user-dropdown.dark {
-  background: #1a1a1a;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--mi-card-bg, #221E18);
+  border-color: var(--mi-card-border, rgba(255, 255, 255, 0.1));
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   color: var(--bs-body-color);
 }
@@ -116,8 +116,8 @@
 }
 
 .user-dropdown.dark .dropdown-header {
-  background: linear-gradient(145deg, #272727 0%, #1a1a1a 100%);
-  border-bottom-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, var(--mi-surface-dark, #2A2520) 0%, var(--mi-card-bg, #221E18) 100%);
+  border-bottom-color: var(--mi-card-border, rgba(255, 255, 255, 0.1));
 }
 
 /* Theme toggle button in header */
@@ -167,7 +167,7 @@
 }
 
 .user-dropdown.dark .dropdown-body {
-  background: #2a2a2a;
+  background: var(--mi-surface-dark, #2A2520);
 }
 
 .info-row {
@@ -205,8 +205,8 @@
 }
 
 .user-dropdown.dark .dropdown-footer {
-  background: #1a1a1a;
-  border-top-color: rgba(255, 255, 255, 0.1);
+  background: var(--mi-card-bg, #221E18);
+  border-top-color: var(--mi-card-border, rgba(255, 255, 255, 0.1));
 }
 
 .dropdown-footer .btn {

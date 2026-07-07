@@ -28,7 +28,7 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background: #dc3545;
+  background: var(--mi-danger, #EF4444);
   color: white;
   border-radius: 10px;
   padding: 2px 6px;

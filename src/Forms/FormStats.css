@@ -248,14 +248,36 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Compact table for response distribution */
+/* Compact table for response distribution — mockup .dist-table look
+   (warm thin borders, uppercase muted headers, transparent background). */
 .response-distribution-table {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+}
+
+.response-distribution-table.table {
+  --bs-table-bg: transparent;
+  margin-bottom: 0;
+  color: var(--bs-body-color);
 }
 
 .response-distribution-table th,
 .response-distribution-table td {
-  padding: 0.5rem;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--mi-card-border, var(--bs-border-color));
+  vertical-align: middle;
+}
+
+.response-distribution-table th {
+  color: var(--mi-muted, #8B7D6B);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: transparent;
+}
+
+.response-distribution-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 /* Modal sizing improvements */

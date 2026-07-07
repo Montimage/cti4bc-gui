@@ -1,0 +1,24 @@
+.mi-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--mi-muted);
+}
+.mi-empty__icon {
+  font-size: 2.4rem;
+  color: var(--mi-amber);
+  opacity: 0.7;
+  display: inline-block;
+}
+.mi-empty__title {
+  font-family: var(--mi-font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin: 12px 0 4px;
+  color: var(--bs-body-color);
+}
+.mi-empty__desc {
+  font-size: 0.9rem;
+}
+.mi-empty__action {
+  margin-top: 16px;
+}

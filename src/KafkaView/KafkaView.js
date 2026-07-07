@@ -1,209 +1,188 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useTheme } from '../ThemeContext';
 import { useToast } from '../components/Toast';
 import './KafkaView.css';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
+const FAVORITES_KEY = 'cti4bc.kafka.favoriteTopics';
+
+const loadFavorites = () => {
+    try {
+        const raw = localStorage.getItem(FAVORITES_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed.filter(t => typeof t === 'string') : [];
+    } catch (e) {
+        return [];
+    }
+};
 
 const KafkaView = () => {
     const { showError, showSuccess } = useToast();
-    const [topics, setTopics] = useState("");
+    const { theme } = useTheme();
+
+    const [selectedTopics, setSelectedTopics] = useState([]);
+    const [favorites, setFavorites] = useState(loadFavorites);
+    const [topicInput, setTopicInput] = useState("");
+    const [messageFilter, setMessageFilter] = useState("");
+
     const [response, setResponse] = useState(null);
     const [consumerStatus, setConsumerStatus] = useState({});
     const [kafkaCredentials, setKafkaCredentials] = useState({});
     const [messages, setMessages] = useState([]);
-    const [selectedQuickTopics, setSelectedQuickTopics] = useState([]);
-    const [customTopic, setCustomTopic] = useState("");
     const [isThemeChanging, setIsThemeChanging] = useState(false);
-    const messagesEndRef = useRef(null);
-    const { theme } = useTheme();
+    // Backend message ids already shown. A ref (not state) so it survives across
+    // polls without triggering renders, and so "Clear" can wipe the view without
+    // the next poll re-adding everything.
+    const seenIdsRef = useRef(new Set());
+
+    const isRunning = consumerStatus.status === 'running';
+
+    // Persist favorites whenever they change
+    useEffect(() => {
+        try {
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        } catch (e) { /* ignore quota / private mode errors */ }
+    }, [favorites]);
 
     // Handle theme change with temporary transition disable
     useEffect(() => {
         setIsThemeChanging(true);
-        const timer = setTimeout(() => {
-            setIsThemeChanging(false);
-        }, 50); // Very short delay to allow theme change to complete
-        
+        const timer = setTimeout(() => setIsThemeChanging(false), 50);
         return () => clearTimeout(timer);
     }, [theme]);
-    
-    const quickTopics = [
-        "UC1.AWARE4BC.security_alerts",
-        "UC2.AWARE4BC.security_alerts",
-        "UC3.AWARE4BC.security_alerts",
-        "UC4.AWARE4BC.security_alerts"
-    ];
 
-    // Function to fetch consumer status
+    // ---------------------------------------------------------------- data
     const fetchConsumerStatus = useCallback(async () => {
         try {
             const token = localStorage.getItem('accessToken');
             const res = await fetch(`${SERVER_URL}/consumer/status/`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Authorization': `Bearer ${token}` },
             });
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
             setConsumerStatus(data);
-        } catch (error) {
-                    }
+        } catch (error) { /* silent: polled */ }
     }, []);
 
-    // Function to fetch Kafka credentials
     const fetchKafkaCredentials = useCallback(async () => {
         try {
             const token = localStorage.getItem('accessToken');
             const res = await fetch(`${SERVER_URL}/consumer/env/`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Authorization': `Bearer ${token}` },
             });
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
             setKafkaCredentials(data.env_variables || {});
-        } catch (error) {
-                    }
+        } catch (error) { /* silent */ }
     }, []);
 
-    // Function to fetch messages
     const fetchMessages = useCallback(async () => {
         if (consumerStatus.status !== 'running') return;
-        
         try {
             const token = localStorage.getItem('accessToken');
             const res = await fetch(`${SERVER_URL}/consumer/messages/`, {
                 method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Authorization': `Bearer ${token}` },
             });
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
-            
-            if (data.messages && data.messages.length > 0) {
-                // Add new messages to the existing pile
-                setMessages(prevMessages => {
-                    // Create a map of existing messages to check for duplicates
-                    const existingMap = new Map(prevMessages.map(msg => [
-                        // Create a unique identifier for each message - adjust as needed based on your data
-                        JSON.stringify({
-                            topic: msg.topic, 
-                            timestamp: msg.timestamp, 
-                            value: msg.value || msg.message
-                        }),
-                        true
-                    ]));
-                    
-                    // Filter out duplicates and add only new messages
-                    const newMessages = data.messages.filter(msg => 
-                        !existingMap.has(JSON.stringify({
-                            topic: msg.topic, 
-                            timestamp: msg.timestamp, 
-                            value: msg.value || msg.message
-                        }))
-                    );
-                    
-                    return [...prevMessages, ...newMessages];
-                });
-            }
-        } catch (error) {
-                    }
+
+            const incoming = data.messages || [];
+            // Identify each entry by its backend id. Content is NOT a unique key:
+            // two identical alerts are distinct messages, and the old content-based
+            // dedup collapsed them so the 2nd never appeared. Fall back to a content
+            // hash only for legacy payloads that predate the id field.
+            const idOf = (m) => (m.id !== undefined && m.id !== null
+                ? `#${m.id}`
+                : JSON.stringify({ t: m.topic, ts: m.timestamp, v: m.value || m.message }));
+
+            const fresh = incoming.filter(m => !seenIdsRef.current.has(idOf(m)));
+            if (fresh.length === 0) return;                       // nothing new -> no re-render
+            fresh.forEach(m => seenIdsRef.current.add(idOf(m)));
+            // The API returns newest-first; append in chronological order. Stamp a
+            // stable _uid (row key) and receive time ONCE so later renders don't
+            // remount the row (that remount was the source of the flicker).
+            const stamped = fresh
+                .map(m => ({ ...m, _uid: idOf(m), _receivedAt: new Date().toISOString() }))
+                .reverse();
+            setMessages(prev => [...prev, ...stamped]);
+        } catch (error) { /* silent: polled */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [consumerStatus.status]);
 
-    // Initial fetch and setup interval for polling
     useEffect(() => {
         fetchConsumerStatus();
         fetchKafkaCredentials();
-        fetchMessages(); // Try to get messages immediately
-        
+        fetchMessages();
         const statusInterval = setInterval(fetchConsumerStatus, 5000);
         const messagesInterval = setInterval(fetchMessages, 2000);
-        
-        // Return cleanup function
         return () => {
             clearInterval(statusInterval);
             clearInterval(messagesInterval);
         };
     }, [fetchMessages, fetchConsumerStatus, fetchKafkaCredentials]);
 
-    // Handle quick topic selection
-    const handleQuickTopicSelect = (e) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-        setSelectedQuickTopics(selectedOptions);
-        if (selectedOptions.length > 0) {
-            setTopics(selectedOptions.join(','));
-        }
+    // ---------------------------------------------------------------- topics
+    const addSelectedTopic = useCallback((raw) => {
+        const topic = (raw || "").trim();
+        if (!topic) return;
+        setSelectedTopics(prev => (prev.includes(topic) ? prev : [...prev, topic]));
+    }, []);
+
+    const removeSelectedTopic = (topic) =>
+        setSelectedTopics(prev => prev.filter(t => t !== topic));
+
+    const addFavorite = (raw) => {
+        const topic = (raw || "").trim();
+        if (!topic) return;
+        setFavorites(prev => (prev.includes(topic) ? prev : [...prev, topic].sort()));
     };
 
-    // Function to add a selected topic to the current topics list
-    const addTopicToList = () => {
-        if (!customTopic.trim()) return;
-        
-        const currentTopics = topics ? topics.split(',') : [];
-        if (!currentTopics.includes(customTopic)) {
-            const newTopics = [...currentTopics, customTopic].filter(t => t.trim()).join(',');
-            setTopics(newTopics);
-            setCustomTopic(""); // Reset the input field
-        }
+    const removeFavorite = (topic) =>
+        setFavorites(prev => prev.filter(t => t !== topic));
+
+    const toggleFavorite = (topic) =>
+        (favorites.includes(topic) ? removeFavorite(topic) : addFavorite(topic));
+
+    const handleAddFromInput = () => {
+        addSelectedTopic(topicInput);
+        setTopicInput("");
     };
 
-    // Function to handle custom topic input
-    const handleCustomTopicChange = (e) => {
-        setCustomTopic(e.target.value);
-    };
-
-    // Function to handle Enter key for quick addition
-    const handleCustomTopicKeyDown = (e) => {
+    const handleInputKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            addTopicToList();
+            handleAddFromInput();
         }
     };
 
-    // Function to remove a topic from the current list
-    const removeTopicFromList = (topicToRemove) => {
-        const currentTopics = topics.split(',');
-        const newTopics = currentTopics.filter(topic => topic !== topicToRemove).join(',');
-        setTopics(newTopics);
-    };
+    const addAllFavorites = () => setSelectedTopics(prev => {
+        const merged = [...prev];
+        favorites.forEach(t => { if (!merged.includes(t)) merged.push(t); });
+        return merged;
+    });
 
+    // ---------------------------------------------------------------- consumer
     const handleStart = async () => {
         try {
             const token = localStorage.getItem('accessToken');
-            const cleanedTopics = topics.replace(/\s+/g, '');
+            const topics = selectedTopics.map(t => t.trim()).filter(Boolean);
             const res = await fetch(`${SERVER_URL}/consumer/start/`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({topics : cleanedTopics.split(',')}),
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ topics }),
             });
-            if (!res.ok){
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
             setResponse(data);
-            if (data.status && data.status.includes('started')) {
-                showSuccess(data.status);
-            }
+            if (data.status && data.status.includes('started')) showSuccess(data.status);
             fetchConsumerStatus();
         } catch (error) {
-            const errorMessage = error.message;
-            setResponse({error: errorMessage});
-            showError(errorMessage);
+            setResponse({ error: error.message });
+            showError(error.message);
         }
     };
 
@@ -212,322 +191,321 @@ const KafkaView = () => {
             const token = localStorage.getItem('accessToken');
             const res = await fetch(`${SERVER_URL}/consumer/stop/`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             });
-            if(!res.ok){
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             const data = await res.json();
             setResponse(data);
-            if (data.status && data.status.includes('stopped')) {
-                showSuccess(data.status);
-            }
+            if (data.status && data.status.includes('stopped')) showSuccess(data.status);
             fetchConsumerStatus();
-            // Clear messages when stopping
+            // Backend clears its history on stop -> start a fresh view + id set.
+            seenIdsRef.current = new Set();
             setMessages([]);
         } catch (error) {
-            const errorMessage = error.message;
-            setResponse({error: errorMessage});
-            showError(errorMessage);
+            setResponse({ error: error.message });
+            showError(error.message);
         }
     };
-  
+
+    // ---------------------------------------------------------------- messages view
+    const visibleMessages = useMemo(() => {
+        const q = messageFilter.trim().toLowerCase();
+        if (!q) return messages;
+        return messages.filter(m => {
+            const topic = (m.topic || '').toLowerCase();
+            let body = '';
+            try { body = JSON.stringify(m.message ?? m.value ?? m).toLowerCase(); } catch (e) { body = ''; }
+            return topic.includes(q) || body.includes(q);
+        });
+    }, [messages, messageFilter]);
+
+    // ---------------------------------------------------------------- render
     return (
         <div className={`kafka-view container-fluid mt-4 ${isThemeChanging ? 'theme-changing' : ''}`}>
             <div className="mi-page-head">
                 <div>
                     <h1>Kafka</h1>
-                    <div className="mi-sub">Start a Kafka consumer on selected topics and stream incoming security messages in real time.</div>
+                    <div className="mi-sub">Start a consumer on your topics and stream incoming security messages in real time.</div>
+                </div>
+                <div className="mi-page-head__actions">
+                    <span className={`mi-badge ${isRunning ? 'mi-success' : 'mi-neutral'}`}>
+                        <span className="mi-led"></span> Consumer {isRunning ? 'running' : 'stopped'}
+                    </span>
                 </div>
             </div>
-            <div className="row kafka-main-row" style={{ minHeight: "calc(100vh - 80px)" }}>
-                {/* Left Column (1/3 width) */}
-                <div className="col-md-4">
-                    <div className="mi-card h-100">
+
+            <div className="row kafka-main-row g-3">
+                {/* ------------------------------------------- Control column */}
+                <div className="col-lg-4">
+                    <div className="mi-card">
                         <div className="mi-card__head">
-                            <div className="mi-card__title">Kafka Consumer Control</div>
+                            <div className="mi-card__title">Consumer control</div>
                         </div>
                         <div className="mi-card__body">
-                            {/* Consumer Status */}
-                            <div className="mb-4">
-                                <h5>Consumer Status</h5>
-                                <div className="d-flex align-items-center mb-2">
-                                    <span className={`mi-badge ${consumerStatus.status === 'running' ? 'mi-success' : 'mi-danger'}`}>
-                                        <span className="mi-led"></span> {consumerStatus.status === 'running' ? 'Running' : 'Stopped'}
-                                    </span>
+
+                            {/* Connection */}
+                            <div className="kfk-section">
+                                <div className="kfk-label">Connection</div>
+                                <div className="kfk-conn">
+                                    <div><span className="kfk-conn__k">Server</span><span className="kfk-conn__v">{kafkaCredentials.KAFKA_SERVER || '—'}</span></div>
+                                    <div><span className="kfk-conn__k">User</span><span className="kfk-conn__v">{kafkaCredentials.KAFKA_USERNAME || '—'}</span></div>
+                                    <div><span className="kfk-conn__k">Password</span><span className="kfk-conn__v">{kafkaCredentials.KAFKA_PASSWORD || '—'}</span></div>
                                 </div>
-                                {consumerStatus.status === 'running' && (
-                                    <div className="small text-muted">
-                                        <div>Active topics: {consumerStatus.topics?.join(', ') || 'None'}</div>
+                                {isRunning && (
+                                    <div className="kfk-active">
+                                        <i className="bi bi-broadcast"></i>
+                                        <span>Listening on <b>{consumerStatus.topics?.join(', ') || 'None'}</b></span>
                                     </div>
                                 )}
                             </div>
 
-                            {/* Kafka Credentials */}
-                            <div className="mb-4">
-                                <h5>Kafka Credentials</h5>
-                                <div className="small">
-                                    <div><strong>Server:</strong> {kafkaCredentials.KAFKA_SERVER}</div>
-                                    <div className="d-flex justify-content-between">
-                                        <div><strong>Username:</strong> {kafkaCredentials.KAFKA_USERNAME}</div>
-                                        <div><strong>Password:</strong> {kafkaCredentials.KAFKA_PASSWORD}</div>
-                                    </div>
+                            {/* Add topic */}
+                            <div className="kfk-section">
+                                <div className="kfk-label">Add a topic</div>
+                                <div className="input-group">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="e.g. UC1.AWARE4BC.security_alerts"
+                                        value={topicInput}
+                                        onChange={(e) => setTopicInput(e.target.value)}
+                                        onKeyDown={handleInputKeyDown}
+                                    />
+                                    <button
+                                        className="btn btn-outline-secondary"
+                                        type="button"
+                                        title="Save as favourite"
+                                        onClick={() => { addFavorite(topicInput); setTopicInput(""); }}
+                                        disabled={!topicInput.trim() || favorites.includes(topicInput.trim())}
+                                    >
+                                        <i className="bi bi-star"></i>
+                                    </button>
+                                    <button
+                                        className="btn btn-primary"
+                                        type="button"
+                                        onClick={handleAddFromInput}
+                                        disabled={isRunning || !topicInput.trim()}
+                                    >
+                                        <i className="bi bi-plus-lg me-1"></i>Add
+                                    </button>
                                 </div>
+                                <div className="kfk-hint">Press Enter to add · ★ saves it to favourites</div>
                             </div>
 
-                            {/* Quick Topic Selection */}
-                            <div className="mb-4">
-                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                    <h5>Quick Topic Selection</h5>
-                                    <div>
-                                        <button 
-                                            type="button" 
-                                            className="btn btn-sm btn-outline-primary me-1"
-                                            onClick={() => {
-                                                setSelectedQuickTopics(quickTopics);
-                                                setTopics(quickTopics.join(','));
-                                            }}
-                                            disabled={consumerStatus.status === 'running'}
+                            {/* Favourites */}
+                            <div className="kfk-section">
+                                <div className="kfk-label kfk-label--row">
+                                    <span><i className="bi bi-star-fill me-1"></i>Favourites</span>
+                                    {favorites.length > 0 && (
+                                        <button
+                                            className="kfk-linkbtn"
+                                            onClick={addAllFavorites}
+                                            disabled={isRunning}
                                         >
-                                            All
+                                            Add all
                                         </button>
-                                        <button 
-                                            type="button" 
-                                            className="btn btn-sm btn-outline-secondary"
-                                            onClick={() => {
-                                                setSelectedQuickTopics([]);
-                                                setTopics('');
-                                            }}
-                                            disabled={consumerStatus.status === 'running'}
-                                        >
-                                            None
-                                        </button>
-                                    </div>
+                                    )}
                                 </div>
-                                <select 
-                                    className="form-select mb-3"
-                                    value={selectedQuickTopics}
-                                    onChange={handleQuickTopicSelect}
-                                    multiple
-                                    size={4}
-                                    disabled={consumerStatus.status === 'running'}
-                                >
-                                    {quickTopics.map((topic, index) => (
-                                        <option key={index} value={topic}>{topic}</option>
-                                    ))}
-                                </select>
-                                <div className="form-text">Hold the Ctrl key (or Cmd on Mac) to select multiple topics</div>
-                            </div>
-
-                            {/* Custom Topic Input */}
-                            <div className="mb-4">
-                                <h5>Custom Topic</h5>
-                                <div className="mb-3">
-                                    <div className="input-group">
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="Enter a topic name and press Enter or click Add
-"
-                                            value={customTopic}
-                                            onChange={handleCustomTopicChange}
-                                            onKeyDown={handleCustomTopicKeyDown}
-                                            disabled={consumerStatus.status === 'running'}
-                                        />
-                                        <button 
-                                            className="btn btn-outline-secondary" 
-                                            type="button"
-                                            onClick={addTopicToList}
-                                            disabled={consumerStatus.status === 'running' || !customTopic.trim()}
-                                        >
-                                            Add
-                                        </button>
+                                {favorites.length === 0 ? (
+                                    <div className="kfk-empty-inline">
+                                        No favourites yet — save topics you use often with the ★ button.
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* Selected Topics Display */}
-                            {topics && (
-                                <div className="mb-4">
-                                    <h5>
-                                        Selected Topics 
-                                        <span className="badge bg-primary ms-2">
-                                            {topics.split(',').filter(t => t.trim()).length}
-                                        </span>
-                                    </h5>
-                                    <div className="selected-topics-container">
-                                        {topics.split(',').filter(t => t.trim()).map((topic, index) => (
-                                            <div key={index} className="selected-topic-badge">
-                                                <span>{topic}</span>
-                                                <button 
-                                                    className="remove-topic-btn" 
-                                                    onClick={() => removeTopicFromList(topic)}
-                                                    title="Remove topic"
-                                                    disabled={consumerStatus.status === 'running'}
+                                ) : (
+                                    <div className="kfk-chips">
+                                        {favorites.map((topic) => (
+                                            <div className="kfk-chip kfk-chip--fav" key={topic}>
+                                                <button
+                                                    className="kfk-chip__body"
+                                                    title={isRunning ? 'Stop the consumer to edit topics' : 'Add to selection'}
+                                                    onClick={() => addSelectedTopic(topic)}
+                                                    disabled={isRunning || selectedTopics.includes(topic)}
                                                 >
-                                                    &times;
+                                                    <i className="bi bi-star-fill"></i>
+                                                    <span>{topic}</span>
+                                                </button>
+                                                <button
+                                                    className="kfk-chip__x"
+                                                    title="Remove favourite"
+                                                    onClick={() => removeFavorite(topic)}
+                                                >
+                                                    <i className="bi bi-x-lg"></i>
                                                 </button>
                                             </div>
                                         ))}
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
 
-                            {/* Control Buttons */}
-                            <div className="d-flex gap-2 mb-3">
-                                <button 
+                            {/* Selected topics */}
+                            <div className="kfk-section">
+                                <div className="kfk-label kfk-label--row">
+                                    <span>Selected topics <span className="kfk-count">{selectedTopics.length}</span></span>
+                                    {selectedTopics.length > 0 && (
+                                        <button
+                                            className="kfk-linkbtn"
+                                            onClick={() => setSelectedTopics([])}
+                                            disabled={isRunning}
+                                        >
+                                            Clear
+                                        </button>
+                                    )}
+                                </div>
+                                {selectedTopics.length === 0 ? (
+                                    <div className="kfk-empty-inline">
+                                        Add at least one topic to start the consumer.
+                                    </div>
+                                ) : (
+                                    <div className="kfk-chips">
+                                        {selectedTopics.map((topic) => (
+                                            <div className="kfk-chip kfk-chip--sel" key={topic}>
+                                                <button
+                                                    className={`kfk-chip__star ${favorites.includes(topic) ? 'is-fav' : ''}`}
+                                                    title={favorites.includes(topic) ? 'Remove favourite' : 'Save as favourite'}
+                                                    onClick={() => toggleFavorite(topic)}
+                                                >
+                                                    <i className={`bi ${favorites.includes(topic) ? 'bi-star-fill' : 'bi-star'}`}></i>
+                                                </button>
+                                                <span className="kfk-chip__label">{topic}</span>
+                                                <button
+                                                    className="kfk-chip__x"
+                                                    title="Remove from selection"
+                                                    onClick={() => removeSelectedTopic(topic)}
+                                                    disabled={isRunning}
+                                                >
+                                                    <i className="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Controls */}
+                            <div className="d-flex gap-2 kfk-controls">
+                                <button
                                     className="btn btn-primary flex-grow-1"
                                     onClick={handleStart}
-                                    disabled={!topics || consumerStatus.status === 'running'}
+                                    disabled={selectedTopics.length === 0 || isRunning}
                                 >
-                                    Start Consumer
+                                    <i className="bi bi-play-fill me-1"></i>Start
                                 </button>
-                                <button 
-                                    className="btn btn-danger flex-grow-1" 
+                                <button
+                                    className="btn btn-outline-danger flex-grow-1"
                                     onClick={handleStop}
-                                    disabled={consumerStatus.status !== 'running'}
+                                    disabled={!isRunning}
                                 >
-                                    Stop Consumer
+                                    <i className="bi bi-stop-fill me-1"></i>Stop
                                 </button>
                             </div>
 
-                            {/* Response Messages */}
                             {response && (
-                                <div className="mt-3 small">
-                                    <h6>Last Action:</h6>
-                                    <div className={`p-2 ${theme === 'dark' ? 'bg-dark' : 'bg-light'} rounded border`}>
-                                        {response.error ? (
-                                            <div className="text-danger">{response.error}</div>
-                                        ) : (
-                                            <div className="text-success">{response.status}</div>
-                                        )}
-                                    </div>
+                                <div className={`kfk-response ${response.error ? 'is-error' : 'is-ok'}`}>
+                                    <i className={`bi ${response.error ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill'} me-1`}></i>
+                                    {response.error || response.status}
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
 
-                {/* Right Column (2/3 width) - Messages Box */}
-                <div className="col-md-8">
+                {/* ------------------------------------------- Messages column */}
+                <div className="col-lg-8">
                     <div className="mi-card h-100 d-flex flex-column">
                         <div className="mi-card__head">
-                            <div className="mi-card__title">Kafka Messages</div>
-                        </div>
-                        <div className="card-body flex-grow-1 d-flex flex-column p-0">
-                            <div className="message-container flex-grow-1" 
-                                 style={{ 
-                                     overflowY: "auto", 
-                                     padding: "10px",
-                                     backgroundColor: theme === 'dark' ? '#2b3035' : '#f8f9fa'
-                                 }}>
-                                {messages.length === 0 ? (
-                                    <div className="text-center text-muted py-5">
-                                        <i className="bi bi-inbox-fill" style={{ fontSize: '3rem' }}></i>
-                                        <p className="mt-3">
-                                            {consumerStatus.status === 'running' 
-                                                ? 'No messages received yet. Waiting for incoming data...' 
-                                                : 'Start the consumer to receive messages'}
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <div className="alert alert-info mb-3">
-                                            Showing {messages.length} message(s)
-                                        </div>
-                                        {messages.map((message, index) => {
-                                            // Try to parse the message value as JSON for prettier display
-                                            let messageContent;
-                                            let isJson = false;
-                                            let timestamp = message.timestamp || new Date().toISOString();
-                                            
-                                            try {
-                                                // If message.message is present, it's already parsed JSON
-                                                if (message.message && typeof message.message === 'object') {
-                                                    messageContent = message.message;
-                                                    isJson = true;
-                                                } 
-                                                // If message.value exists, it might be a string that needs parsing
-                                                else if (message.value) {
-                                                    if (typeof message.value === 'string') {
-                                                        try {
-                                                            messageContent = JSON.parse(message.value);
-                                                            isJson = true;
-                                                        } catch (e) {
-                                                            // If it's not valid JSON, display as string
-                                                            messageContent = String(message.value);
-                                                        }
-                                                    } else {
-                                                        messageContent = message.value;
-                                                    }
-                                                }
-                                                // If neither exists, try to use the whole message
-                                                else {
-                                                    messageContent = message;
-                                                }
-                                            } catch (e) {
-                                                // Display raw message as fallback
-                                                messageContent = JSON.stringify(message);
-                                            }
-
-                                            return (
-                                                <div className={`message-card mb-3 p-3 border rounded ${theme === 'dark' ? 'border-secondary' : ''}`} key={index}>
-                                                    <div className="d-flex justify-content-between mb-2">
-                                                        <span className="badge bg-secondary">{message.topic || "Unknown Topic"}</span>
-                                                        <small className={`${theme === 'dark' ? 'text-light-emphasis' : 'text-muted'}`}>
-                                                            {timestamp ? new Date(timestamp).toLocaleString() : new Date().toLocaleString()}
-                                                        </small>
-                                                    </div>
-                                                    {isJson ? (
-                                                        <pre className={`message-content mb-0 ${theme === 'dark' ? 'bg-dark text-light' : 'bg-light'} p-2 rounded`} 
-                                                             style={{ maxHeight: "300px", overflow: "auto" }}>
-                                                            {typeof messageContent === 'object' 
-                                                                ? JSON.stringify(messageContent, null, 2) 
-                                                                : String(messageContent)}
-                                                        </pre>
-                                                    ) : (
-                                                        <div className={`message-content ${theme === 'dark' ? 'bg-dark text-light' : 'bg-light'} p-2 rounded`}>
-                                                            {messageContent}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </>
+                            <div className="mi-card__title">Messages</div>
+                            <div className="d-flex align-items-center gap-2">
+                                <span className="mi-badge mi-neutral">
+                                    {visibleMessages.length}{messageFilter.trim() ? ` / ${messages.length}` : ''} message{messages.length !== 1 ? 's' : ''}
+                                </span>
+                                {isRunning && (
+                                    <span className="mi-badge mi-info"><span className="mi-led"></span> live</span>
                                 )}
-                                <div ref={messagesEndRef} style={{ display: 'none' }} />
                             </div>
-                            <div className="card-footer mt-auto border-top">
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span className="badge bg-primary me-2">
-                                            {messages.length} message{messages.length !== 1 ? 's' : ''}
-                                        </span>
-                                        {consumerStatus.status === 'running' && (
-                                            <span className={`small ${theme === 'dark' ? 'text-light-emphasis' : 'text-muted'}`}>Auto-refreshing every 2 seconds</span>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <button 
-                                            className="btn btn-sm btn-outline-primary me-2" 
-                                            onClick={fetchMessages}
-                                            disabled={consumerStatus.status !== 'running'}
-                                        >
-                                            <i className="bi bi-arrow-clockwise me-1"></i> Refresh Now
-                                        </button>
-                                        <button 
-                                            className="btn btn-sm btn-outline-secondary" 
-                                            onClick={() => setMessages([])}
-                                            disabled={messages.length === 0}
-                                        >
-                                            Clear Messages
-                                        </button>
-                                    </div>
+                        </div>
+
+                        <div className="kfk-msg-toolbar">
+                            <div className="kfk-search">
+                                <i className="bi bi-funnel"></i>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Filter by topic or content…"
+                                    value={messageFilter}
+                                    onChange={(e) => setMessageFilter(e.target.value)}
+                                />
+                                {messageFilter && (
+                                    <button className="kfk-search__clear" onClick={() => setMessageFilter("")} title="Clear filter">
+                                        <i className="bi bi-x-lg"></i>
+                                    </button>
+                                )}
+                            </div>
+                            <div className="d-flex gap-2">
+                                <button
+                                    className="btn btn-sm btn-outline-secondary"
+                                    onClick={fetchMessages}
+                                    disabled={!isRunning}
+                                    title="Refresh now"
+                                >
+                                    <i className="bi bi-arrow-clockwise"></i>
+                                </button>
+                                <button
+                                    className="btn btn-sm btn-outline-secondary"
+                                    onClick={() => setMessages([])}
+                                    disabled={messages.length === 0}
+                                    title="Clear messages"
+                                >
+                                    <i className="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="kfk-msg-list">
+                            {visibleMessages.length === 0 ? (
+                                <div className="kfk-empty">
+                                    <i className={`bi ${messageFilter.trim() ? 'bi-search' : 'bi-inbox'}`}></i>
+                                    <p>
+                                        {messageFilter.trim()
+                                            ? 'No message matches your filter.'
+                                            : isRunning
+                                                ? 'Consumer running — waiting for incoming messages…'
+                                                : 'Start the consumer to receive messages.'}
+                                    </p>
                                 </div>
-                            </div>
+                            ) : (
+                                visibleMessages.map((message, index) => {
+                                    let messageContent;
+                                    const displayTime = message.timestamp || message._receivedAt;
+
+                                    if (message.message && typeof message.message === 'object') {
+                                        messageContent = message.message;
+                                    } else if (message.value !== undefined) {
+                                        if (typeof message.value === 'string') {
+                                            try { messageContent = JSON.parse(message.value); }
+                                            catch (e) { messageContent = String(message.value); }
+                                        } else {
+                                            messageContent = message.value;
+                                        }
+                                    } else {
+                                        messageContent = message;
+                                    }
+
+                                    return (
+                                        <div className="kfk-msg" key={message._uid || index}>
+                                            <div className="kfk-msg__head">
+                                                <span className="mi-badge mi-warning">{message.topic || 'Unknown topic'}</span>
+                                                <span className="kfk-msg__time">
+                                                    {displayTime ? new Date(displayTime).toLocaleString() : '—'}
+                                                </span>
+                                            </div>
+                                            <pre className="kfk-msg__body">
+                                                {typeof messageContent === 'object'
+                                                    ? JSON.stringify(messageContent, null, 2)
+                                                    : String(messageContent)}
+                                            </pre>
+                                        </div>
+                                    );
+                                })
+                            )}
                         </div>
                     </div>
                 </div>
@@ -535,5 +513,5 @@ const KafkaView = () => {
         </div>
     );
 };
-  
+
 export default KafkaView;

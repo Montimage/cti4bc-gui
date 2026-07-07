@@ -1,0 +1,20 @@
+.mi-skel {
+  display: inline-block;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--mi-card-border) 25%,
+    var(--mi-content-bg) 37%,
+    var(--mi-card-border) 63%
+  );
+  background-size: 400% 100%;
+  animation: mi-shimmer 1.4s ease infinite;
+}
+@keyframes mi-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mi-skel { animation: none; }
+}

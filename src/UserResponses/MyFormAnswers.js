@@ -172,7 +172,7 @@ const MyFormAnswers = () => {
       case 'checkbox':
         if (Array.isArray(field.options) && field.options.length > 0) {
           const checkboxOptions = field.options;
-          const currentValues = value ? value.split(',') : [];
+          const currentValues = Array.isArray(value) ? value : (value ? String(value).split(',') : []);
           return (
             <div>
               {checkboxOptions.map((option, index) => (

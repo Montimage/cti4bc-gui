@@ -93,7 +93,7 @@ const Login = () => {
                         Collect, refine, anonymize and share cyber threat intelligence across partner
                         organizations — securely and on time.
                     </p>
-                    <div className="mi-auth__brand-foot">Dynabic · EU Horizon Europe programme</div>
+                    <div className="mi-auth__brand-foot">Montimage · CTI4BC</div>
                 </div>
             </aside>
 

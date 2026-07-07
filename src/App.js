@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EventList from "./Events/EventList";
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Aggregation from "./Events/Aggregation/AggregationView";
 import ShareEventView from "./Events/EventDetail/ShareEvent";
 import EventShareLogs from "./Events/EventShareLogs";
@@ -11,7 +11,6 @@ import AdminProtectedRoute from "./ProtectedRoute/AdminProtectedRoute";
 import AppLayout from "./layout/AppLayout";
 import KafkaView from "./KafkaView/KafkaView";
 import FormsView from "./Forms/FormsView";
-import FormStats from "./Forms/FormStats";
 import Analytics from './Analytics/Analytics';
 import Settings from './Settings/Settings';
 import MyFormAnswers from './UserResponses/MyFormAnswers';
@@ -58,7 +57,8 @@ function App() {
                       <Route path="/health" element={<SystemHealthPage />} />
                       <Route path='/admin/kafka' element={<KafkaView />} />
                       <Route path='/admin/forms' element={<FormsView />} />
-                      <Route path='/admin/form-stats' element={<FormStats />} />
+                      {/* Statistics are now an in-page tab; keep the old URL working. */}
+                      <Route path='/admin/form-stats' element={<Navigate to="/admin/forms?tab=stats" replace />} />
                     </Route>
                    </Route>
                   </Route>

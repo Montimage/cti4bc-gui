@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI4BC — Maquette · Forms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="mockup.css">
+  <style>
+    /* ============ Forms-specific bits (scoped to this mockup) ============ */
+    button.tab { border: none; background: none; font-family: inherit; border-top: none; }
+    .stat.mi-clickable { cursor: pointer; transition: border-color .15s var(--ease), box-shadow .15s var(--ease); }
+    .stat.mi-clickable:hover { border-color: var(--mi-amber); }
+
+    .panel { display: none; }
+    .panel.active { display: block; animation: fade .2s var(--ease); }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .help { color: var(--text-muted); font-size: .82rem; }
+    .cell-actions { display: flex; gap: 6px; justify-content: center; }
+    .th-c, .td-c { text-align: center; }
+
+    /* Organization chips inside a cell */
+    .org-chips { display: inline-flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+    .org-chips .chip { font-size: .72rem; padding: 2px 8px; }
+
+    /* Status toggle pill (inline active/inactive) */
+    .switch { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+    .switch input { display: none; }
+    .switch .track { width: 38px; height: 20px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); position: relative; transition: background .15s var(--ease); }
+    .switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--text-muted); transition: transform .15s var(--ease), background .15s var(--ease); }
+    .switch input:checked + .track { background: rgba(var(--mi-amber-rgb), .3); border-color: var(--mi-amber); }
+    .switch input:checked + .track::after { transform: translateX(18px); background: var(--mi-amber); }
+
+    /* Accordion (Answers tab) */
+    .acc { margin-bottom: var(--s3); }
+    .acc__head { cursor: pointer; }
+    .acc__head .chev { transition: transform .15s var(--ease); color: var(--text-muted); }
+    .acc.open .acc__head .chev { transform: rotate(90deg); }
+    .acc__body { display: none; }
+    .acc.open .acc__body { display: block; }
+
+    /* Empty state */
+    .empty { text-align: center; padding: var(--s10) var(--s5); color: var(--text-muted); }
+    .empty i { font-size: 2.4rem; color: var(--mi-amber); opacity: .7; }
+    .empty h3 { font-size: 1.05rem; margin: var(--s3) 0 var(--s1); color: var(--text); }
+
+    /* ---- Modal (Form Builder / Import) ---- */
+    .overlay { position: fixed; inset: 0; background: rgba(26,22,18,.55); backdrop-filter: blur(2px); display: none; align-items: flex-start; justify-content: center; z-index: 60; padding: var(--s8) var(--s4); overflow-y: auto; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); width: 100%; max-width: 920px; }
+    .modal.sm { max-width: 460px; }
+    .modal__head { display: flex; align-items: center; justify-content: space-between; padding: var(--s5) var(--s6); border-bottom: 1px solid var(--border); }
+    .modal__head h2 { font-size: 1.2rem; }
+    .modal__body { padding: var(--s6); max-height: 68vh; overflow-y: auto; }
+    .modal__foot { display: flex; justify-content: flex-end; gap: var(--s2); padding: var(--s4) var(--s6); border-top: 1px solid var(--border); }
+    .x-btn { background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; }
+    .x-btn:hover { color: var(--text); }
+
+    .form-row { margin-bottom: var(--s4); }
+    .form-row > label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; }
+    .form-row .req { color: var(--mi-danger); }
+    .ctrl { width: 100%; padding: 9px var(--s3); border-radius: var(--r-sm); border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: .92rem; }
+    .ctrl:focus { outline: none; border-color: var(--mi-amber-light); box-shadow: 0 0 0 .2rem rgba(var(--mi-amber-rgb), .22); }
+    textarea.ctrl { resize: vertical; min-height: 64px; }
+
+    /* Two-column builder: editor | live preview */
+    .fb-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: var(--s5); align-items: start; }
+    .fb-section-title { font-family: var(--font-display); font-weight: 600; font-size: .95rem; margin: var(--s5) 0 var(--s3); display: flex; align-items: center; justify-content: space-between; }
+
+    /* Field list with reorder handles + inline actions */
+    .field-item { display: flex; align-items: center; gap: var(--s3); padding: 10px var(--s3); border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface-2); margin-bottom: var(--s2); }
+    .field-item .grip { color: var(--text-muted); cursor: grab; }
+    .field-item .fi-main { flex: 1; min-width: 0; }
+    .field-item .fi-label { font-weight: 600; font-size: .9rem; }
+    .field-item .fi-meta { color: var(--text-muted); font-size: .78rem; font-family: var(--font-mono); }
+    .field-item .fi-actions { display: flex; gap: 4px; }
+    .type-badge { font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: var(--r-pill); background: rgba(var(--mi-amber-rgb), .14); color: var(--mi-amber-text); font-weight: 700; }
+    [data-theme="dark"] .type-badge { color: var(--mi-amber-light); }
+
+    .add-field { border: 1px dashed var(--border); border-radius: var(--r-sm); padding: var(--s3); margin-top: var(--s2); }
+    .add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+
+    /* Live preview panel */
+    .preview { border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--s4); background: var(--bg); position: sticky; top: 0; }
+    .preview h4 { font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); margin: 0 0 var(--s3); }
+    .pv-field { margin-bottom: var(--s3); }
+    .pv-field label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: 3px; }
+    .pv-field .pv-req { color: var(--mi-danger); }
+
+    /* Org picker checklist */
+    .org-picker { border: 1px solid var(--border); border-radius: var(--r-sm); max-height: 180px; overflow-y: auto; }
+    .org-opt { display: flex; align-items: center; gap: var(--s3); padding: 10px var(--s3); border-bottom: 1px solid var(--border); cursor: pointer; }
+    .org-opt:last-child { border-bottom: none; }
+    .org-opt:hover { background: var(--surface-2); }
+    .org-opt small { color: var(--text-muted); }
+
+    /* ---- Statistics tab ---- */
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--s5); }
+    .chart-box { border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--s5); background: var(--surface); }
+    .chart-box h4 { font-size: .95rem; margin: 0 0 var(--s4); }
+    .donut-wrap { display: flex; align-items: center; gap: var(--s5); flex-wrap: wrap; }
+    .donut { width: 150px; height: 150px; border-radius: 50%; position: relative; flex-shrink: 0;
+      background: conic-gradient(var(--mi-amber) 0 46%, var(--mi-info) 46% 71%, var(--mi-success) 71% 89%, var(--mi-neutral) 89% 100%); }
+    .donut::after { content: ""; position: absolute; inset: 24px; border-radius: 50%; background: var(--surface); }
+    .legend { display: flex; flex-direction: column; gap: var(--s2); font-size: .85rem; }
+    .legend span { display: inline-flex; align-items: center; gap: var(--s2); }
+    .legend .sw { width: 11px; height: 11px; border-radius: 3px; }
+    .bars { display: flex; flex-direction: column; gap: var(--s3); }
+    .bar-row { display: grid; grid-template-columns: 130px 1fr 42px; align-items: center; gap: var(--s3); font-size: .85rem; }
+    .bar-track { height: 12px; background: var(--surface-2); border-radius: var(--r-pill); overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--mi-amber), var(--mi-amber-hover)); border-radius: var(--r-pill); }
+    .dist-table { width: 100%; border-collapse: collapse; font-size: .85rem; margin-top: var(--s3); }
+    .dist-table th, .dist-table td { text-align: left; padding: 7px var(--s3); border-bottom: 1px solid var(--border); }
+    .dist-table th { color: var(--text-muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; }
+
+    @media (max-width: 820px) {
+      .fb-grid { grid-template-columns: 1fr; }
+      .add-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- ===== Sidebar ===== -->
+    <aside class="rail">
+      <div class="rail__brand">
+        <div class="rail__mark">C</div>
+        <div class="rail__name">CTI4BC</div>
+      </div>
+      <nav class="rail__nav">
+        <a class="rail__link"><i class="bi bi-shield-exclamation"></i><span>Events</span></a>
+        <a class="rail__link"><i class="bi bi-diagram-3"></i><span>Aggregation</span></a>
+        <a class="rail__link"><i class="bi bi-graph-up"></i><span>Analytics</span></a>
+        <a class="rail__link"><i class="bi bi-file-earmark-text"></i><span>Reports</span></a>
+        <a class="rail__link"><i class="bi bi-clock-history"></i><span>Shared Logs</span></a>
+        <div class="rail__group-label">Admin</div>
+        <a class="rail__link"><i class="bi bi-hdd-network"></i><span>Kafka</span></a>
+        <a class="rail__link active"><i class="bi bi-ui-checks"></i><span>Forms</span></a>
+        <a class="rail__link"><i class="bi bi-heart-pulse"></i><span>System Health</span></a>
+      </nav>
+      <div class="rail__foot">Montimage · CTI4BC v0.1</div>
+    </aside>
+
+    <!-- ===== Topbar ===== -->
+    <header class="topbar">
+      <button class="topbar__toggle" id="toggle" title="Collapse menu"><i class="bi bi-list"></i></button>
+      <div class="topbar__crumbs"><span>CTI</span><i class="bi bi-chevron-right" style="font-size:.7rem"></i><b>Forms</b></div>
+      <div class="topbar__spacer"></div>
+      <div class="topbar__util">
+        <button class="theme-toggle btn btn-outline btn-sm" id="themeBtn"><i class="bi bi-moon-stars"></i> Theme</button>
+        <span class="health-pill"><span class="led"></span> All systems operational</span>
+        <button class="icon-btn" title="Notifications"><i class="bi bi-bell"></i><span class="dot">3</span></button>
+        <div class="avatar" title="admin">A</div>
+      </div>
+    </header>
+
+    <!-- ===== Main ===== -->
+    <main class="main">
+      <div class="page-head">
+        <div>
+          <h1>Forms Management</h1>
+          <div class="sub">Create, import and analyze data-collection forms for partner organizations.</div>
+        </div>
+        <div class="page-head__actions">
+          <button class="btn btn-outline" onclick="openModal('importModal')"><i class="bi bi-cloud-arrow-down"></i> Import Form</button>
+          <button class="btn btn-primary" onclick="openModal('builderModal')"><i class="bi bi-plus-lg"></i> Create Form</button>
+        </div>
+      </div>
+
+      <!-- KPI cards -->
+      <section class="stats">
+        <div class="stat mi-clickable" onclick="showTab('stats')"><div class="stat__label">Total forms</div><div class="stat__value">12</div><div class="stat__delta">across 4 orgs</div></div>
+        <div class="stat mi-clickable" onclick="showTab('stats')"><div class="stat__label">Active forms</div><div class="stat__value"><span class="accent">9</span></div><div class="stat__delta up">3 inactive</div></div>
+        <div class="stat mi-clickable" onclick="showTab('answers')"><div class="stat__label">Total responses</div><div class="stat__value">184</div><div class="stat__delta up">+12 this week</div></div>
+        <div class="stat mi-clickable" onclick="showTab('stats')"><div class="stat__label">Avg / form</div><div class="stat__value">15.3</div><div class="stat__delta">responses</div></div>
+      </section>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" data-tab="forms" onclick="showTab('forms')"><i class="bi bi-ui-checks-grid"></i> Forms</button>
+        <button class="tab" data-tab="answers" onclick="showTab('answers')"><i class="bi bi-chat-left-text"></i> Answers</button>
+        <button class="tab" data-tab="stats" onclick="showTab('stats')"><i class="bi bi-bar-chart"></i> Statistics</button>
+      </div>
+
+      <!-- ============ FORMS TAB ============ -->
+      <section class="panel active" id="panel-forms">
+        <div class="toolbar">
+          <div class="field search">
+            <label>Search</label>
+            <div style="position:relative"><i class="bi bi-search"></i><input class="input" placeholder="Search forms by title…"></div>
+          </div>
+          <div class="field"><label>Status</label>
+            <select class="select"><option>Any status</option><option>Active</option><option>Inactive</option></select>
+          </div>
+          <div class="field"><label>Organization</label>
+            <select class="select"><option>All organizations</option><option>Montimage</option><option>CERT-EU</option><option>ACME Energy</option></select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <div class="card__title">Forms <span class="chip" style="margin-left:8px">12</span></div>
+          </div>
+          <div class="table-wrap">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th class="th-c">Organizations</th>
+                  <th class="th-c">Status</th>
+                  <th class="th-c sortable">Created <i class="bi bi-caret-down-fill caret" style="font-size:.7rem"></i></th>
+                  <th class="th-c">Fields</th>
+                  <th class="th-c">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="ev-title">Incident Response Feedback</div></td>
+                  <td>Post-incident feedback from partner SOCs</td>
+                  <td class="td-c"><div class="org-chips"><span class="chip">Montimage</span><span class="chip">CERT-EU</span><span class="chip" style="cursor:pointer">+1</span></div></td>
+                  <td class="td-c"><span class="badge success"><span class="led"></span> Active</span></td>
+                  <td class="td-c">2026-06-24</td>
+                  <td class="td-c">6</td>
+                  <td class="td-c"><div class="cell-actions">
+                    <button class="btn btn-outline btn-sm">View</button>
+                    <button class="btn btn-outline btn-sm" onclick="openModal('builderModal')">Edit</button>
+                    <button class="icon-btn" title="Statistics" onclick="showTab('stats')"><i class="bi bi-bar-chart"></i></button>
+                    <button class="icon-btn" title="Delete" onclick="openModal('deleteModal')"><i class="bi bi-trash"></i></button>
+                  </div></td>
+                </tr>
+                <tr>
+                  <td><div class="ev-title">Sector Impact Survey</div></td>
+                  <td>Assess cross-sector impact of shared threats</td>
+                  <td class="td-c"><div class="org-chips"><span class="chip">Montimage</span></div></td>
+                  <td class="td-c"><span class="badge success"><span class="led"></span> Active</span></td>
+                  <td class="td-c">2026-06-19</td>
+                  <td class="td-c">8</td>
+                  <td class="td-c"><div class="cell-actions">
+                    <button class="btn btn-outline btn-sm">View</button>
+                    <button class="btn btn-outline btn-sm" onclick="openModal('builderModal')">Edit</button>
+                    <button class="icon-btn" title="Statistics" onclick="showTab('stats')"><i class="bi bi-bar-chart"></i></button>
+                    <button class="icon-btn" title="Delete" onclick="openModal('deleteModal')"><i class="bi bi-trash"></i></button>
+                  </div></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="ev-title">Post-Sharing Questionnaire</div>
+                    <div class="ev-sub"><i class="bi bi-google" style="color:var(--mi-amber)"></i> Imported from Google Forms</div>
+                  </td>
+                  <td>Collected via Google Apps Script</td>
+                  <td class="td-c"><div class="org-chips"><span class="chip">CERT-EU</span></div></td>
+                  <td class="td-c"><span class="badge success"><span class="led"></span> Active</span></td>
+                  <td class="td-c">2026-06-11</td>
+                  <td class="td-c">5</td>
+                  <td class="td-c"><div class="cell-actions">
+                    <button class="btn btn-outline btn-sm">View</button>
+                    <button class="btn btn-outline btn-sm" onclick="openModal('builderModal')">Edit</button>
+                    <button class="icon-btn" title="Statistics" onclick="showTab('stats')"><i class="bi bi-bar-chart"></i></button>
+                    <button class="icon-btn" title="Delete" onclick="openModal('deleteModal')"><i class="bi bi-trash"></i></button>
+                  </div></td>
+                </tr>
+                <tr>
+                  <td><div class="ev-title">Threat Relevance Rating</div></td>
+                  <td>Rate relevance of received IoCs</td>
+                  <td class="td-c"><div class="org-chips"><span class="chip">ACME Energy</span></div></td>
+                  <td class="td-c"><span class="badge neutral"><span class="led"></span> Inactive</span></td>
+                  <td class="td-c">2026-05-30</td>
+                  <td class="td-c">4</td>
+                  <td class="td-c"><div class="cell-actions">
+                    <button class="btn btn-outline btn-sm">View</button>
+                    <button class="btn btn-outline btn-sm" onclick="openModal('builderModal')">Edit</button>
+                    <button class="icon-btn" title="Statistics" onclick="showTab('stats')"><i class="bi bi-bar-chart"></i></button>
+                    <button class="icon-btn" title="Delete" onclick="openModal('deleteModal')"><i class="bi bi-trash"></i></button>
+                  </div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ANSWERS TAB ============ -->
+      <section class="panel" id="panel-answers">
+        <div class="toolbar">
+          <div class="field search">
+            <label>Search</label>
+            <div style="position:relative"><i class="bi bi-search"></i><input class="input" placeholder="Search by user, event or IP…"></div>
+          </div>
+          <div class="field"><label>Form</label>
+            <select class="select"><option>All forms</option><option>Incident Response Feedback</option><option>Sector Impact Survey</option></select>
+          </div>
+          <div class="field"><label>Date</label>
+            <select class="select"><option>Any time</option><option>Last 7 days</option><option>Last 30 days</option></select>
+          </div>
+          <div class="topbar__spacer"></div>
+          <div class="field"><label>&nbsp;</label>
+            <button class="btn btn-outline"><i class="bi bi-download"></i> Export CSV</button>
+          </div>
+        </div>
+
+        <div class="acc open card">
+          <div class="card__head acc__head" onclick="toggleAcc(this)">
+            <div class="card__title"><i class="bi bi-chevron-right chev"></i> Incident Response Feedback <span class="help" style="margin-left:8px">3 responses</span></div>
+            <span class="badge info"><span class="led"></span> 3</span>
+          </div>
+          <div class="acc__body table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Event</th><th>Filled by</th><th class="th-c">Filled at</th><th class="th-c">IP address</th><th class="th-c">Actions</th></tr></thead>
+              <tbody>
+                <tr><td class="ev-title">Phishing campaign — energy sector</td><td>a.dupont</td><td class="td-c">2026-06-25 14:02</td><td class="td-c ev-sub">10.4.2.18</td><td class="td-c"><button class="btn btn-outline btn-sm" onclick="openModal('answerModal')">View</button></td></tr>
+                <tr><td class="ev-title">Ransomware IoCs — LockBit</td><td>m.klein</td><td class="td-c">2026-06-24 09:41</td><td class="td-c ev-sub">192.168.1.7</td><td class="td-c"><button class="btn btn-outline btn-sm" onclick="openModal('answerModal')">View</button></td></tr>
+                <tr><td class="ev-title">Suspicious C2 infrastructure</td><td>s.rossi</td><td class="td-c">2026-06-22 17:20</td><td class="td-c ev-sub">10.4.2.31</td><td class="td-c"><button class="btn btn-outline btn-sm" onclick="openModal('answerModal')">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="acc card">
+          <div class="card__head acc__head" onclick="toggleAcc(this)">
+            <div class="card__title"><i class="bi bi-chevron-right chev"></i> Sector Impact Survey <span class="help" style="margin-left:8px">2 responses</span></div>
+            <span class="badge info"><span class="led"></span> 2</span>
+          </div>
+          <div class="acc__body table-wrap">
+            <table class="tbl">
+              <thead><tr><th>Event</th><th>Filled by</th><th class="th-c">Filled at</th><th class="th-c">IP address</th><th class="th-c">Actions</th></tr></thead>
+              <tbody>
+                <tr><td class="ev-title">Credential stuffing — VPN portal</td><td>a.dupont</td><td class="td-c">2026-06-20 11:05</td><td class="td-c ev-sub">10.4.2.18</td><td class="td-c"><button class="btn btn-outline btn-sm" onclick="openModal('answerModal')">View</button></td></tr>
+                <tr><td class="ev-title">Malicious npm package alert</td><td>j.novak</td><td class="td-c">2026-06-18 15:33</td><td class="td-c ev-sub">172.16.0.9</td><td class="td-c"><button class="btn btn-outline btn-sm" onclick="openModal('answerModal')">View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ STATISTICS TAB ============ -->
+      <section class="panel" id="panel-stats">
+        <div class="toolbar">
+          <div class="field"><label>Form</label>
+            <select class="select" style="min-width:280px"><option>Incident Response Feedback</option><option>Sector Impact Survey</option><option>Threat Relevance Rating</option></select>
+          </div>
+          <div class="topbar__spacer"></div>
+          <div class="field"><label>&nbsp;</label>
+            <button class="btn btn-outline"><i class="bi bi-download"></i> Export report</button>
+          </div>
+        </div>
+
+        <section class="stats" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat"><div class="stat__label">Total responses</div><div class="stat__value"><span class="accent">24</span></div><div class="stat__delta up">+3 this week</div></div>
+          <div class="stat"><div class="stat__label">Response rate</div><div class="stat__value">100%</div><div class="stat__delta">of started</div></div>
+          <div class="stat"><div class="stat__label">Choice questions</div><div class="stat__value">3</div><div class="stat__delta">of 6 fields</div></div>
+        </section>
+
+        <div class="card" style="margin-bottom:var(--s5)">
+          <div class="card__head"><div class="card__title">Response trend — last 30 days</div></div>
+          <div class="card__body">
+            <svg viewBox="0 0 600 140" width="100%" height="140" preserveAspectRatio="none" role="img" aria-label="Response trend line chart, gradually increasing over 30 days">
+              <polyline fill="none" stroke="var(--mi-amber)" stroke-width="2.5"
+                points="0,120 50,110 100,115 150,95 200,100 250,80 300,85 350,60 400,68 450,45 500,52 550,30 600,38" />
+              <polyline fill="rgba(233,171,52,.10)" stroke="none"
+                points="0,140 0,120 50,110 100,115 150,95 200,100 250,80 300,85 350,60 400,68 450,45 500,52 550,30 600,38 600,140" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-box">
+            <h4>Q2 · How relevant was the shared intelligence?</h4>
+            <div class="donut-wrap">
+              <div class="donut" role="img" aria-label="Doughnut chart of relevance ratings"></div>
+              <div class="legend">
+                <span><span class="sw" style="background:var(--mi-amber)"></span> Very relevant — 46%</span>
+                <span><span class="sw" style="background:var(--mi-info)"></span> Relevant — 25%</span>
+                <span><span class="sw" style="background:var(--mi-success)"></span> Somewhat — 18%</span>
+                <span><span class="sw" style="background:var(--mi-neutral)"></span> Not relevant — 11%</span>
+              </div>
+            </div>
+            <table class="dist-table">
+              <thead><tr><th>Option</th><th>Count</th><th>%</th></tr></thead>
+              <tbody>
+                <tr><td>Very relevant</td><td>11</td><td>46%</td></tr>
+                <tr><td>Relevant</td><td>6</td><td>25%</td></tr>
+                <tr><td>Somewhat</td><td>4</td><td>18%</td></tr>
+                <tr><td>Not relevant</td><td>3</td><td>11%</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="chart-box">
+            <h4>Q4 · Which actions did you take? (multiple)</h4>
+            <div class="bars">
+              <div class="bar-row"><span>Blocked IoCs</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><span>21</span></div>
+              <div class="bar-row"><span>Alerted team</span><div class="bar-track"><div class="bar-fill" style="width:71%"></div></div><span>17</span></div>
+              <div class="bar-row"><span>Updated rules</span><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><span>13</span></div>
+              <div class="bar-row"><span>Shared onward</span><div class="bar-track"><div class="bar-fill" style="width:33%"></div></div><span>8</span></div>
+              <div class="bar-row"><span>No action</span><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div><span>3</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============ FORM BUILDER MODAL (Create / Edit unified) ============ -->
+  <div class="overlay" id="builderModal">
+    <div class="modal">
+      <div class="modal__head">
+        <h2>Create Form</h2>
+        <button class="x-btn" onclick="closeModal('builderModal')"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="fb-grid">
+          <!-- Editor column -->
+          <div>
+            <div class="form-row">
+              <label>Title <span class="req">*</span></label>
+              <input class="ctrl" value="Incident Response Feedback">
+            </div>
+            <div class="form-row">
+              <label>Description</label>
+              <textarea class="ctrl">Post-incident feedback from partner SOCs.</textarea>
+            </div>
+            <div class="form-row" style="display:flex;align-items:center;justify-content:space-between">
+              <label style="margin:0">Status</label>
+              <label class="switch"><input type="checkbox" checked><span class="track"></span> <span class="help">Active</span></label>
+            </div>
+            <div class="form-row">
+              <label>Organizations <span class="req">*</span></label>
+              <div class="org-picker">
+                <label class="org-opt"><input type="checkbox" class="checkbox" checked> <span>Montimage <small>— coordinator</small></span></label>
+                <label class="org-opt"><input type="checkbox" class="checkbox" checked> <span>CERT-EU <small>— partner</small></span></label>
+                <label class="org-opt"><input type="checkbox" class="checkbox"> <span>ACME Energy <small>— partner</small></span></label>
+                <label class="org-opt"><input type="checkbox" class="checkbox"> <span>Nordic Grid <small>— partner</small></span></label>
+              </div>
+            </div>
+
+            <div class="fb-section-title">Fields <span class="help">Drag to reorder</span></div>
+
+            <div class="field-item">
+              <i class="bi bi-grip-vertical grip"></i>
+              <div class="fi-main"><div class="fi-label">Analyst name <span class="type-badge">text</span></div><div class="fi-meta">analyst_name · required</div></div>
+              <div class="fi-actions"><button class="icon-btn" title="Edit"><i class="bi bi-pencil"></i></button><button class="icon-btn" title="Remove"><i class="bi bi-trash"></i></button></div>
+            </div>
+            <div class="field-item">
+              <i class="bi bi-grip-vertical grip"></i>
+              <div class="fi-main"><div class="fi-label">Relevance rating <span class="type-badge">radio</span></div><div class="fi-meta">relevance · 4 options · required</div></div>
+              <div class="fi-actions"><button class="icon-btn" title="Edit"><i class="bi bi-pencil"></i></button><button class="icon-btn" title="Remove"><i class="bi bi-trash"></i></button></div>
+            </div>
+            <div class="field-item">
+              <i class="bi bi-grip-vertical grip"></i>
+              <div class="fi-main"><div class="fi-label">Actions taken <span class="type-badge">checkbox</span></div><div class="fi-meta">actions · 5 options</div></div>
+              <div class="fi-actions"><button class="icon-btn" title="Edit"><i class="bi bi-pencil"></i></button><button class="icon-btn" title="Remove"><i class="bi bi-trash"></i></button></div>
+            </div>
+
+            <div class="add-field">
+              <div class="add-grid">
+                <div class="form-row" style="margin:0"><label>Field label</label><input class="ctrl" placeholder="e.g. Additional comments"></div>
+                <div class="form-row" style="margin:0"><label>Type</label>
+                  <select class="ctrl"><option>Text</option><option>Email</option><option>Number</option><option>Textarea</option><option>Select</option><option>Radio</option><option>Checkbox</option></select>
+                </div>
+              </div>
+              <div class="form-row" style="margin:var(--s2) 0 0"><label>Options <span class="help">(comma-separated — for select / radio / checkbox)</span></label><input class="ctrl" placeholder="Option 1, Option 2, Option 3"></div>
+              <div style="margin-top:var(--s3);display:flex;align-items:center;gap:var(--s3)">
+                <label class="switch"><input type="checkbox"><span class="track"></span> <span class="help">Required</span></label>
+                <div class="topbar__spacer"></div>
+                <button class="btn btn-outline btn-sm"><i class="bi bi-plus-lg"></i> Add field</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live preview column -->
+          <div class="preview">
+            <h4>Live preview</h4>
+            <div class="pv-field"><label>Analyst name <span class="pv-req">*</span></label><input class="ctrl" placeholder="Your answer"></div>
+            <div class="pv-field"><label>Relevance rating <span class="pv-req">*</span></label>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:.88rem">
+                <label><input type="radio" name="pv-rel"> Very relevant</label>
+                <label><input type="radio" name="pv-rel"> Relevant</label>
+                <label><input type="radio" name="pv-rel"> Somewhat</label>
+                <label><input type="radio" name="pv-rel"> Not relevant</label>
+              </div>
+            </div>
+            <div class="pv-field"><label>Actions taken</label>
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:.88rem">
+                <label><input type="checkbox"> Blocked IoCs</label>
+                <label><input type="checkbox"> Alerted team</label>
+                <label><input type="checkbox"> Updated rules</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn-ghost" onclick="closeModal('builderModal')">Cancel</button>
+        <button class="btn btn-primary"><i class="bi bi-check-lg"></i> Save form</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ IMPORT MODAL (single step) ============ -->
+  <div class="overlay" id="importModal">
+    <div class="modal sm">
+      <div class="modal__head">
+        <h2>Import Google Form</h2>
+        <button class="x-btn" onclick="closeModal('importModal')"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="form-row">
+          <label>Google Form URL <span class="req">*</span></label>
+          <input class="ctrl" placeholder="https://docs.google.com/forms/d/FORM_ID/edit">
+          <div class="help" style="margin-top:6px">Imported via Google Apps Script. Supported: text, email, number, choice and checkbox questions.</div>
+        </div>
+        <div class="form-row">
+          <label>Organizations <span class="req">*</span></label>
+          <div class="org-picker">
+            <label class="org-opt"><input type="checkbox" class="checkbox" checked> <span>CERT-EU <small>— partner</small></span></label>
+            <label class="org-opt"><input type="checkbox" class="checkbox"> <span>Montimage <small>— coordinator</small></span></label>
+            <label class="org-opt"><input type="checkbox" class="checkbox"> <span>ACME Energy <small>— partner</small></span></label>
+          </div>
+        </div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn-ghost" onclick="closeModal('importModal')">Cancel</button>
+        <button class="btn btn-primary"><i class="bi bi-cloud-arrow-down"></i> Import form</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DELETE CONFIRM MODAL ============ -->
+  <div class="overlay" id="deleteModal">
+    <div class="modal sm">
+      <div class="modal__head">
+        <h2>Delete form</h2>
+        <button class="x-btn" onclick="closeModal('deleteModal')"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal__body">
+        <p>Are you sure you want to delete <b>Incident Response Feedback</b>?</p>
+        <p class="help"><i class="bi bi-exclamation-triangle" style="color:var(--mi-warning)"></i> This action cannot be undone. Existing responses will also be removed.</p>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn-ghost" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn btn-primary" style="background:var(--mi-danger);box-shadow:none;color:#fff"><i class="bi bi-trash"></i> Delete form</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ANSWER DETAIL MODAL ============ -->
+  <div class="overlay" id="answerModal">
+    <div class="modal">
+      <div class="modal__head">
+        <h2>Response details</h2>
+        <button class="x-btn" onclick="closeModal('answerModal')"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal__body">
+        <div class="meta-chips" style="margin-bottom:var(--s5)">
+          <span class="chip"><i class="bi bi-ui-checks"></i> Incident Response Feedback</span>
+          <span class="chip"><i class="bi bi-person"></i> a.dupont</span>
+          <span class="chip"><i class="bi bi-calendar3"></i> 2026-06-25 14:02</span>
+          <span class="chip"><i class="bi bi-hdd-network"></i> 10.4.2.18</span>
+        </div>
+        <div class="pv-field"><label>Analyst name</label><div class="ctrl" style="background:var(--surface-2)">Alice Dupont</div></div>
+        <div class="pv-field"><label>Relevance rating</label><div><span class="badge success"><span class="led"></span> Very relevant</span></div></div>
+        <div class="pv-field"><label>Actions taken</label>
+          <div class="meta-chips"><span class="chip">Blocked IoCs</span><span class="chip">Alerted team</span><span class="chip">Updated rules</span></div>
+        </div>
+        <div class="pv-field"><label>Additional comments</label><div class="ctrl" style="background:var(--surface-2);min-height:auto">Very timely — matched an ongoing campaign we were tracking.</div></div>
+      </div>
+      <div class="modal__foot">
+        <button class="btn btn-outline" onclick="closeModal('answerModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ribbon">MAQUETTE · Forms · charte Montimage · aucune donnée réelle</div>
+
+  <script>
+    const app = document.getElementById('app');
+    document.getElementById('toggle').onclick = () => app.classList.toggle('collapsed');
+
+    const html = document.documentElement, tBtn = document.getElementById('themeBtn');
+    tBtn.onclick = () => {
+      const dark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', dark ? 'light' : 'dark');
+      tBtn.innerHTML = dark ? '<i class="bi bi-moon-stars"></i> Theme' : '<i class="bi bi-sun"></i> Theme';
+    };
+
+    function showTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+      document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+    }
+    function toggleAcc(head) { head.closest('.acc').classList.toggle('open'); }
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+    document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); }));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.overlay.open').forEach(o => o.classList.remove('open')); });
+  </script>
+</body>
+</html>

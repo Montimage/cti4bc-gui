@@ -149,15 +149,9 @@ code {
   transform: translateY(-2px);
 }
 
-/* Dark mode specific overrides */
-[data-bs-theme="dark"] {
-  --bs-body-color: #e0e0e0;
-  --bs-body-color-rgb: 224, 224, 224;
-  --bs-secondary-color: #c0c0c0;
-  --bs-tertiary-color: #a0a0a0;
-  --bs-card-bg: #2d2d2d;
-  --bs-form-control-bg: #2d2d2d;
-}
+/* Dark-mode design tokens are owned by theme/montimage-theme.css (warm charter).
+   The former neutral-grey overrides here were removed — they leaked #c0c0c0 /
+   #2d2d2d into placeholders, muted text and surfaces. */
 
 [data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
   color: var(--bs-body-color);

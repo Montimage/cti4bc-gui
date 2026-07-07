@@ -137,15 +137,30 @@ function SystemHealthIndicator() {
     }
   };
 
+  // Text shown inside the topbar health pill (mirrors the mockup wording).
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case 'healthy':
+        return 'All systems operational';
+      case 'warning':
+        return 'Degraded performance';
+      case 'critical':
+        return 'Service disruption';
+      default:
+        return 'Checking status…';
+    }
+  };
+
   return (
     <div className={`system-health-indicator ${theme}`} ref={dropdownRef}>
-      <button 
-        className={`health-button ${theme} ${healthData.overall} ${statusChangeAnimation ? 'status-changing' : ''}`}
+      <button
+        className={`health-pill health-pill--${healthData.overall} ${theme} ${statusChangeAnimation ? 'status-changing' : ''}`}
         onClick={toggleDropdown}
         type="button"
         title={`System Health Status: ${healthData.overall.toUpperCase()}`}
       >
-        <i className={`bi ${getStatusIcon(healthData.overall)}`}></i>
+        <span className="led"></span>
+        <span className="health-pill__label">{getStatusLabel(healthData.overall)}</span>
       </button>
 
       {isOpen && (

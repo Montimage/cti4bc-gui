@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTheme } from '../ThemeContext';
 import SystemHealthIndicator from '../components/SystemHealth';
 import NotificationBell from '../components/Notifications/NotificationBell';
 import UserProfile from '../UserProfile/UserProfile';
@@ -30,6 +31,13 @@ function titleFor(pathname) {
 function Topbar({ onToggle }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { themePreference, toggleTheme } = useTheme();
+
+  // Icon reflects the NEXT state in the light → dark → system cycle.
+  const themeIcon =
+    themePreference === 'light' ? 'bi-moon-stars'
+    : themePreference === 'dark' ? 'bi-sun'
+    : 'bi-display';
 
   // Identical logout behaviour to the former NavBar.
   const handleLogout = () => {
@@ -47,9 +55,16 @@ function Topbar({ onToggle }) {
       <button className="mi-topbar__toggle" onClick={onToggle} title="Toggle menu" aria-label="Toggle menu">
         <i className="bi bi-list"></i>
       </button>
-      <div className="mi-topbar__title">{titleFor(location.pathname)}</div>
+      <div className="mi-topbar__crumbs">
+        <span>CTI</span>
+        <i className="bi bi-chevron-right" style={{ fontSize: '.7rem' }}></i>
+        <b>{titleFor(location.pathname)}</b>
+      </div>
       <div className="mi-topbar__spacer"></div>
       <div className="mi-topbar__util">
+        <button className="mi-theme-toggle" onClick={toggleTheme} title="Toggle theme" type="button">
+          <i className={`bi ${themeIcon}`}></i> Theme
+        </button>
         <SystemHealthIndicator />
         <NotificationBell />
         <UserProfile onLogout={handleLogout} />

@@ -6,6 +6,43 @@ import { useToast } from '../components/Toast';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
+// Sectors cell: show a few chips, collapse the rest behind a clickable "+N".
+const SECTORS_VISIBLE = 2;
+function SectorCell({ sectors }) {
+    const [expanded, setExpanded] = useState(false);
+    if (!sectors || sectors.length === 0) {
+        return <span style={{ color: 'var(--mi-muted)' }}>—</span>;
+    }
+    const hidden = sectors.length - SECTORS_VISIBLE;
+    const visible = expanded ? sectors : sectors.slice(0, SECTORS_VISIBLE);
+    return (
+        <div className="mi-sectors-cell">
+            {visible.map(sector => (
+                <span key={sector} className="mi-chip">{sector}</span>
+            ))}
+            {!expanded && hidden > 0 && (
+                <button
+                    type="button"
+                    className="mi-chip mi-chip-more"
+                    title={sectors.join(', ')}
+                    onClick={() => setExpanded(true)}
+                >
+                    +{hidden}
+                </button>
+            )}
+            {expanded && sectors.length > SECTORS_VISIBLE && (
+                <button
+                    type="button"
+                    className="mi-chip mi-chip-more"
+                    onClick={() => setExpanded(false)}
+                >
+                    Show less
+                </button>
+            )}
+        </div>
+    );
+}
+
 function EventList() {
     const { showError } = useToast();
     const [events, setEvents] = useState([]);
@@ -380,17 +417,7 @@ function EventList() {
                                     </td>
                                     <td className="mi-ev-title">{event.info}</td>
                                     <td>{event.organization || "N/A"}</td>
-                                    <td>
-                                        {(event.sectors && event.sectors.length > 0) ? (
-                                            <div className="mi-sectors-cell">
-                                                {event.sectors.map(sector => (
-                                                    <span key={sector} className="mi-chip">{sector}</span>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <span style={{ color: 'var(--mi-muted)' }}>—</span>
-                                        )}
-                                    </td>
+                                    <td><SectorCell sectors={event.sectors} /></td>
                                     <td><span className={`mi-badge ${tlClass}`}><span className="mi-led"></span> {tl}</span></td>
                                     <td><span className={`mi-badge ${statusClass}`}><span className="mi-led"></span> {status}</span></td>
                                     <td>{event.date}</td>

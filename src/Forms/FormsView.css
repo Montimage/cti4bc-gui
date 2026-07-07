@@ -12,38 +12,6 @@
   overflow-x: hidden;
 }
 
-.forms-container .toggle-buttons {
-  background-color: var(--bs-light);
-  border-radius: 0.5rem;
-  padding: 0.25rem;
-  display: inline-flex;
-  gap: 0.25rem;
-  border: 1px solid var(--bs-border-color);
-}
-
-.forms-container .toggle-buttons .btn {
-  border-radius: 0.375rem;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-}
-
-.forms-container .toggle-buttons .btn-primary {
-  background-color: var(--bs-primary);
-  color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.forms-container .toggle-buttons .btn-outline-primary {
-  background-color: transparent;
-  color: var(--bs-primary);
-  border: none;
-}
-
-.forms-container .toggle-buttons .btn-outline-primary:hover {
-  background-color: var(--bs-primary);
-  color: white;
-}
 
 .forms-container .card {
   border: none;
@@ -559,89 +527,51 @@
   font-size: 0.8rem;
 }
 
-/* Import Loading Screen Styles */
-.forms-container .import-loading-screen {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border-radius: 12px;
-  padding: 3rem 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
-}
+/* ===================================================================
+   Phase 5 — ergonomic additions (accordion button, inline status)
+   =================================================================== */
 
-.forms-container .import-loading-screen::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
+/* Answers accordion header rendered as a full-width accessible button */
+.mi-acc-head {
   width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  animation: shimmer 2s infinite;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.mi-acc-head:focus-visible {
+  outline: 2px solid var(--mi-amber);
+  outline-offset: -2px;
 }
 
-@keyframes shimmer {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
+/* ===================================================================
+   Organizations column — render as warm mockup chips (.mi-chip look)
+   instead of solid Bootstrap badges. Scoped to the Forms page so other
+   pages that reuse <OrganizationBadges> are untouched.
+   =================================================================== */
+.forms-container .organization-badges-compact {
+  gap: 4px;
 }
-
-.forms-container .import-loading-screen .spinner-border {
-  border-width: 4px;
-  animation: spin 1s linear infinite;
+.forms-container .organization-badges-compact .badge {
+  background-color: var(--mi-card-bg, #fff) !important;
+  color: var(--mi-muted, #8B7D6B) !important;
+  border: 1px solid var(--mi-card-border, var(--bs-border-color)) !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 3px 9px;
+  max-width: none;
 }
-
-.forms-container .import-loading-screen .progress {
-  background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+.forms-container .organization-badges-compact .organization-badge-more {
+  background-color: rgba(var(--mi-amber-rgb), 0.10) !important;
+  color: var(--bs-primary-text-emphasis) !important;
+  border-color: rgba(var(--mi-amber-rgb), 0.45) !important;
+  cursor: pointer;
 }
-
-.forms-container .import-loading-screen .progress-bar {
-  background: linear-gradient(45deg, #E9AB34, #D49A2E, #E9AB34);
-  background-size: 200% 200%;
-  animation: gradient-shift 2s ease-in-out infinite;
-  border-radius: 10px;
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.forms-container .import-loading-screen h4 {
-  font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.forms-container .import-loading-screen .text-muted {
-  font-size: 1.1rem;
-}
-
-/* Dark theme support for loading screen */
-[data-bs-theme="dark"] .forms-container .import-loading-screen,
-.dark-theme .forms-container .import-loading-screen {
-  background: linear-gradient(135deg, #343a40 0%, #495057 100%);
-  color: #ffffff;
-}
-
-[data-bs-theme="dark"] .forms-container .import-loading-screen .progress,
-.dark-theme .forms-container .import-loading-screen .progress {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-[data-bs-theme="dark"] .forms-container .import-loading-screen::before,
-.dark-theme .forms-container .import-loading-screen::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+.forms-container .organization-badges-compact .organization-badge-more:hover {
+  background-color: rgba(var(--mi-amber-rgb), 0.20) !important;
+  transform: none;
+  box-shadow: none;
 }

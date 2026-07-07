@@ -60,7 +60,7 @@ function Sidebar() {
         {userIsStaff && <div className="mi-rail__group-label">Admin</div>}
         {userIsStaff && NAV_ADMIN.map((it) => <Item key={it.to} {...it} />)}
       </nav>
-      <div className="mi-rail__foot">Dynabic · CTI4BC</div>
+      <div className="mi-rail__foot">Montimage · CTI4BC</div>
     </aside>
   );
 }

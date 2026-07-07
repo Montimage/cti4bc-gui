@@ -1,256 +1,178 @@
-.message-container {
-    border-radius: 0.25rem;
-    padding: 1rem;
-    overflow-y: auto;
-    min-height: 300px;
-    flex: 1;
-}
-
-/* Styles pour la carte des messages */
-.card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-body.flex-grow-1 {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    overflow: hidden;
-    position: relative;
-}
-
-.card-footer.mt-auto {
-    flex-shrink: 0;
-    background-color: var(--bs-card-cap-bg);
-    border-top: var(--bs-card-border-width) solid var(--bs-card-border-color);
-}
-
-/* Make sure dark theme colors work correctly */
-[data-bs-theme="dark"] .message-container {
-    background-color: #2b3035;
-}
-
-[data-bs-theme="light"] .message-container {
-    background-color: #f8f9fa;
-}
-
-.message-card {
-    border-left: 4px solid #E9AB34;
-    transition: all 0.2s ease-in-out;
-}
-
-.message-card:hover {
-    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-[data-bs-theme="dark"] .message-card:hover {
-    box-shadow: 0 0.25rem 0.75rem rgba(255, 255, 255, 0.1);
-}
-
-.status-indicator {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-right: 0.5rem;
-}
-
-.bg-success {
-    background-color: #28a745 !important;
-}
-
-.bg-danger {
-    background-color: #dc3545 !important;
-}
-
-/* Styles pour la sélection multiple */
-select[multiple] {
-    font-size: 0.9rem;
-}
-
-select[multiple] option {
-    padding: 0.5rem;
-    border-bottom: 1px solid #eee;
-}
-
-select[multiple] option:checked {
-    background-color: var(--bs-primary-text-emphasis);
-    color: white;
-}
-
-/* Styles pour les badges de topics sélectionnés */
-.selected-topics-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.selected-topic-badge {
-    display: flex;
-    align-items: center;
-    border-radius: 16px;
-    padding: 0.3rem 0.8rem;
-    font-size: 0.85rem;
-}
-
-[data-bs-theme="light"] .selected-topic-badge {
-    background-color: #e9ecef;
-    color: #212529;
-}
-
-[data-bs-theme="dark"] .selected-topic-badge {
-    background-color: #343a40;
-    color: #f8f9fa;
-}
-
-.selected-topic-badge span {
-    margin-right: 0.5rem;
-}
-
-.remove-topic-btn {
-    background: none;
-    border: none;
-    color: #6c757d;
-    font-size: 1rem;
-    line-height: 1;
-    padding: 0;
-    cursor: pointer;
-}
-
-.remove-topic-btn:hover {
-    color: #dc3545;
-}
-
-/* Add some animation for new messages */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.message-card {
-    animation: fadeIn 0.3s ease-out;
-}
-
-/* Custom scrollbar for message container */
-.message-container::-webkit-scrollbar {
-    width: 6px;
-}
-
-.message-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-[data-bs-theme="dark"] .message-container::-webkit-scrollbar-track {
-    background: #212529;
-}
-
-.message-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
-}
-
-.message-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* Message content styling */
-.message-content {
-    font-family: 'Courier New', monospace;
-    font-size: 0.9rem;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-pre.message-content {
-    margin: 0;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-[data-bs-theme="light"] pre.message-content {
-    background-color: #f8f9fa;
-    border: 1px solid #eaeaea;
-}
-
-[data-bs-theme="dark"] pre.message-content {
-    background-color: #212529;
-    border: 1px solid #495057;
-    color: #f8f9fa;
-}
-
-/* Animation for new messages */
-@keyframes highlight {
-    0% { background-color: rgba(233, 171, 52, 0.2); }
-    100% { background-color: transparent; }
-}
-
-.message-card:first-child {
-    animation: highlight 2s ease-out;
-}
-
-/* Card styling */
-.card {
-    border: none;
-    border-radius: 8px;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
+/* =====================================================================
+   Kafka view — Montimage charter (mi-designer). Uses the shared design
+   tokens from theme/montimage-theme.css + theme/patterns.css.
+   ===================================================================== */
 
 .kafka-main-row {
-    display: flex;
-    flex-wrap: wrap;
+    min-height: calc(100vh - 170px);
 }
 
-.card-header {
-    font-weight: 500;
-    padding: 0.75rem 1.25rem;
+/* ------------------------------- Sections --------------------------- */
+.kfk-section { margin-bottom: 22px; }
+.kfk-section:last-child { margin-bottom: 0; }
+
+.kfk-label {
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--mi-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 8px;
+}
+.kfk-label--row { display: flex; justify-content: space-between; align-items: center; }
+.kfk-label i { color: var(--mi-amber); }
+
+.kfk-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 18px; height: 18px; padding: 0 5px; margin-left: 4px;
+    border-radius: 999px; background: var(--mi-amber); color: var(--mi-dark);
+    font-size: .7rem; font-weight: 700; font-family: var(--mi-font-body);
 }
 
-.card-footer {
-    padding: 0.75rem 1.25rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.125);
+.kfk-hint { font-size: .72rem; color: var(--mi-muted); margin-top: 6px; }
+
+.kfk-linkbtn {
+    border: none; background: transparent; padding: 0;
+    color: var(--bs-primary-text-emphasis); font-size: .75rem; font-weight: 600;
+    cursor: pointer; text-transform: none; letter-spacing: 0;
+}
+.kfk-linkbtn:hover:not(:disabled) { text-decoration: underline; }
+.kfk-linkbtn:disabled { opacity: .45; cursor: default; }
+
+.kfk-empty-inline { font-size: .8rem; color: var(--mi-muted); font-style: italic; }
+
+/* ------------------------------ Connection -------------------------- */
+.kfk-conn { display: flex; flex-direction: column; gap: 6px; }
+.kfk-conn > div { display: flex; justify-content: space-between; gap: 12px; font-size: .82rem; }
+.kfk-conn__k { color: var(--mi-muted); }
+.kfk-conn__v { font-family: var(--mi-font-mono); color: var(--bs-body-color); text-align: right; word-break: break-all; }
+
+.kfk-active {
+    margin-top: 12px; display: flex; align-items: center; gap: 8px;
+    font-size: .82rem; color: var(--mi-muted);
+    background: rgba(var(--mi-amber-rgb), .08);
+    border: 1px solid rgba(var(--mi-amber-rgb), .25);
+    border-radius: 10px; padding: 8px 10px;
+}
+.kfk-active i { color: var(--mi-amber); }
+.kfk-active b { color: var(--bs-body-color); font-family: var(--mi-font-mono); }
+
+/* -------------------------------- Chips ----------------------------- */
+.kfk-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.kfk-chip {
+    display: inline-flex; align-items: center; max-width: 100%;
+    border: 1px solid var(--mi-card-border); border-radius: 999px;
+    background: var(--mi-card-bg); overflow: hidden;
+    transition: border-color .15s var(--mi-transition), background .15s var(--mi-transition);
 }
 
-[data-bs-theme="light"] .card-footer {
-    background-color: rgba(0, 0, 0, 0.03);
+.kfk-chip__body {
+    border: none; background: transparent; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
+    padding: 5px 10px; color: var(--bs-body-color);
+    font-family: var(--mi-font-mono); font-size: .78rem;
+}
+.kfk-chip__body i { color: var(--mi-amber); flex-shrink: 0; }
+.kfk-chip__body span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kfk-chip__body:disabled { cursor: default; opacity: .55; }
+
+.kfk-chip__label {
+    padding: 5px 4px; font-family: var(--mi-font-mono); font-size: .78rem;
+    color: var(--bs-body-color); overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; max-width: 220px;
 }
 
-[data-bs-theme="dark"] .card-footer {
-    background-color: rgba(255, 255, 255, 0.03);
-    border-top: 1px solid rgba(255, 255, 255, 0.125);
+.kfk-chip__x, .kfk-chip__star {
+    border: none; background: transparent; cursor: pointer;
+    display: inline-flex; align-items: center; color: var(--mi-muted);
+    font-size: .7rem; padding: 6px 9px;
+}
+.kfk-chip__x { padding-left: 4px; }
+.kfk-chip__x:hover:not(:disabled) { color: var(--mi-danger); }
+.kfk-chip__x:disabled { opacity: .4; cursor: default; }
+.kfk-chip__star { padding: 6px 4px 6px 9px; }
+.kfk-chip__star:hover { color: var(--mi-amber); }
+.kfk-chip__star.is-fav { color: var(--mi-amber); }
+
+.kfk-chip--fav {
+    border-color: rgba(var(--mi-amber-rgb), .4);
+    background: rgba(var(--mi-amber-rgb), .08);
+}
+.kfk-chip--fav:hover { border-color: var(--mi-amber); }
+
+/* ------------------------------ Controls ---------------------------- */
+.kfk-controls { margin-top: 4px; }
+
+.kfk-response {
+    margin-top: 12px; font-size: .82rem; border-radius: 10px;
+    padding: 9px 12px; display: flex; align-items: center;
+}
+.kfk-response.is-ok { background: rgba(34, 197, 94, .12); color: #15803d; }
+.kfk-response.is-error { background: rgba(239, 68, 68, .12); color: #b91c1c; }
+[data-bs-theme="dark"] .kfk-response.is-ok { color: #4ade80; }
+[data-bs-theme="dark"] .kfk-response.is-error { color: #f87171; }
+
+/* ------------------------- Messages toolbar ------------------------- */
+.kfk-msg-toolbar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px; border-bottom: 1px solid var(--mi-card-border);
+    flex-shrink: 0;
+}
+.kfk-search { position: relative; flex: 1; display: flex; align-items: center; min-width: 0; }
+.kfk-search > i.bi-funnel {
+    position: absolute; left: 12px; color: var(--mi-muted);
+    font-size: .85rem; pointer-events: none;
+}
+.kfk-search .form-control { padding-left: 34px; padding-right: 34px; }
+.kfk-search__clear {
+    position: absolute; right: 8px; border: none; background: transparent;
+    color: var(--mi-muted); cursor: pointer; padding: 2px 6px; font-size: .75rem;
+}
+.kfk-search__clear:hover { color: var(--mi-danger); }
+
+/* --------------------------- Messages list -------------------------- */
+.kfk-msg-list {
+    flex: 1 1 auto; overflow-y: auto; padding: 16px 20px;
+    display: flex; flex-direction: column; gap: 12px;
+    background: var(--mi-content-bg);
 }
 
-/* Disable transitions temporarily during theme changes */
-.kafka-view.theme-changing * {
-  transition: none !important;
+.kfk-msg {
+    border: 1px solid var(--mi-card-border); border-left: 3px solid var(--mi-amber);
+    border-radius: 10px; background: var(--mi-card-bg); padding: 12px 14px;
+    animation: kfkFade .25s ease-out;
+}
+.kfk-msg__head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+.kfk-msg__time { font-size: .75rem; color: var(--mi-muted); font-family: var(--mi-font-mono); white-space: nowrap; }
+.kfk-msg__body {
+    margin: 0; font-family: var(--mi-font-mono); font-size: .8rem; line-height: 1.5;
+    white-space: pre-wrap; word-break: break-word; max-height: 340px; overflow: auto;
+    background: var(--mi-content-bg); border: 1px solid var(--mi-card-border);
+    border-radius: 8px; padding: 10px; color: var(--bs-body-color);
 }
 
-/* Specific optimization for form controls */
-.kafka-view.theme-changing .form-control,
-.kafka-view.theme-changing .btn,
-.kafka-view.theme-changing .card,
-.kafka-view.theme-changing .message-card {
-  transition: none !important;
+@keyframes kfkFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.kfk-msg:last-child { animation: kfkFade .25s ease-out, kfkHighlight 1.6s ease-out; }
+@keyframes kfkHighlight {
+    0% { box-shadow: 0 0 0 3px rgba(var(--mi-amber-rgb), .18); }
+    100% { box-shadow: none; }
 }
 
-/* Re-enable specific transitions after theme change */
-.kafka-view:not(.theme-changing) .message-card {
-  transition: all 0.2s ease-in-out;
-  transition-delay: 0.1s;
+/* --------------------------- Empty states --------------------------- */
+.kfk-empty {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 48px 20px; color: var(--mi-muted);
 }
+.kfk-empty i { font-size: 2.6rem; opacity: .45; margin-bottom: 12px; }
+.kfk-empty p { margin: 0; font-size: .9rem; max-width: 340px; }
 
-.kafka-view:not(.theme-changing) .form-control {
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  transition-delay: 0.1s;
+/* ------------------------------ Scrollbars -------------------------- */
+.kfk-msg-list::-webkit-scrollbar, .kfk-msg__body::-webkit-scrollbar { width: 8px; height: 8px; }
+.kfk-msg-list::-webkit-scrollbar-thumb, .kfk-msg__body::-webkit-scrollbar-thumb {
+    background: var(--mi-card-border); border-radius: 4px;
 }
+.kfk-msg-list::-webkit-scrollbar-track { background: transparent; }
 
-.kafka-view:not(.theme-changing) .btn {
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-  transition-delay: 0.1s;
-}
+/* --------- Disable transitions momentarily on theme switch ---------- */
+.kafka-view.theme-changing * { transition: none !important; }

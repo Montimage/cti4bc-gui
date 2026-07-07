@@ -62,10 +62,28 @@
   --bs-link-hover-color-rgb: 110, 79, 13;
 
   --bs-body-font-family: var(--mi-font-body);
-  --bs-body-bg: var(--mi-light);
+  --bs-body-bg: #FBF9F6;               /* warm cream page (mockup --bg), cards stay white */
+  --bs-body-color: #2A2520;            /* warm ink (mockup --text) instead of Bootstrap cool #212529 */
+  --bs-body-color-rgb: 42, 37, 32;
   --bs-secondary-bg: var(--mi-surface);
   --bs-tertiary-bg: #EFE7DD;
   --bs-border-color: #E3D9CC;
+
+  /* Warm muted text (mockup --text-muted) → placeholders, .text-muted, scrollbars, crumbs */
+  --bs-secondary-color: #8B7D6B;
+  --bs-secondary-color-rgb: 139, 125, 107;
+  --bs-tertiary-color: #A79A88;
+  --bs-heading-color: #2A2520;
+
+  /* Warm semantic surfaces + modal/card-cap/code (were Bootstrap neutral/pink defaults) */
+  --bs-light: #F5F0EB;
+  --bs-modal-bg: #FFFFFF;
+  --bs-card-cap-bg: transparent;
+  --bs-code-color: var(--mi-amber-text);
+
+  /* Status colours aligned to the Montimage charter (was Bootstrap defaults) */
+  --bs-danger: var(--mi-danger);
+  --bs-danger-rgb: 239, 68, 68;
 
   --bs-border-radius: var(--mi-radius-sm);
   --bs-border-radius-sm: 6px;
@@ -88,7 +106,7 @@
   --bs-link-hover-color: var(--mi-amber);
   --bs-link-hover-color-rgb: var(--mi-amber-rgb);
 
-  --bs-body-bg: var(--mi-dark);
+  --bs-body-bg: #161310;               /* warm near-black page (mockup dark --bg) */
   --bs-body-color: #EDE6DA;
   --bs-body-color-rgb: 237, 230, 218;
   --bs-emphasis-color: #FFFFFF;
@@ -96,8 +114,25 @@
   --bs-tertiary-bg: var(--mi-surface-dark);
   --bs-border-color: #3A332B;
 
-  /* used by index.css overrides */
-  --bs-card-bg: var(--mi-surface-dark);
+  /* Warm muted text (mockup dark --text-muted) → placeholders, .text-muted, scrollbars */
+  --bs-secondary-color: #9A8E7C;
+  --bs-secondary-color-rgb: 154, 142, 124;
+  --bs-tertiary-color: #7E7160;
+  --bs-heading-color: #EDE6DA;
+
+  /* Warm semantic surfaces so every var(--bs-dark)/var(--bs-light)/modal consumer
+     stops rendering Bootstrap's cool grey (#212529/#f8f9fa). */
+  --bs-dark: #221E18;
+  --bs-dark-rgb: 34, 30, 24;
+  --bs-light: #F5F0EB;
+  --bs-modal-bg: #221E18;              /* warm surface (mockup dark --surface) */
+  --bs-card-cap-bg: transparent;
+  --bs-code-color: var(--mi-amber-light);
+
+  --bs-danger: var(--mi-danger);
+  --bs-danger-rgb: 239, 68, 68;
+
+  --bs-card-bg: #221E18;               /* warm surface (mockup --surface), was #2A2520 */
   --bs-form-control-bg: #241F1A;
 
   --bs-focus-ring-color: rgba(var(--mi-amber-rgb), 0.45);
