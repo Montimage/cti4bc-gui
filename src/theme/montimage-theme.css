@@ -84,6 +84,12 @@
   /* Status colours aligned to the Montimage charter (was Bootstrap defaults) */
   --bs-danger: var(--mi-danger);
   --bs-danger-rgb: 239, 68, 68;
+  --bs-success: var(--mi-success);
+  --bs-success-rgb: 34, 197, 94;
+  --bs-info: var(--mi-info);
+  --bs-info-rgb: 59, 130, 246;
+  --bs-warning: var(--mi-warning);
+  --bs-warning-rgb: 245, 158, 11;
 
   --bs-border-radius: var(--mi-radius-sm);
   --bs-border-radius-sm: 6px;
@@ -131,6 +137,12 @@
 
   --bs-danger: var(--mi-danger);
   --bs-danger-rgb: 239, 68, 68;
+  --bs-success: var(--mi-success);
+  --bs-success-rgb: 34, 197, 94;
+  --bs-info: var(--mi-info);
+  --bs-info-rgb: 59, 130, 246;
+  --bs-warning: var(--mi-warning);
+  --bs-warning-rgb: 245, 158, 11;
 
   --bs-card-bg: #221E18;               /* warm surface (mockup --surface), was #2A2520 */
   --bs-form-control-bg: #241F1A;

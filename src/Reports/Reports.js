@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Alert, Form, Spinner, Modal, Table, Badge, InputGroup, Dropdown } from 'react-bootstrap';
+import { Row, Col, Card, Button, Alert, Form, Spinner, Modal, Badge, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Toast';
 import './Reports.css';
@@ -305,13 +305,6 @@ const Reports = () => {
             setPrompt(template.prompt);
             showInfo(`Template "${template.title}" loaded`);
         }
-    };
-
-    const clearForm = () => {
-        setTitle('');
-        setPrompt('');
-        setSelectedEvents([]);
-        showInfo('Form cleared');
     };
 
     const deleteReport = async (reportId) => {
@@ -655,9 +648,6 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
 
     return (
         <div className="mi-reports">
-                <Container fluid className="mt-4">
-                    <Row>
-                        <Col>
                             <div className="mi-page-head">
                                 <div>
                                     <h1>Security Reports</h1>
@@ -665,20 +655,20 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                 </div>
                                 <div className="mi-page-head__actions">
                                     <Button
-                                        variant="outline-secondary"
+                                        variant="outline-primary"
                                         onClick={handleLLMSettings}
                                         disabled={loading}
                                         title="LLM Settings"
-                                        className="settings-gear-btn"
                                     >
-                                        <i className="fas fa-cog"></i>
+                                        <i className="bi bi-gear me-2"></i>
+                                        LLM Settings
                                     </Button>
                                     <Button
                                         variant="primary"
                                         onClick={handleCreateReport}
                                         disabled={loading}
                                     >
-                                        <i className="fas fa-plus me-2"></i>
+                                        <i className="bi bi-plus-lg me-2"></i>
                                         New Report
                                     </Button>
                                 </div>
@@ -696,21 +686,24 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                 <div className="mi-stat__value">
                                     {currentProvider ? currentProvider.charAt(0).toUpperCase() + currentProvider.slice(1) : 'No LLM'}
                                     {loadingLLM && (
-                                        <Spinner animation="border" size="sm" variant="info" className="ms-2" />
+                                        <Spinner animation="border" size="sm" className="ms-2" />
                                     )}
                                 </div>
-                                <div className="mi-stat__delta d-flex justify-content-between align-items-center gap-2">
-                                    <span>{currentProvider === 'gemini' ? 'Gemini 1.5 Flash' : (currentModel || 'No model selected')}</span>
-                                    <Button
-                                        variant="outline-info"
-                                        size="sm"
+                                <div className="mi-stat__row">
+                                    <span className="mi-help">
+                                        <i className={`bi ${currentProvider === 'ollama' ? 'bi-hdd-network' : 'bi-cloud'} me-1`}></i>
+                                        {currentProvider === 'gemini' ? 'Gemini 1.5 Flash' : (currentModel || 'No model selected')}
+                                    </span>
+                                    <button
+                                        type="button"
+                                        className="mi-icon-btn"
+                                        style={{ width: 30, height: 30, fontSize: '.9rem' }}
                                         onClick={loadLLMProviders}
                                         disabled={loadingLLM}
-                                        className="border-0"
                                         title="Refresh LLM Configuration"
                                     >
-                                        <i className={`fas fa-sync-alt ${loadingLLM ? 'fa-spin' : ''}`}></i>
-                                    </Button>
+                                        <i className={`bi bi-arrow-clockwise ${loadingLLM ? 'mi-spin' : ''}`}></i>
+                                    </button>
                                 </div>
                             </div>
                             <div className="mi-stat">
@@ -728,36 +721,40 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
 
                         {/* Search and Filter */}
                         <div className="mi-toolbar">
-                            <div className="mi-field" style={{ flex: '1 1 240px' }}>
+                            <div className="mi-field" style={{ flex: '1 1 260px' }}>
                                 <label>Search</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search reports by title or content..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
+                                <div className="mi-search">
+                                    <i className="bi bi-search"></i>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search reports by title or content..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                    />
+                                </div>
                             </div>
                             <div className="mi-toolbar__spacer"></div>
-                            <small className="text-muted">
+                            <span className="mi-help">
                                 Showing {filteredReports.length} of {reports.length} reports
-                            </small>
+                            </span>
                         </div>
 
                         {/* Reports Table */}
                         <div className="mi-card">
                             <div className="mi-card__head">
                                 <div className="mi-card__title">
-                                    <i className="fas fa-list me-2"></i>
+                                    <i className="bi bi-card-list me-2"></i>
                                     Reports Management
+                                    {reports.length > 0 && <span className="mi-chip" style={{ marginLeft: 8 }}>{reports.length}</span>}
                                 </div>
                             </div>
                             {reports.length === 0 ? (
                                 <div className="mi-card__body text-center py-5">
                                     <h5>No Reports Found</h5>
-                                    <p className="text-muted">Create your first security report to get started.</p>
-                                    <Button variant="primary" onClick={handleCreateReport} size="lg">
-                                        <i className="fas fa-plus me-2"></i>
+                                    <p className="mi-help">Create your first security report to get started.</p>
+                                    <Button variant="primary" onClick={handleCreateReport}>
+                                        <i className="bi bi-plus-lg me-2"></i>
                                         Create Your First Report
                                     </Button>
                                 </div>
@@ -769,7 +766,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                 <th>Report Title</th>
                                                 <th style={{ textAlign: 'center' }}>Events</th>
                                                 <th style={{ textAlign: 'center' }}>LLM Model</th>
-                                                <th style={{ textAlign: 'center' }}>Generated</th>
+                                                <th className="mi-sortable" style={{ textAlign: 'center' }}>Generated <i className="bi bi-caret-down-fill" style={{ fontSize: '.7rem' }}></i></th>
                                                 <th style={{ textAlign: 'center' }}>Status</th>
                                                 <th style={{ textAlign: 'center' }}>Actions</th>
                                             </tr>
@@ -778,17 +775,12 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                             {filteredReports.map(report => (
                                                 <tr key={report.id}>
                                                     <td>
-                                                        <div className="d-flex flex-column">
-                                                            <span className="mi-ev-title">{report.title || 'Untitled Report'}</span>
-                                                            {report.prompt && (
-                                                                <small className="text-muted text-truncate" style={{ maxWidth: '300px' }}>
-                                                                    {report.prompt.length > 80
-                                                                        ? `${report.prompt.substring(0, 80)}...`
-                                                                        : report.prompt
-                                                                    }
-                                                                </small>
-                                                            )}
-                                                        </div>
+                                                        <div className="mi-ev-title">{report.title || 'Untitled Report'}</div>
+                                                        {report.prompt && (
+                                                            <div className="mi-ev-sub" style={{ maxWidth: '340px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                                {report.prompt}
+                                                            </div>
+                                                        )}
                                                     </td>
                                                     <td style={{ textAlign: 'center' }}>
                                                         <span
@@ -797,97 +789,86 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                             onClick={() => handleShowEvents(report)}
                                                             title="Click to view events"
                                                         >
-                                                            {report.events_count || 0} events
+                                                            <span className="mi-led"></span> {report.events_count || 0}
                                                         </span>
                                                     </td>
                                                     <td style={{ textAlign: 'center' }}>
-                                                        <div className="d-flex flex-column align-items-center">
-                                                            <span
-                                                                className={`mi-badge ${report.llm_provider === 'ollama' ? 'mi-warning' : 'mi-info'} mb-1`}
-                                                                style={{ cursor: 'pointer' }}
-                                                                onClick={() => handleShowLLMInfo(report)}
-                                                                title="Click to view LLM details"
-                                                            >
-                                                                <i className={`fas ${report.llm_provider === 'ollama' ? 'fa-server' : 'fa-brain'} me-1`}></i>
-                                                                {report.llm_provider === 'ollama' ? 'Ollama' : 'Gemini'}
+                                                        <span
+                                                            className={`mi-llm-chip ${report.llm_provider === 'ollama' ? 'ollama' : 'gemini'}`}
+                                                            onClick={() => handleShowLLMInfo(report)}
+                                                            title="Click to view LLM details"
+                                                        >
+                                                            <i className={`bi ${report.llm_provider === 'ollama' ? 'bi-hdd-network' : 'bi-cloud'}`}></i>
+                                                            {report.llm_provider === 'ollama' ? 'Ollama' : 'Gemini'}
+                                                        </span>
+                                                        {report.llm_model && (
+                                                            <span className="mi-llm-model">{report.llm_model}</span>
+                                                        )}
+                                                    </td>
+                                                    <td style={{ textAlign: 'center' }}>
+                                                        {formatDate(report.created_at)}
+                                                        {report.generation_time && (
+                                                            <span className="mi-llm-model">
+                                                                {report.generation_time < 60
+                                                                    ? `${Math.round(report.generation_time)}s`
+                                                                    : `${Math.round(report.generation_time / 60)}m`
+                                                                }
                                                             </span>
-                                                            {report.llm_model && (
-                                                                <small className="text-muted">{report.llm_model}</small>
-                                                            )}
-                                                        </div>
+                                                        )}
                                                     </td>
                                                     <td style={{ textAlign: 'center' }}>
-                                                        <div className="d-flex flex-column align-items-center">
-                                                            <small>{formatDate(report.created_at)}</small>
-                                                            {report.generation_time && (
-                                                                <small className="text-muted">
-                                                                    {report.generation_time < 60
-                                                                        ? `${Math.round(report.generation_time)}s`
-                                                                        : `${Math.round(report.generation_time / 60)}m`
-                                                                    }
-                                                                </small>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                    <td style={{ textAlign: 'center' }}>
-                                                        <div className="d-flex flex-column align-items-center">
-                                                            <span className="mi-badge mi-success mb-1">
-                                                                <span className="mi-led"></span> Generated
+                                                        <span className="mi-badge mi-success">
+                                                            <span className="mi-led"></span> Generated
+                                                        </span>
+                                                        {report.content && (
+                                                            <span className="mi-llm-model">
+                                                                {(report.content.length / 1024).toFixed(1)} KB
                                                             </span>
-                                                            {report.content && (
-                                                                <small className="text-muted">
-                                                                    {(report.content.length / 1024).toFixed(1)} KB
-                                                                </small>
-                                                            )}
-                                                        </div>
+                                                        )}
                                                     </td>
                                                     <td style={{ textAlign: 'center' }}>
-                                                        <div className="btn-group" role="group">
-                                                            <Button
-                                                                variant="outline-primary"
-                                                                size="sm"
+                                                        <div className="mi-cell-actions">
+                                                            <button
+                                                                type="button"
+                                                                className="mi-icon-btn"
                                                                 onClick={() => handleViewReport(report)}
                                                                 title="View Report"
                                                             >
-                                                                <i className="fas fa-eye"></i>
-                                                            </Button>
+                                                                <i className="bi bi-eye"></i>
+                                                            </button>
 
-                                                            {/* Download Dropdown */}
-                                                            <Dropdown>
+                                                            {/* Download Dropdown (icon-btn styled) */}
+                                                            <Dropdown className="mi-dl">
                                                                 <Dropdown.Toggle
-                                                                    variant="outline-success"
-                                                                    size="sm"
+                                                                    as="button"
+                                                                    type="button"
+                                                                    bsPrefix="mi-dl-toggle"
+                                                                    className="mi-icon-btn"
                                                                     title="Download Report"
                                                                 >
-                                                                    <i className="fas fa-download"></i>
+                                                                    <i className="bi bi-download"></i>
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
-                                                                    <Dropdown.Item
-                                                                        onClick={() => downloadReportAsHTML(report)}
-                                                                    >
-                                                                        <i className="fas fa-code me-2"></i>HTML
+                                                                    <Dropdown.Item onClick={() => downloadReportAsHTML(report)}>
+                                                                        <i className="bi bi-filetype-html me-2"></i>HTML
                                                                     </Dropdown.Item>
-                                                                    <Dropdown.Item
-                                                                        onClick={() => downloadReportAsText(report)}
-                                                                    >
-                                                                        <i className="fas fa-file-alt me-2"></i>Text
+                                                                    <Dropdown.Item onClick={() => downloadReportAsText(report)}>
+                                                                        <i className="bi bi-file-text me-2"></i>Text
                                                                     </Dropdown.Item>
-                                                                    <Dropdown.Item
-                                                                        onClick={() => downloadReportAsJSON(report)}
-                                                                    >
-                                                                        <i className="fas fa-file-code me-2"></i>JSON
+                                                                    <Dropdown.Item onClick={() => downloadReportAsJSON(report)}>
+                                                                        <i className="bi bi-filetype-json me-2"></i>JSON
                                                                     </Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
 
-                                                            <Button
-                                                                variant="outline-danger"
-                                                                size="sm"
+                                                            <button
+                                                                type="button"
+                                                                className="mi-icon-btn mi-icon-btn--danger"
                                                                 onClick={() => setSelectedReportForDeletion(report)}
                                                                 title="Delete Report"
                                                             >
-                                                                <i className="fas fa-trash"></i>
-                                                            </Button>
+                                                                <i className="bi bi-trash"></i>
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -899,135 +880,100 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                         </div>
 
                         {/* Create Report Modal */}
-                        <Modal show={showCreateModal} onHide={closeModals} size="lg">
-                            <Modal.Header closeButton className="bg-primary text-white">
+                        <Modal show={showCreateModal} onHide={closeModals} size="lg" dialogClassName="mi-modal-lg">
+                            <Modal.Header closeButton>
                                 <Modal.Title>
-                                    <i className="fas fa-magic me-2"></i>
+                                    <i className="bi bi-stars me-2"></i>
                                     Create New Security Report
                                 </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 {/* LLM Provider Indicator */}
                                 {currentProvider && (
-                                    <Alert variant="info" className="d-flex align-items-center mb-3">
-                                        <i className={`fas ${currentProvider === 'ollama' ? 'fa-server' : 'fa-brain'} me-2`}></i>
+                                    <div className="mi-provider-banner mb-3">
+                                        <i className={`bi ${currentProvider === 'ollama' ? 'bi-hdd-network' : 'bi-cloud'} lead-icon`}></i>
                                         <strong>AI Provider:</strong>
-                                        <Badge 
-                                            bg={currentProvider === 'ollama' ? 'success' : 'primary'} 
-                                            className="ms-2"
-                                        >
+                                        <span className={`mi-badge ${currentProvider === 'ollama' ? 'mi-warning' : 'mi-info'}`}>
+                                            <span className="mi-led"></span>
                                             {currentProvider === 'ollama' ? 'Ollama (Local)' : 'Gemini (Cloud)'}
-                                        </Badge>
-                                        <Button 
-                                            variant="link" 
-                                            size="sm" 
-                                            className="ms-auto text-decoration-none"
+                                        </span>
+                                        <span className="mi-provider-banner__spacer"></span>
+                                        <button
+                                            type="button"
+                                            className="mi-provider-banner__link"
                                             onClick={handleLLMSettings}
                                         >
-                                            <i className="fas fa-cog me-1"></i>
+                                            <i className="bi bi-gear me-1"></i>
                                             Change Provider
-                                        </Button>
-                                    </Alert>
+                                        </button>
+                                    </div>
                                 )}
                                 
-                                <Form>
-                                    <Row className="mb-3">
-                                        <Col>
-                                            <Form.Label>Report Title</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder="Enter a descriptive title for your report"
-                                                value={title}
-                                                onChange={(e) => setTitle(e.target.value)}
-                                            />
-                                        </Col>
-                                    </Row>
+                                <div className="mi-form-row">
+                                    <label>Report Title <span className="mi-req">*</span></label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Enter a descriptive title for your report"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                    />
+                                </div>
 
-                                    <Row className="mb-3">
-                                        <Col>
-                                            <Form.Label>Analysis Prompt</Form.Label>
-                                            <Form.Control
-                                                as="textarea"
-                                                rows={4}
-                                                placeholder="Describe what kind of analysis you want the AI to perform"
-                                                value={prompt}
-                                                onChange={(e) => setPrompt(e.target.value)}
-                                            />
-                                        </Col>
-                                    </Row>
+                                <div className="mi-form-row">
+                                    <label>Analysis Prompt <span className="mi-req">*</span></label>
+                                    <Form.Control
+                                        as="textarea"
+                                        placeholder="Describe what kind of analysis you want the AI to perform"
+                                        value={prompt}
+                                        onChange={(e) => setPrompt(e.target.value)}
+                                    />
+                                </div>
 
-                                    <Row className="mb-3">
-                                        <Col>
-                                            <Form.Label>Quick Templates</Form.Label>
-                                            <div className="d-grid gap-2 d-md-flex flex-wrap">
-                                                {Object.entries(predefinedPrompts).map(([key, template]) => (
-                                                    <Button
-                                                        key={key}
-                                                        variant="outline-secondary"
-                                                        size="sm"
-                                                        onClick={() => setPromptTemplate(key)}
-                                                        className="flex-fill"
-                                                    >
-                                                        {template.title}
-                                                    </Button>
-                                                ))}
-                                                <Button
-                                                    variant="outline-warning"
-                                                    size="sm"
-                                                    onClick={clearForm}
-                                                    className="flex-fill"
-                                                >
-                                                    <i className="fas fa-eraser me-1"></i>
-                                                    Clear
-                                                </Button>
-                                            </div>
-                                        </Col>
-                                    </Row>
+                                <div className="mi-form-row">
+                                    <label>Quick Templates</label>
+                                    <div className="mi-tpl-grid">
+                                        {Object.entries(predefinedPrompts).map(([key, template]) => {
+                                            const icons = { summary: 'bi-file-text', threat_analysis: 'bi-shield-check', forensic_analysis: 'bi-search', remediation_plan: 'bi-wrench-adjustable' };
+                                            return (
+                                                <button key={key} type="button" className="mi-tpl" onClick={() => setPromptTemplate(key)}>
+                                                    <i className={`bi ${icons[key] || 'bi-file-earmark-text'}`}></i>
+                                                    {template.title}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
 
-                                    <Row className="mb-3">
-                                        <Col>
-                                            <Form.Label>Select Events to Analyze</Form.Label>
-                                            {loadingEvents ? (
-                                                <div className="text-center p-3">
-                                                    <Spinner animation="border" size="sm" />
-                                                    <span className="ms-2">Loading events...</span>
-                                                </div>
-                                            ) : (
-                                                <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #dee2e6', borderRadius: '0.375rem', padding: '0.75rem' }}>
-                                                    {events.length === 0 ? (
-                                                        <Alert variant="info" className="mb-0">
-                                                            <i className="fas fa-info-circle me-2"></i>
-                                                            No events available for analysis
-                                                        </Alert>
-                                                    ) : (
-                                                        events.map(event => (
-                                                            <Form.Check
-                                                                key={event.id}
-                                                                type="checkbox"
-                                                                id={`event-${event.id}`}
-                                                                label={
-                                                                    <div>
-                                                                        <strong>{event.info || event.title || `Event ${event.id}`}</strong>
-                                                                        <br />
-                                                                        <small className="text-muted">
-                                                                            Event ID: {event.id}
-                                                                        </small>
-                                                                    </div>
-                                                                }
-                                                                checked={selectedEvents.includes(event.id)}
-                                                                onChange={() => handleEventSelection(event.id)}
-                                                                className="mb-2"
-                                                            />
-                                                        ))
-                                                    )}
-                                                </div>
-                                            )}
-                                        </Col>
-                                    </Row>
-                                </Form>
+                                <div className="mi-form-row">
+                                    <label>Select Events to Analyze</label>
+                                    {loadingEvents ? (
+                                        <div className="text-center p-3">
+                                            <Spinner animation="border" size="sm" />
+                                            <span className="ms-2">Loading events...</span>
+                                        </div>
+                                    ) : events.length === 0 ? (
+                                        <div className="mi-note"><i className="bi bi-info-circle"></i><span>No events available for analysis</span></div>
+                                    ) : (
+                                        <div className="mi-ev-picker">
+                                            {events.map(event => (
+                                                <label key={event.id} className="mi-ev-opt">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedEvents.includes(event.id)}
+                                                        onChange={() => handleEventSelection(event.id)}
+                                                    />
+                                                    <span>
+                                                        {event.info || event.title || `Event ${event.id}`}
+                                                        <span className="mi-ev-meta"> · #{event.id}</span>
+                                                    </span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={closeModals}>
+                                <Button variant="light" onClick={closeModals}>
                                     Cancel
                                 </Button>
                                 <Button 
@@ -1042,7 +988,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                         </>
                                     ) : (
                                         <>
-                                            <i className="fas fa-magic me-2"></i>
+                                            <i className="bi bi-stars me-2"></i>
                                             Generate Report
                                         </>
                                     )}
@@ -1052,7 +998,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
 
                         {/* View Report Modal */}
                         <Modal show={showViewModal} onHide={closeModals} size="xl">
-                            <Modal.Header closeButton className="bg-info text-white">
+                            <Modal.Header closeButton>
                                 <Modal.Title>
                                     {selectedReport?.title || 'Untitled Report'}
                                 </Modal.Title>
@@ -1064,7 +1010,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                             <Row>
                                                 <Col md={6}>
                                                     <small className="text-muted">
-                                                        <i className="fas fa-calendar me-1"></i>
+                                                        <i className="bi bi-calendar3 me-1"></i>
                                                         Created: {formatDate(selectedReport.created_at)}
                                                     </small>
                                                 </Col>
@@ -1076,7 +1022,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                             onClick={() => handleShowEvents(selectedReport)}
                                                             title="Click to view events"
                                                         >
-                                                            <i className="fas fa-link me-1"></i>
+                                                            <i className="bi bi-link-45deg me-1"></i>
                                                             {selectedReport.events.length} events analyzed
                                                         </Badge>
                                                     )}
@@ -1097,24 +1043,24 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                             onClick={() => downloadReportAsHTML(selectedReport)}
                                             title="Download as HTML"
                                         >
-                                            <i className="fas fa-code me-1"></i>HTML
+                                            <i className="bi bi-filetype-html me-1"></i>HTML
                                         </Button>
                                         <Button 
                                             variant="outline-success"
                                             onClick={() => downloadReportAsText(selectedReport)}
                                             title="Download as Text"
                                         >
-                                            <i className="fas fa-file-alt me-1"></i>TXT
+                                            <i className="bi bi-file-text me-1"></i>TXT
                                         </Button>
                                         <Button 
                                             variant="outline-success"
                                             onClick={() => downloadReportAsJSON(selectedReport)}
                                             title="Download as JSON"
                                         >
-                                            <i className="fas fa-file-code me-1"></i>JSON
+                                            <i className="bi bi-filetype-json me-1"></i>JSON
                                         </Button>
                                     </div>
-                                    <Button variant="secondary" onClick={closeModals}>
+                                    <Button variant="light" onClick={closeModals}>
                                         Close
                                     </Button>
                                 </div>
@@ -1123,32 +1069,32 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
 
                         {/* Delete Confirmation Modal */}
                         <Modal show={!!selectedReportForDeletion} onHide={closeModals}>
-                            <Modal.Header closeButton className="bg-danger text-white">
+                            <Modal.Header closeButton>
                                 <Modal.Title>
-                                    <i className="fas fa-exclamation-triangle me-2"></i>
+                                    <i className="bi bi-exclamation-triangle me-2"></i>
                                     Confirm Deletion
                                 </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <div className="text-center">
-                                    <i className="fas fa-trash fa-3x text-danger mb-3"></i>
+                                    <i className="bi bi-trash mi-icon-3x text-danger mb-3"></i>
                                     <p>Are you sure you want to delete the report:</p>
                                     <p><strong>"{selectedReportForDeletion?.title}"</strong></p>
                                     <Alert variant="warning">
-                                        <i className="fas fa-exclamation-triangle me-2"></i>
+                                        <i className="bi bi-exclamation-triangle me-2"></i>
                                         This action cannot be undone.
                                     </Alert>
                                 </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={closeModals}>
+                                <Button variant="light" onClick={closeModals}>
                                     Cancel
                                 </Button>
                                 <Button 
                                     variant="danger" 
                                     onClick={() => deleteReport(selectedReportForDeletion.id)}
                                 >
-                                    <i className="fas fa-trash me-2"></i>
+                                    <i className="bi bi-trash me-2"></i>
                                     Delete Report
                                 </Button>
                             </Modal.Footer>
@@ -1156,9 +1102,9 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
 
                         {/* Events Modal */}
                         <Modal show={showEventsModal} onHide={closeModals} size="lg">
-                            <Modal.Header closeButton className="bg-primary text-white">
+                            <Modal.Header closeButton>
                                 <Modal.Title>
-                                    <i className="fas fa-list me-2"></i>
+                                    <i className="bi bi-card-list me-2"></i>
                                     Report Events ({selectedReportEvents.length})
                                 </Modal.Title>
                             </Modal.Header>
@@ -1183,13 +1129,13 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                                 <div className="mb-2 small">
                                                                     {event.source_ip && (
                                                                         <span className="me-3">
-                                                                            <i className="fas fa-arrow-right me-1 text-muted"></i>
+                                                                            <i className="bi bi-arrow-right me-1 text-muted"></i>
                                                                             <strong>Source:</strong> {event.source_ip}
                                                                         </span>
                                                                     )}
                                                                     {event.destination_ip && (
                                                                         <span>
-                                                                            <i className="fas fa-bullseye me-1 text-muted"></i>
+                                                                            <i className="bi bi-bullseye me-1 text-muted"></i>
                                                                             <strong>Destination:</strong> {event.destination_ip}
                                                                         </span>
                                                                     )}
@@ -1244,221 +1190,152 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                     </div>
                                 ) : (
                                     <div className="text-center py-4">
-                                        <i className="fas fa-exclamation-circle fa-3x text-muted mb-3"></i>
+                                        <i className="bi bi-exclamation-circle mi-icon-3x text-muted mb-3"></i>
                                         <h5>No Events Found</h5>
                                         <p className="text-muted">This report doesn't have any associated events.</p>
                                     </div>
                                 )}
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={closeModals}>
+                                <Button variant="light" onClick={closeModals}>
                                     Close
                                 </Button>
                             </Modal.Footer>
                         </Modal>
 
                         {/* LLM Settings Modal */}
-                        <Modal show={showLLMSettingsModal} onHide={closeModals} size="lg">
-                            <Modal.Header closeButton className="bg-secondary text-white">
+                        <Modal show={showLLMSettingsModal} onHide={closeModals} size="lg" dialogClassName="mi-modal-lg">
+                            <Modal.Header closeButton>
                                 <Modal.Title>
-                                    <i className="fas fa-cog me-2"></i>
+                                    <i className="bi bi-gear me-2"></i>
                                     LLM Provider Settings
                                 </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <div className="mb-4">
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 className="mb-0">Current Configuration</h5>
+                                <div className="mi-section-title" style={{ marginTop: 0 }}>Current configuration</div>
+                                <div className="mi-cfg-now">
+                                    <div className="mi-cfg-box">
+                                        <div className="mi-cfg-box__lbl">Current provider</div>
+                                        <div className="mi-cfg-box__val">
+                                            <span className="mi-badge mi-info">
+                                                <span className="mi-led"></span>
+                                                {currentProvider === 'ollama' ? 'Ollama (Local)' : 'Gemini (Cloud)'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    
-                                    <Card className="border-primary">
-                                        <Card.Body>
-                                            <Row>
-                                                <Col md={6}>
-                                                    <strong>Current Provider:</strong>
-                                                    <div className="mt-1">
-                                                        <Badge 
-                                                            bg={currentProvider === 'ollama' ? 'success' : 'primary'} 
-                                                            className="fs-6"
-                                                        >
-                                                            <i className={`fas ${currentProvider === 'ollama' ? 'fa-server' : 'fa-brain'} me-1`}></i>
-                                                            {currentProvider === 'ollama' ? 'Ollama (Local)' : 'Gemini (Cloud)'}
-                                                        </Badge>
-                                                    </div>
-                                                </Col>
-                                                <Col md={6}>
-                                                    <strong>Current Model:</strong>
-                                                    <div className="mt-1">
-                                                        <Badge bg="info" className="fs-6">
-                                                            {currentModel || 'Unknown'}
-                                                        </Badge>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </Card.Body>
-                                    </Card>
+                                    <div className="mi-cfg-box">
+                                        <div className="mi-cfg-box__lbl">Current model</div>
+                                        <div className="mi-cfg-box__val">
+                                            <span className="mi-chip"><i className="bi bi-cpu"></i> {currentModel || 'Unknown'}</span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="mb-4">
-                                    <h5>Change Configuration</h5>
-                                    <Row>
-                                        <Col md={6}>
-                                            <Form.Label>Select Provider</Form.Label>
-                                            <Form.Select 
-                                                value={selectedProvider}
-                                                onChange={(e) => handleProviderChange(e.target.value)}
-                                                disabled={savingConfig}
-                                            >
-                                                {llmProviders && llmProviders.length > 0 ? (
-                                                    llmProviders.map(provider => (
-                                                        <option key={provider} value={provider}>
-                                                            {provider === 'ollama' ? 'Ollama (Local)' : 'Gemini (Cloud)'}
-                                                        </option>
+                                <div className="mi-section-title">Change configuration</div>
+                                <div className="mi-grid-2">
+                                    <div className="mi-pv-field">
+                                        <label>Select Provider</label>
+                                        <Form.Select
+                                            value={selectedProvider}
+                                            onChange={(e) => handleProviderChange(e.target.value)}
+                                            disabled={savingConfig}
+                                        >
+                                            {llmProviders && llmProviders.length > 0 ? (
+                                                llmProviders.map(provider => (
+                                                    <option key={provider} value={provider}>
+                                                        {provider === 'ollama' ? 'Ollama (Local)' : 'Gemini (Cloud)'}
+                                                    </option>
+                                                ))
+                                            ) : (
+                                                <>
+                                                    <option value="gemini">Gemini (Cloud)</option>
+                                                    <option value="ollama">Ollama (Local)</option>
+                                                </>
+                                            )}
+                                        </Form.Select>
+                                    </div>
+                                    <div className="mi-pv-field">
+                                        <label>Select Model</label>
+                                        <Form.Select
+                                            value={selectedModel}
+                                            onChange={(e) => handleModelChange(e.target.value)}
+                                            disabled={selectedProvider !== 'ollama' || savingConfig}
+                                        >
+                                            {selectedProvider === 'ollama' ? (
+                                                availableModels.length > 0 ? (
+                                                    availableModels.map(model => (
+                                                        <option key={model} value={model}>{model}</option>
                                                     ))
                                                 ) : (
-                                                    <>
-                                                        <option value="gemini">Gemini (Cloud)</option>
-                                                        <option value="ollama">Ollama (Local)</option>
-                                                    </>
-                                                )}
-                                            </Form.Select>
-                                        </Col>
-                                        <Col md={6}>
-                                            <Form.Label>Select Model</Form.Label>
-                                            <Form.Select 
-                                                value={selectedModel}
-                                                onChange={(e) => handleModelChange(e.target.value)}
-                                                disabled={selectedProvider !== 'ollama' || savingConfig}
-                                            >
-                                                {selectedProvider === 'ollama' ? (
-                                                    availableModels.length > 0 ? (
-                                                        availableModels.map(model => (
-                                                            <option key={model} value={model}>
-                                                                {model}
-                                                            </option>
-                                                        ))
-                                                    ) : (
-                                                        <option value="">No models available</option>
-                                                    )
-                                                ) : (
-                                                    <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
-                                                )}
-                                            </Form.Select>
-                                            <div className="mt-2 d-flex justify-content-between align-items-center">
-                                                <Form.Text className="text-muted">
-                                                    {selectedProvider === 'ollama' ? 
-                                                        'Only Ollama models can be changed' : 
-                                                        'Gemini model is fixed'
-                                                    }
-                                                </Form.Text>
-                                                {selectedProvider === 'ollama' && (
-                                                    <Button 
-                                                        variant="outline-secondary" 
-                                                        size="sm"
-                                                        onClick={() => loadModelsForProvider('ollama')}
-                                                        title="Refresh available models"
-                                                    >
-                                                        <i className="fas fa-sync-alt"></i>
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    
-                                    <div className="mt-3 d-flex gap-2">
-                                        <Button 
-                                            variant="success" 
-                                            onClick={saveLLMConfiguration}
-                                            disabled={savingConfig || (selectedProvider === currentProvider && selectedModel === currentModel)}
-                                        >
-                                            <i className={`fas ${savingConfig ? 'fa-spinner fa-spin' : 'fa-save'} me-2`}></i>
-                                            {savingConfig ? 'Saving...' : 'Save Configuration'}
-                                        </Button>
-                                        
-                                        {(selectedProvider !== currentProvider || selectedModel !== currentModel) && (
-                                            <Badge bg="warning" className="align-self-center">
-                                                <i className="fas fa-exclamation-triangle me-1"></i>
-                                                Configuration changed - Click Save to apply
-                                            </Badge>
-                                        )}
-                                        
-                                        {savingConfig && (
-                                            <Badge bg="info" className="align-self-center">
-                                                <i className="fas fa-spinner fa-spin me-1"></i>
-                                                Applying changes...
-                                            </Badge>
-                                        )}
+                                                    <option value="">No models available</option>
+                                                )
+                                            ) : (
+                                                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                                            )}
+                                        </Form.Select>
+                                        <div className="mi-help mt-1 d-flex justify-content-between align-items-center">
+                                            <span>{selectedProvider === 'ollama' ? 'Only Ollama models can be changed' : 'Gemini model is fixed'}</span>
+                                            {selectedProvider === 'ollama' && (
+                                                <button
+                                                    type="button"
+                                                    className="mi-icon-btn"
+                                                    style={{ width: 28, height: 28, fontSize: '.85rem' }}
+                                                    onClick={() => loadModelsForProvider('ollama')}
+                                                    title="Refresh available models"
+                                                >
+                                                    <i className="bi bi-arrow-clockwise"></i>
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
-                                    <h5>Provider Information</h5>
-                                    <Row>
-                                        <Col md={6}>
-                                            <Card className="h-100 llm-info-card">
-                                                <Card.Header className="bg-success text-white">
-                                                    <i className="fas fa-server me-2"></i>
-                                                    Ollama (Local)
-                                                </Card.Header>
-                                                <Card.Body>
-                                                    <p className="small mb-2">
-                                                        <strong>Advantages:</strong>
-                                                    </p>
-                                                    <ul className="small mb-2">
-                                                        <li>Data stays local</li>
-                                                        <li>No API costs</li>
-                                                        <li>Offline capable</li>
-                                                        <li>Customizable models</li>
-                                                    </ul>
-                                                    <p className="small mb-2">
-                                                        <strong>Requirements:</strong>
-                                                    </p>
-                                                    <ul className="small">
-                                                        <li>Local Ollama installation</li>
-                                                        <li>Downloaded models</li>
-                                                        <li>Sufficient hardware</li>
-                                                    </ul>
-                                                </Card.Body>
-                                            </Card>
-                                        </Col>
-                                        <Col md={6}>
-                                            <Card className="h-100 llm-info-card">
-                                                <Card.Header className="bg-primary text-white">
-                                                    <i className="fas fa-brain me-2"></i>
-                                                    Gemini (Cloud)
-                                                </Card.Header>
-                                                <Card.Body>
-                                                    <p className="small mb-2">
-                                                        <strong>Advantages:</strong>
-                                                    </p>
-                                                    <ul className="small mb-2">
-                                                        <li>High performance</li>
-                                                        <li>Latest AI models</li>
-                                                        <li>No local setup</li>
-                                                        <li>Always up-to-date</li>
-                                                    </ul>
-                                                    <p className="small mb-2">
-                                                        <strong>Requirements:</strong>
-                                                    </p>
-                                                    <ul className="small">
-                                                        <li>API key configuration</li>
-                                                        <li>Internet connection</li>
-                                                        <li>API usage costs</li>
-                                                    </ul>
-                                                </Card.Body>
-                                            </Card>
-                                        </Col>
-                                    </Row>
+                                <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
+                                    <Button
+                                        variant="primary"
+                                        onClick={saveLLMConfiguration}
+                                        disabled={savingConfig || (selectedProvider === currentProvider && selectedModel === currentModel)}
+                                    >
+                                        <i className={`bi ${savingConfig ? 'bi-arrow-clockwise mi-spin' : 'bi-check-lg'} me-2`}></i>
+                                        {savingConfig ? 'Saving...' : 'Save Configuration'}
+                                    </Button>
+                                    <span className="mi-help d-inline-flex align-items-center gap-1">
+                                        <i className="bi bi-info-circle"></i>
+                                        {savingConfig
+                                            ? 'Applying changes…'
+                                            : ((selectedProvider !== currentProvider || selectedModel !== currentModel) ? 'Unsaved changes — click Save to apply' : 'No changes to apply')}
+                                    </span>
                                 </div>
 
-                                <Alert variant="info">
-                                    <i className="fas fa-info-circle me-2"></i>
-                                    <strong>Note:</strong> Configuration changes take effect immediately. 
-                                    The system dynamically reloads the configuration without requiring a server restart.
-                                </Alert>
+                                <div className="mi-section-title">Provider information</div>
+                                <div className="mi-grid-2">
+                                    <div className="prov-card">
+                                        <div className="mi-prov-head mi-prov-head--local"><i className="bi bi-hdd-network"></i> Ollama (Local)</div>
+                                        <div className="prov-card__body">
+                                            <strong>Advantages</strong>
+                                            <ul><li>Data stays local</li><li>No API costs</li><li>Offline capable</li><li>Customizable models</li></ul>
+                                            <strong>Requirements</strong>
+                                            <ul><li>Local Ollama installation</li><li>Downloaded models</li><li>Sufficient hardware</li></ul>
+                                        </div>
+                                    </div>
+                                    <div className="prov-card">
+                                        <div className="mi-prov-head mi-prov-head--cloud"><i className="bi bi-cloud"></i> Gemini (Cloud)</div>
+                                        <div className="prov-card__body">
+                                            <strong>Advantages</strong>
+                                            <ul><li>High performance</li><li>Latest AI models</li><li>No local setup</li><li>Always up-to-date</li></ul>
+                                            <strong>Requirements</strong>
+                                            <ul><li>API key configuration</li><li>Internet connection</li><li>API usage costs</li></ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mi-note">
+                                    <i className="bi bi-info-circle"></i>
+                                    <span><strong>Note:</strong> Configuration changes take effect immediately. The system dynamically reloads the configuration without requiring a server restart.</span>
+                                </div>
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={closeModals}>
+                                <Button variant="light" onClick={closeModals}>
                                     Close
                                 </Button>
                             </Modal.Footer>
@@ -1468,7 +1345,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                         <Modal show={showLLMInfoModal} onHide={closeModals} size="lg">
                             <Modal.Header closeButton>
                                 <Modal.Title>
-                                    <i className="fas fa-info-circle me-2"></i>
+                                    <i className="bi bi-info-circle me-2"></i>
                                     LLM Generation Details
                                 </Modal.Title>
                             </Modal.Header>
@@ -1484,7 +1361,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                             <Col md={6}>
                                                 <Card className="h-100">
                                                     <Card.Header className="bg-light">
-                                                        <i className="fas fa-cogs me-2"></i>
+                                                        <i className="bi bi-gear-wide-connected me-2"></i>
                                                         <strong>Provider Information</strong>
                                                     </Card.Header>
                                                     <Card.Body>
@@ -1494,7 +1371,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                                 bg={selectedReportForLLMInfo.llm_provider === 'ollama' ? 'warning' : 'primary'} 
                                                                 className="ms-2"
                                                             >
-                                                                <i className={`fas ${selectedReportForLLMInfo.llm_provider === 'ollama' ? 'fa-server' : 'fa-brain'} me-1`}></i>
+                                                                <i className={`bi ${selectedReportForLLMInfo.llm_provider === 'ollama' ? 'bi-hdd-network' : 'bi-cloud'} me-1`}></i>
                                                                 {selectedReportForLLMInfo.llm_provider === 'ollama' ? 'Ollama' : 'Gemini'}
                                                             </Badge>
                                                         </div>
@@ -1516,7 +1393,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                             <Col md={6}>
                                                 <Card className="h-100">
                                                     <Card.Header className="bg-light">
-                                                        <i className="fas fa-chart-line me-2"></i>
+                                                        <i className="bi bi-graph-up me-2"></i>
                                                         <strong>Performance Metrics</strong>
                                                     </Card.Header>
                                                     <Card.Body>
@@ -1559,7 +1436,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                             <Col>
                                                 <Card>
                                                     <Card.Header className="bg-light">
-                                                        <i className="fas fa-file-alt me-2"></i>
+                                                        <i className="bi bi-file-text me-2"></i>
                                                         <strong>Report Details</strong>
                                                     </Card.Header>
                                                     <Card.Body>
@@ -1596,14 +1473,11 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                 )}
                             </Modal.Body>
                             <Modal.Footer>
-                                <Button variant="secondary" onClick={closeModals}>
+                                <Button variant="light" onClick={closeModals}>
                                     Close
                                 </Button>
                             </Modal.Footer>
                         </Modal>
-                    </Col>
-                </Row>
-            </Container>
         </div>
     );
 };
