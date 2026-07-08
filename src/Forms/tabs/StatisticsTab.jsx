@@ -8,7 +8,7 @@ import EmptyState from '../../components/EmptyState/EmptyState';
 // chart.js lives here — code-split out of the main bundle.
 const FormCharts = lazy(() => import('./FormCharts'));
 
-const SERVER_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 const Loader = () => (
   <div className="mi-card">

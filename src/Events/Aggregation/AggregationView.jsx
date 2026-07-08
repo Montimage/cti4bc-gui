@@ -24,22 +24,30 @@ const Aggregation = () => {
 
     useEffect(() => {
         const fetchEventData = async () => {
-            if(isDataFetched) return;
+            // Wait until the selected ids are populated from navigation state,
+            // and only fetch once.
+            if (isDataFetched || selectedEventIds.length === 0) return;
 
             try {
+                const token = localStorage.getItem('accessToken');
                 const response = await fetch(`${SERVER_URL}/event/aggregate/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify({ eventsId: selectedEventIds }),
                 });
+                if (!response.ok) {
+                    throw new Error(`Aggregation request failed (${response.status})`);
+                }
                 const result = await response.json();
                 setJsonData(result.data);
-                                setSelectedEventIds(result.eventsId);
+                setSelectedEventIds(result.eventsId);
                 setIsDataFetched(true);
             } catch (error) {
-                            }
+                console.error('Failed to aggregate events:', error);
+            }
         };
 
         fetchEventData();

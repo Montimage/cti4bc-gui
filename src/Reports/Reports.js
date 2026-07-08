@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from '../components/Toast';
 import './Reports.css';
 
-const SERVER_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 // Escape user/LLM/event-provided strings before injecting them into downloaded HTML,
 // so hostile content (e.g. an event ingested from MISP/Kafka containing markup) cannot

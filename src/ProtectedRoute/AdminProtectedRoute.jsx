@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { isAuthenticated, getToken } from '../auth';
 
+const SERVER_URL = process.env.REACT_APP_API_URL;
+
 const AdminProtectedRoute = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [hasAdminAccess, setHasAdminAccess] = useState(false);
@@ -15,7 +17,7 @@ const AdminProtectedRoute = () => {
 
             try {
                 const token = getToken();
-                const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/users/info/`, {
+                const response = await fetch(`${SERVER_URL}/api/users/info/`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },

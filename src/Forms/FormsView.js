@@ -13,7 +13,7 @@ import FormBuilderModal from './components/FormBuilderModal';
 import ImportFormModal from './components/ImportFormModal';
 
 // Configuration de l'URL du serveur
-const SERVER_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const SERVER_URL = process.env.REACT_APP_API_URL;
 
 // Debounce a fast-changing value (search inputs) so downstream filtering
 // doesn't recompute on every keystroke.
