@@ -6,6 +6,31 @@ import './Reports.css';
 
 const SERVER_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
+// Escape user/LLM/event-provided strings before injecting them into downloaded HTML,
+// so hostile content (e.g. an event ingested from MISP/Kafka containing markup) cannot
+// execute when the exported HTML file is opened.
+const escapeHtml = (value) => {
+    if (value === null || value === undefined) return '';
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+};
+
+// Safely parse a fetch Response as JSON. Backends may return non-JSON bodies on error
+// (500 HTML pages, 502/503 from a proxy); parsing those with response.json() throws a
+// SyntaxError that would crash the component. Returns {} when the body is not JSON.
+const safeJson = async (response) => {
+    try {
+        const text = await response.text();
+        return text ? JSON.parse(text) : {};
+    } catch (error) {
+        return {};
+    }
+};
+
 const Reports = () => {
     const navigate = useNavigate();
     const { showSuccess, showError, showWarning, showInfo } = useToast();
@@ -45,13 +70,16 @@ const Reports = () => {
                sessionStorage.getItem('authToken');
     };
 
-    // Headers with authentication
+    // Headers with authentication (omit the Authorization header entirely when there is
+    // no token, rather than sending an empty "Authorization: " which some servers treat
+    // differently from an absent header).
     const getAuthHeaders = () => {
         const token = getAuthToken();
-        return {
-            'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
-        };
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        return headers;
     };
 
     // Load events and reports on component mount
@@ -61,6 +89,21 @@ const Reports = () => {
         loadLLMProviders();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Poll while any report is still being generated so the table transitions from
+    // 'pending'/'generating' to 'completed'/'failed' without a manual refresh. The
+    // interval starts when a report becomes active and is cleared once none remain.
+    const hasActiveReports = reports.some(
+        r => r.status === 'pending' || r.status === 'generating'
+    );
+    useEffect(() => {
+        if (!hasActiveReports) return undefined;
+        const interval = setInterval(() => {
+            loadReports();
+        }, 4000);
+        return () => clearInterval(interval);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hasActiveReports]);
 
     // Function to load LLM providers
     const loadLLMProviders = async () => {
@@ -73,25 +116,25 @@ const Reports = () => {
 
             
             if (response.ok) {
-                const data = await response.json();
+                const data = await safeJson(response);
                 console.log('✅ LLM Providers loaded:', data);
-                
+
                 setLlmProviders(data.available_providers || ['gemini', 'ollama']);
                 setCurrentProvider(data.current_provider || '');
                 setSelectedProvider(data.current_provider || '');
-                
-                
+
+
                 // Get current provider status for models info
                 const providerStatus = data.current_provider_status || {};
                 setAvailableModels(providerStatus.available_models || []);
                 setCurrentModel(providerStatus.current_model || '');
                 setSelectedModel(providerStatus.current_model || '');
-                
+
                 // Force reload models for current provider to get the latest list
                 if (data.current_provider) {
-                    loadModelsForProvider(data.current_provider);
+                    loadModelsForProvider(data.current_provider, true);
                 }
-                
+
             } else {
                 console.error('❌ API request failed:', response.status, response.statusText);
                 const errorText = await response.text();
@@ -106,8 +149,11 @@ const Reports = () => {
         }
     };
 
-    // Function to load models for a specific provider
-    const loadModelsForProvider = async (provider) => {
+    // Function to load models for a specific provider.
+    // `isActiveProvider` is passed explicitly by the caller instead of comparing against
+    // the `currentProvider` state, which may be stale inside this async closure (race
+    // condition when the user switches providers quickly).
+    const loadModelsForProvider = async (provider, isActiveProvider = false) => {
         try {
             // Add timestamp to URL to prevent caching
             const timestamp = new Date().getTime();
@@ -116,13 +162,14 @@ const Reports = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                setAvailableModels(data.available_models || []);
-                if (provider === currentProvider) {
+                const data = await safeJson(response);
+                const models = Array.isArray(data.available_models) ? data.available_models : [];
+                setAvailableModels(models);
+                if (isActiveProvider) {
                     setCurrentModel(data.current_model || '');
                     setSelectedModel(data.current_model || '');
                 } else {
-                    setSelectedModel(data.available_models[0] || '');
+                    setSelectedModel(models[0] || '');
                 }
             }
         } catch (error) {
@@ -150,23 +197,23 @@ const Reports = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                showSuccess(`Configuration updated: ${data.message}`);
-                
+                const data = await safeJson(response);
+                showSuccess(`Configuration updated: ${data.message || 'success'}`);
+
                 // Update current configuration immediately
                 setCurrentProvider(selectedProvider);
                 setCurrentModel(selectedModel);
-                
+
                 // Petit délai pour s'assurer que le backend a fini de traiter
                 await new Promise(resolve => setTimeout(resolve, 100));
-                
+
                 // Forcer un rechargement complet de la configuration depuis le serveur
                 await loadLLMProviders();
-                
+
                 // Fermer le modal après la mise à jour réussie
                 setShowLLMSettingsModal(false);
             } else {
-                const errorData = await response.json();
+                const errorData = await safeJson(response);
                 showError(errorData.error || 'Failed to update configuration');
             }
         } catch (error) {
@@ -184,7 +231,7 @@ const Reports = () => {
             });
             
             if (response.ok) {
-                const data = await response.json();
+                const data = await safeJson(response);
                 const eventsArray = Array.isArray(data) ? data : data.events || [];
                 setEvents(eventsArray);
             } else {
@@ -206,7 +253,7 @@ const Reports = () => {
             });
             
             if (response.ok) {
-                const data = await response.json();
+                const data = await safeJson(response);
                 setReports(data.reports || []);
             } else {
                 console.error('Error loading reports:', response.status);
@@ -235,12 +282,9 @@ const Reports = () => {
         try {
             setLoading(true);
 
-            // Create AbortController for timeout handling
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => {
-                controller.abort();
-            }, 120000); // 2 minutes timeout
-
+            // Generation now runs asynchronously on the backend worker: this POST returns
+            // immediately (HTTP 202) with a report in the 'pending' state. We reset the form
+            // and let the polling effect refresh the list until generation completes.
             const response = await fetch(`${SERVER_URL}/reports/`, {
                 method: 'POST',
                 headers: getAuthHeaders(),
@@ -248,31 +292,23 @@ const Reports = () => {
                     title,
                     prompt,
                     events: selectedEvents
-                }),
-                signal: controller.signal
+                })
             });
 
-            clearTimeout(timeoutId);
-
             if (response.ok) {
-                // Report generated successfully
-                showSuccess('Report generated successfully!');
+                showInfo('Report queued — generating in the background…');
                 setTitle('');
                 setPrompt('');
                 setSelectedEvents([]);
                 setShowCreateModal(false);
                 loadReports();
             } else {
-                const errorData = await response.json();
+                const errorData = await safeJson(response);
                 showError(errorData.error || 'Error generating report');
             }
         } catch (error) {
             console.error('💥 Exception during report generation:', error);
-            if (error.name === 'AbortError') {
-                showError('Request timeout: Report generation took too long. Please try again or check your LLM configuration.');
-            } else {
-                showError('Connection error');
-            }
+            showError('Connection error');
         } finally {
             setLoading(false);
         }
@@ -341,7 +377,7 @@ const Reports = () => {
                 weekAgo.setDate(weekAgo.getDate() - 7);
                 return createdDate > weekAgo;
             }).length,
-            withEvents: reports.filter(r => r.events && r.events.length > 0).length
+            withEvents: reports.filter(r => (r.events_count || 0) > 0).length
         };
     };
 
@@ -382,7 +418,7 @@ const Reports = () => {
                 });
                 
                 if (response.ok) {
-                    const reportData = await response.json();
+                    const reportData = await safeJson(response);
                     setSelectedReportEvents(reportData.events || []);
                     setShowEventsModal(true);
                 } else {
@@ -405,7 +441,7 @@ const Reports = () => {
             });
             
             if (response.ok) {
-                const reportData = await response.json();
+                const reportData = await safeJson(response);
                 setSelectedReportForLLMInfo(reportData);
                 setShowLLMInfoModal(true);
             } else {
@@ -464,6 +500,30 @@ const Reports = () => {
         setSelectedModel(model);
     };
 
+    // Render the generation status badge for a report row.
+    const renderStatusBadge = (report) => {
+        const status = report.status || 'completed';
+        const map = {
+            completed: { cls: 'mi-success', label: 'Completed' },
+            pending: { cls: 'mi-info', label: 'Pending' },
+            generating: { cls: 'mi-info', label: 'Generating' },
+            failed: { cls: 'mi-danger', label: 'Failed' },
+        };
+        const cfg = map[status] || map.completed;
+        const inProgress = status === 'pending' || status === 'generating';
+        return (
+            <span
+                className={`mi-badge ${cfg.cls}`}
+                title={status === 'failed' ? (report.error_message || 'Generation failed') : undefined}
+            >
+                {inProgress
+                    ? <i className="bi bi-arrow-clockwise mi-spin" style={{ marginRight: 4 }}></i>
+                    : <span className="mi-led"></span>}
+                {' '}{cfg.label}
+            </span>
+        );
+    };
+
     const stats = getReportStats();
 
     // Enhanced download functions that fetch complete report data including events
@@ -474,7 +534,7 @@ const Reports = () => {
             });
             
             if (response.ok) {
-                return await response.json();
+                return await safeJson(response);
             } else {
                 showError('Error loading complete report data');
                 return report; // fallback to original report
@@ -496,7 +556,7 @@ const Reports = () => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${completeReport.title || 'Security Report'}</title>
+    <title>${escapeHtml(completeReport.title || 'Security Report')}</title>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; }
         h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
@@ -508,9 +568,9 @@ const Reports = () => {
     </style>
 </head>
 <body>
-    <h1>${completeReport.title || 'Security Report'}</h1>
+    <h1>${escapeHtml(completeReport.title || 'Security Report')}</h1>
     <div class="metadata">
-        <strong>Created:</strong> ${new Date(completeReport.created_at).toLocaleString()}<br>
+        <strong>Created:</strong> ${escapeHtml(new Date(completeReport.created_at).toLocaleString())}<br>
         <strong>Generation Time:</strong> ${completeReport.generation_time ? completeReport.generation_time.toFixed(2) + 's' : 'N/A'}<br>
         <strong>Events Count:</strong> ${events.length}
     </div>
@@ -522,11 +582,11 @@ const Reports = () => {
         <h3>Associated Events</h3>
         ${events.map(event => `
             <div class="event-item">
-                <strong>${event.title || 'Untitled Event'}</strong><br>
-                <small><strong>Description:</strong> ${event.description || 'No description'}</small><br>
-                ${event.source_ip ? `<small><strong>Source IP:</strong> ${event.source_ip}</small><br>` : ''}
-                ${event.destination_ip ? `<small><strong>Destination IP:</strong> ${event.destination_ip}</small><br>` : ''}
-                ${event.created_at ? `<small><strong>Date:</strong> ${new Date(event.created_at).toLocaleString()}</small>` : ''}
+                <strong>${escapeHtml(event.title || 'Untitled Event')}</strong><br>
+                <small><strong>Description:</strong> ${escapeHtml(event.description || 'No description')}</small><br>
+                ${event.source_ip ? `<small><strong>Source IP:</strong> ${escapeHtml(event.source_ip)}</small><br>` : ''}
+                ${event.destination_ip ? `<small><strong>Destination IP:</strong> ${escapeHtml(event.destination_ip)}</small><br>` : ''}
+                ${event.created_at ? `<small><strong>Date:</strong> ${escapeHtml(new Date(event.created_at).toLocaleString())}</small>` : ''}
             </div>
         `).join('')}
     </div>
@@ -618,11 +678,13 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
         URL.revokeObjectURL(url);
     };
 
-    // Helper function to convert markdown-like content to HTML
+    // Helper function to convert markdown-like content to HTML.
+    // The content is HTML-escaped FIRST so any markup embedded in the LLM output cannot
+    // execute in the exported file; only our own generated tags below are real HTML.
     const formatContentForHTML = (content) => {
         if (!content) return 'No content available';
-        
-        return content
+
+        return escapeHtml(content)
             // Convert markdown headers
             .replace(/^### (.*$)/gm, '<h3>$1</h3>')
             .replace(/^## (.*$)/gm, '<h2>$1</h2>')
@@ -817,10 +879,8 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                         )}
                                                     </td>
                                                     <td style={{ textAlign: 'center' }}>
-                                                        <span className="mi-badge mi-success">
-                                                            <span className="mi-led"></span> Generated
-                                                        </span>
-                                                        {report.content && (
+                                                        {renderStatusBadge(report)}
+                                                        {report.status === 'completed' && report.content && (
                                                             <span className="mi-llm-model">
                                                                 {(report.content.length / 1024).toFixed(1)} KB
                                                             </span>
@@ -1029,9 +1089,22 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                 </Col>
                                             </Row>
                                         </div>
-                                        <div className="report-content">
-                                            {selectedReport.content || 'No content available'}
-                                        </div>
+                                        {selectedReport.status === 'failed' ? (
+                                            <Alert variant="danger">
+                                                <i className="bi bi-exclamation-triangle me-2"></i>
+                                                <strong>Generation failed.</strong>
+                                                <div className="mt-1 small">{selectedReport.error_message || 'Unknown error'}</div>
+                                            </Alert>
+                                        ) : (selectedReport.status === 'pending' || selectedReport.status === 'generating') ? (
+                                            <Alert variant="info">
+                                                <Spinner animation="border" size="sm" className="me-2" />
+                                                Report is still being generated…
+                                            </Alert>
+                                        ) : (
+                                            <div className="report-content">
+                                                {selectedReport.content || 'No content available'}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </Modal.Body>
@@ -1280,7 +1353,7 @@ ${index + 1}. Event: ${event.title || 'Untitled Event'}
                                                     type="button"
                                                     className="mi-icon-btn"
                                                     style={{ width: 28, height: 28, fontSize: '.85rem' }}
-                                                    onClick={() => loadModelsForProvider('ollama')}
+                                                    onClick={() => loadModelsForProvider('ollama', currentProvider === 'ollama')}
                                                     title="Refresh available models"
                                                 >
                                                     <i className="bi bi-arrow-clockwise"></i>
