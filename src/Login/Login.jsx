@@ -86,8 +86,11 @@ const Login = () => {
             {/* Left: Montimage brand panel */}
             <aside className="mi-auth__brand">
                 <div className="mi-auth__brand-inner">
-                    <div className="mi-auth__mark">C</div>
-                    <div className="mi-auth__brand-name">CTI4BC</div>
+                    <img
+                        src={`${process.env.PUBLIC_URL}/cti4bc-logo-dark.svg`}
+                        alt="CTI4BC"
+                        className="mi-auth__logo"
+                    />
                     <h2 className="mi-auth__brand-title">Cyber Threat Intelligence for Business Continuity</h2>
                     <p className="mi-auth__brand-sub">
                         Collect, refine, anonymize and share cyber threat intelligence across partner

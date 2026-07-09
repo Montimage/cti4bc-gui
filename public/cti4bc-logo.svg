@@ -1,0 +1,13 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CTI4BC logo">
+  <title>CTI4BC logo</title>
+  <circle cx="48" cy="50" r="24" fill="none" stroke="#8B7D6B" stroke-width="1.4" stroke-dasharray="2.5 5"/>
+  <path d="M48 16 L77.4 33 L77.4 67 L48 84 L18.6 67 L18.6 33 Z" fill="none" stroke="#E9AB34" stroke-width="3" stroke-linejoin="round"/>
+  <line x1="48" y1="50" x2="35" y2="39" stroke="#8B7D6B" stroke-width="1.8"/>
+  <line x1="48" y1="50" x2="60" y2="43" stroke="#8B7D6B" stroke-width="1.8"/>
+  <line x1="48" y1="50" x2="47" y2="68" stroke="#8B7D6B" stroke-width="1.8"/>
+  <circle cx="35" cy="39" r="3" fill="#8B7D6B"/>
+  <circle cx="60" cy="43" r="3" fill="#8B7D6B"/>
+  <circle cx="47" cy="68" r="3" fill="#8B7D6B"/>
+  <circle cx="48" cy="50" r="4.5" fill="#E9AB34"/>
+  <text x="104" y="64" font-family="'Segoe UI', Helvetica, Arial, sans-serif" font-size="42" font-weight="600" letter-spacing="0.5" fill="#1A1A1A">CTI<tspan fill="#E9AB34">4</tspan>BC</text>
+</svg>

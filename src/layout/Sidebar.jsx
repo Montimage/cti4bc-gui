@@ -52,8 +52,16 @@ function Sidebar() {
   return (
     <aside className="mi-rail">
       <NavLink to="/events" className="mi-rail__brand">
-        <div className="mi-rail__mark">C</div>
-        <div className="mi-rail__name">CTI4BC</div>
+        <img
+          src={`${process.env.PUBLIC_URL}/cti4bc-logo-dark.svg`}
+          alt="CTI4BC"
+          className="mi-rail__logo mi-rail__logo--full"
+        />
+        <img
+          src={`${process.env.PUBLIC_URL}/cti4bc-favicon.svg`}
+          alt="CTI4BC"
+          className="mi-rail__logo mi-rail__logo--mark"
+        />
       </NavLink>
       <nav className="mi-rail__nav">
         {NAV_MAIN.map((it) => <Item key={it.to} {...it} />)}

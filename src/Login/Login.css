@@ -154,22 +154,8 @@
   pointer-events: none;
 }
 .mi-auth__brand-inner { position: relative; max-width: 480px; }
-.mi-auth__mark {
-  width: 56px; height: 56px;
-  border-radius: 16px;
-  display: grid; place-items: center;
-  background: linear-gradient(135deg, var(--mi-amber), var(--mi-amber-hover));
-  color: #1A1A1A;
-  font-family: var(--mi-font-display);
-  font-weight: 700; font-size: 1.8rem;
-  box-shadow: 0 10px 34px rgba(233, 171, 52, 0.45);
-}
-.mi-auth__brand-name {
-  font-family: var(--mi-font-display);
-  font-weight: 700; font-size: 1.5rem;
-  letter-spacing: -0.01em;
-  margin-top: 22px;
-}
+/* Full brand logo (dark-variant, shown on the dark auth panel) */
+.mi-auth__logo { display: block; height: 96px; width: auto; max-width: 100%; }
 .mi-auth__brand-title {
   font-family: var(--mi-font-display);
   font-weight: 600; font-size: 2.1rem; line-height: 1.18;
