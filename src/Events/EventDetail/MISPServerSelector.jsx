@@ -4,9 +4,12 @@ import { useToast } from '../../components/Toast';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
-const MISPServerSelector = ({ onServersSelected }) => {
+const MISPServerSelector = ({ onServersSelected, eventId: eventIdProp }) => {
     const { showError } = useToast();
-    const { id: eventId } = useParams(); // Gets the event ID from the URL
+    const { id: paramEventId } = useParams(); // Event ID from the URL (share event route)
+    // On the aggregation page there is no :id in the URL, so the caller passes the
+    // reference event id (the first source event) explicitly via the eventId prop.
+    const eventId = eventIdProp ?? paramEventId;
     const [mispServers, setMispServers] = useState([]);
     const [selectedServers, setSelectedServers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,6 +17,11 @@ const MISPServerSelector = ({ onServersSelected }) => {
     // Retrieve the list of MISP servers belonging to the same organization as the event
     useEffect(() => {
         const fetchMISPServers = async () => {
+            if (!eventId) {
+                setMispServers([]);
+                setLoading(false);
+                return;
+            }
             try {
                 setLoading(true);
                 const token = localStorage.getItem('accessToken');

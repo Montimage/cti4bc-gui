@@ -37,7 +37,7 @@ const ShareEventModal = ({ show, onClose, onConfirm, eventId }) => {
 
           <div className="modal-body">
             <div>
-              <MISPServerSelector onServersSelected={handleServersSelected} />
+              <MISPServerSelector onServersSelected={handleServersSelected} eventId={eventId} />
               <hr className="my-4" />
 
               <h6 className="mb-2">Share with other CTI4BC organisations</h6>

@@ -7,7 +7,6 @@ const SERVER_URL = process.env.REACT_APP_API_URL;
 // mirroring the previous NavBar behaviour (Kafka / Forms were staff-only).
 const NAV_MAIN = [
   { to: '/events', label: 'Events', icon: 'bi-shield-exclamation' },
-  { to: '/aggregation', label: 'Aggregation', icon: 'bi-diagram-3' },
   { to: '/analytics', label: 'Analytics', icon: 'bi-graph-up' },
   { to: '/reports', label: 'Reports', icon: 'bi-file-earmark-text' },
   { to: '/share-logs', label: 'Shared Logs', icon: 'bi-clock-history' },
