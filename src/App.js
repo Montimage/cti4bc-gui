@@ -16,7 +16,7 @@ import Settings from './Settings/Settings';
 import MyFormAnswers from './UserResponses/MyFormAnswers';
 import NotificationsPage from './components/Notifications/NotificationsPage';
 import SystemHealthPage from './components/SystemHealth/SystemHealthPage';
-import { useTheme, ThemeProvider } from './ThemeContext';
+import { useTheme } from './ThemeContext';
 import ArtifactDownloadPage from "./Download/ArtifactDownloadPage";
 import { ToastProvider, ToastContainer } from './components/Toast';
 import { NotificationProvider } from './components/Notifications/NotificationContext';
@@ -31,45 +31,43 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider>
-      <ToastProvider>
-        <NotificationProvider>
-          <HealthProvider>
-            <div className="theme-transition">
-              <Router>
-                <Routes>
-                  <Route path="/" element={<Login/>} />
-                  <Route element={<ProtectedRoute />}>
-                   <Route element={<AppLayout />}>
-                    <Route path="/events" element={<EventList />} />
-                    <Route path="/event/:id" element={<ShareEventView />} />
-                    <Route path="/aggregation" element={<Aggregation />} />
-                    <Route path="/share-logs" element={<EventShareLogs />} />
-                    <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/download/:id" element={<ArtifactDownloadPage />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/notifications" element={<NotificationsPage />} />
-                    <Route path="/my-form-answers" element={<MyFormAnswers />} />
-                    <Route path="/reports" element={<Reports />} />
-                    
-                    {/* Admin protected routes - nested within protected routes */}
-                    <Route element={<AdminProtectedRoute />}>
-                      <Route path="/health" element={<SystemHealthPage />} />
-                      <Route path='/admin/kafka' element={<KafkaView />} />
-                      <Route path='/admin/forms' element={<FormsView />} />
-                      {/* Statistics are now an in-page tab; keep the old URL working. */}
-                      <Route path='/admin/form-stats' element={<Navigate to="/admin/forms?tab=stats" replace />} />
-                    </Route>
-                   </Route>
+    <ToastProvider>
+      <NotificationProvider>
+        <HealthProvider>
+          <div className="theme-transition">
+            <Router>
+              <Routes>
+                <Route path="/" element={<Login/>} />
+                <Route element={<ProtectedRoute />}>
+                 <Route element={<AppLayout />}>
+                  <Route path="/events" element={<EventList />} />
+                  <Route path="/event/:id" element={<ShareEventView />} />
+                  <Route path="/aggregation" element={<Aggregation />} />
+                  <Route path="/share-logs" element={<EventShareLogs />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/download/:id" element={<ArtifactDownloadPage />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/notifications" element={<NotificationsPage />} />
+                  <Route path="/my-form-answers" element={<MyFormAnswers />} />
+                  <Route path="/reports" element={<Reports />} />
+                  
+                  {/* Admin protected routes - nested within protected routes */}
+                  <Route element={<AdminProtectedRoute />}>
+                    <Route path="/health" element={<SystemHealthPage />} />
+                    <Route path='/admin/kafka' element={<KafkaView />} />
+                    <Route path='/admin/forms' element={<FormsView />} />
+                    {/* Statistics are now an in-page tab; keep the old URL working. */}
+                    <Route path='/admin/form-stats' element={<Navigate to="/admin/forms?tab=stats" replace />} />
                   </Route>
-                </Routes>
-              </Router>
-              <ToastContainer />
-            </div>
-          </HealthProvider>
-        </NotificationProvider>
-      </ToastProvider>
-    </ThemeProvider>
+                 </Route>
+                </Route>
+              </Routes>
+            </Router>
+            <ToastContainer />
+          </div>
+        </HealthProvider>
+      </NotificationProvider>
+    </ToastProvider>
   );
 }
 
