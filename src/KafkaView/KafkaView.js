@@ -249,7 +249,6 @@ const KafkaView = () => {
                                 <div className="kfk-conn">
                                     <div><span className="kfk-conn__k">Server</span><span className="kfk-conn__v">{kafkaCredentials.KAFKA_SERVER || '—'}</span></div>
                                     <div><span className="kfk-conn__k">User</span><span className="kfk-conn__v">{kafkaCredentials.KAFKA_USERNAME || '—'}</span></div>
-                                    <div><span className="kfk-conn__k">Password</span><span className="kfk-conn__v">{kafkaCredentials.KAFKA_PASSWORD || '—'}</span></div>
                                 </div>
                                 {isRunning && (
                                     <div className="kfk-active">
