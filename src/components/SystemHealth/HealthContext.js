@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -59,6 +59,10 @@ export const HealthProvider = ({ children }) => {
     lastUpdated: new Date()
   });
   const [loading, setLoading] = useState(false);
+
+  // Tracks the last known overall status for change detection, so fetchHealthStatus
+  // does not need healthData.overall as a dependency (which would churn the interval).
+  const overallStatusRef = useRef('healthy');
   
   // State for selected MISP servers
   const [selectedMispServers, setSelectedMispServers] = useState(() => {
@@ -374,7 +378,7 @@ export const HealthProvider = ({ children }) => {
     setLoading(true);
     try {
       // Store previous overall status for change detection
-      const previousOverallStatus = healthData.overall;
+      const previousOverallStatus = overallStatusRef.current;
       
       // Get real database health data
       const databaseHealth = await fetchDatabaseHealth();
@@ -398,21 +402,22 @@ export const HealthProvider = ({ children }) => {
 
       const newOverallStatus = calculateOverallStatus(updatedComponents);
 
-      // Update system metrics with threshold-based status
-      const updatedMetrics = {
-        cpu: Math.min(100, Math.max(0, healthData.metrics.cpu + (Math.random() - 0.5) * 10)),
-        memory: Math.min(100, Math.max(0, healthData.metrics.memory + (Math.random() - 0.5) * 8)),
-        disk: Math.min(100, Math.max(0, healthData.metrics.disk + (Math.random() - 0.5) * 5)),
-        network: Math.min(100, Math.max(0, healthData.metrics.network + (Math.random() - 0.5) * 15))
-      };
-
       setHealthData(prev => ({
         ...prev,
         components: updatedComponents,
         overall: newOverallStatus,
-        metrics: updatedMetrics,
+        // Update system metrics from the previous state via the updater, so this
+        // callback stays stable across renders.
+        metrics: {
+          cpu: Math.min(100, Math.max(0, prev.metrics.cpu + (Math.random() - 0.5) * 10)),
+          memory: Math.min(100, Math.max(0, prev.metrics.memory + (Math.random() - 0.5) * 8)),
+          disk: Math.min(100, Math.max(0, prev.metrics.disk + (Math.random() - 0.5) * 5)),
+          network: Math.min(100, Math.max(0, prev.metrics.network + (Math.random() - 0.5) * 15))
+        },
         lastUpdated: new Date()
       }));
+
+      overallStatusRef.current = newOverallStatus;
 
       // Log status change for debugging
       if (previousOverallStatus !== newOverallStatus) {
@@ -435,23 +440,23 @@ export const HealthProvider = ({ children }) => {
         overall: 'critical',
         lastUpdated: new Date()
       }));
+      overallStatusRef.current = 'critical';
     } finally {
       setLoading(false);
     }
-  }, [healthData.components, healthData.overall, healthData.metrics, calculateOverallStatus, getStatusFromResponseTime, getStatusFromUptime, fetchDatabaseHealth, fetchApiServerHealth, fetchExternalServicesHealth, fetchMessageQueueHealth, selectedMispServers]);
-
-  // Load initial health data on component mount
-  useEffect(() => {
-    fetchHealthStatus();
-  }, []); // Empty dependency array means this runs only once on mount
+  }, [calculateOverallStatus, fetchDatabaseHealth, fetchApiServerHealth, fetchExternalServicesHealth, fetchMessageQueueHealth, selectedMispServers]);
 
   // Load available MISP servers on component mount
   useEffect(() => {
     fetchAvailableMispServers();
   }, [fetchAvailableMispServers]);
 
-  // Auto-refresh health status every 30 seconds
+  // Fetch health status on mount, then auto-refresh every 30 seconds.
+  // fetchHealthStatus is stable, so this runs once on mount and re-runs only when
+  // the MISP server selection changes (which needs fresh data for the new selection).
   useEffect(() => {
+    fetchHealthStatus();
+
     const interval = setInterval(() => {
       fetchHealthStatus();
     }, 30000);

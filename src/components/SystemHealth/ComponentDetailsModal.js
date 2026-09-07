@@ -4,7 +4,7 @@ import { useHealth } from './HealthContext';
 import MispServerSelector from './MispServerSelector';
 
 function ComponentDetailsModal({ show, onHide, component }) {
-  const { availableMispServers, selectedMispServers, updateSelectedMispServers, fetchHealthStatus } = useHealth();
+  const { availableMispServers, selectedMispServers, updateSelectedMispServers } = useHealth();
   const [showMispSelector, setShowMispSelector] = useState(false);
   
   if (!component) return null;
@@ -258,11 +258,7 @@ function ComponentDetailsModal({ show, onHide, component }) {
       onHide={() => setShowMispSelector(false)}
       selectedServers={selectedMispServers}
       availableServers={availableMispServers}
-      onSelectionChange={(newSelection) => {
-        updateSelectedMispServers(newSelection);
-        // Refresh health data after changing selection
-        setTimeout(() => fetchHealthStatus(), 500);
-      }}
+      onSelectionChange={updateSelectedMispServers}
     />
     </>
   );
