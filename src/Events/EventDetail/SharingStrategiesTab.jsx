@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import StrategyModal from './StrategyModal';
+import { applyStrategyTemplate } from './applyStrategyTemplate';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -127,38 +128,10 @@ const SharingStrategies = ({ strategies, setStrategies, setJsonData })=> {
             const template = data.strategy.template;
 
             // Apply the strategy
-            setJsonData(prevEvent => {
-                if (!prevEvent || !prevEvent.Attribute){
-                                        return prevEvent;
-                }
-
-                const updatedAttributes = Object.keys(prevEvent.Attribute).reduce((acc, category) =>{
-                    acc[category] = prevEvent.Attribute[category].map(attr => {
-                        const templateAttr = template.Attribute.find(tAttr => tAttr.type === attr.type);
-                        if (templateAttr){
-                            return {
-                                ...attr,
-                                action: templateAttr.action,
-                                to_ids: templateAttr.hasOwnProperty('to_ids') ? templateAttr.to_ids === true : attr.to_ids,
-                            };
-                        }
-                        return attr;
-                    });
-                    return acc;
-                }, {});
-
-                return {
-                    ...prevEvent,
-                    ...template,
-                    Attribute: updatedAttributes,
-                    published: template.hasOwnProperty('published') ? template.published === "true" : prevEvent.published,
-                    locked: template.hasOwnProperty('locked') ? template.locked === "true" : prevEvent.locked,
-                    disable_correlation: template.hasOwnProperty('disable_correlation') ? template.disable_correlation === "true" : prevEvent.disable_correlation,
-                    proposal_email_lock: template.hasOwnProperty('proposal_email_lock') ? template.proposal_email_lock === "true" : prevEvent.proposal_email_lock,
-                };
-            });
+            setJsonData(prevEvent => applyStrategyTemplate(prevEvent, template));
         } catch (error) {
-                    }
+            console.error('Failed to apply strategy:', error);
+        }
     };
 
     const handleDeleteStrategy = async () => {

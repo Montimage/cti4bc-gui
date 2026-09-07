@@ -1,6 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import JsonViewer from "./JsonViewer";
 import StrategyModal from "./StrategyModal";
+import { applyStrategyTemplate } from "./applyStrategyTemplate";
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -46,9 +47,10 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
     useEffect(() => {
         if(data){
             const eventData = data;
+            const eventAttributes = eventData.Attribute || {};
             const transformedAttributes = {
-                ...eventData.Attribute,
-                AWARE4BC: eventData.Attribute.AWARE4BC.map(attr => ({
+                ...eventAttributes,
+                AWARE4BC: (eventAttributes.AWARE4BC || []).map(attr => ({
                     ...attr,
                     action: {
                         type:'none',
@@ -70,7 +72,7 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
             setJsonData(transformedEvent);
 
             const adjustTextareaHeight = (attributeType) =>{
-                transformedEvent.Attribute[attributeType].forEach((attr, attrIndex) => {
+                (transformedEvent.Attribute[attributeType] || []).forEach((attr, attrIndex) => {
                     const textarea = document.getElementById(`comment-${attributeType}-${attrIndex}`);
                     if (textarea) {
                         textarea.style.height = 'auto';
@@ -258,31 +260,22 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
                 'Authorization': `Bearer ${token}`,
             },
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to apply strategy (${response.status})`);
+                }
+                return response.json();
+            })
             .then(data => {
+                if (!data.strategy || !data.strategy.template) {
+                    throw new Error('Invalid strategy data received from the server.');
+                }
                 const template = data.strategy.template;
-    
-                setJsonData(prevEvent => {
-                    const updatedAttributes = prevEvent.Attribute.map(attr => {
-                        const templateAttr = template.Attribute.find(tAttr => tAttr.type === attr.type);
-                        if (templateAttr) {
-                            return {
-                                ...attr,
-                                action: templateAttr.action,
-                            };
-                        }
-                        return attr;
-                    });
-    
-                    return {
-                        ...prevEvent,
-                        ...template,
-                        Attribute: updatedAttributes,
-                    };
-                });
+
+                setJsonData(prevEvent => applyStrategyTemplate(prevEvent, template));
             })
             .catch(error => {
-                // Error handling for attribute update
+                console.error('Failed to apply strategy:', error);
             });
     };
 
