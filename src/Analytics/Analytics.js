@@ -1037,18 +1037,18 @@ function Analytics() {
                                                             <div
                                                                 className={`progress-bar ${ip.threat_score > 60 ? 'bg-danger' : ip.threat_score > 40 ? 'bg-warning' : 'bg-success'}`}
                                                                 role="progressbar"
-                                                                style={{ width: `${ip.threat_score}%` }}
-                                                                aria-valuenow={ip.threat_score}
+                                                                style={{ width: `${ip.threat_score ?? 0}%` }}
+                                                                aria-valuenow={ip.threat_score ?? 0}
                                                                 aria-valuemin="0"
                                                                 aria-valuemax="100"
                                                             >
-                                                                {ip.threat_score.toFixed(1)}
+                                                                {(ip.threat_score ?? 0).toFixed(1)}
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td>{ip.confidence_score.toFixed(1)}</td>
+                                                    <td>{(ip.confidence_score ?? 0).toFixed(1)}</td>
                                                     <td>{ip.reported_by ? Object.keys(ip.reported_by).join(", ") : "None"}</td>
-                                                    <td>{new Date(ip.last_checked).toLocaleString()}</td>
+                                                    <td>{ip.last_checked ? new Date(ip.last_checked).toLocaleString() : '—'}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
