@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Container, Button, Modal, Form } from 'react-bootstrap';
 import { getToken } from '../auth';
+import { buildCsv, downloadCsv } from '../csv';
 import { useToast } from '../components/Toast';
 import './FormsView.css';
 import { useSearchParams } from 'react-router-dom';
@@ -141,7 +142,7 @@ const FormsView = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showError]);
 
   // Fetch available organizations
   const fetchOrganizations = async () => {
@@ -452,28 +453,16 @@ const FormsView = () => {
       showError('No answers to export');
       return;
     }
-    const esc = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
     const header = ['Form', 'Event', 'Filled by', 'Filled at', 'IP address', 'Answers'];
-    const lines = [header.map(esc).join(',')];
-    visibleAnswers.forEach((a) => {
-      lines.push([
-        a.form_title || a.form,
-        a.event_name || `Event #${a.event}`,
-        a.filled_by_username || 'Anonymous',
-        new Date(a.filled_at).toLocaleString(),
-        a.ip_address || '',
-        JSON.stringify(a.answers || {}),
-      ].map(esc).join(','));
-    });
-    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'form-answers.csv';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const rows = visibleAnswers.map((a) => [
+      a.form_title || a.form,
+      a.event_name || `Event #${a.event}`,
+      a.filled_by_username || 'Anonymous',
+      new Date(a.filled_at).toLocaleString(),
+      a.ip_address || '',
+      JSON.stringify(a.answers || {}),
+    ]);
+    downloadCsv(buildCsv(header, rows), 'form-answers.csv');
   };
 
   return (

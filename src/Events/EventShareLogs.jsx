@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { buildCsv, downloadCsv } from '../csv';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -211,33 +212,20 @@ const EventShareLogs = () => {
             document.body.removeChild(a);
         } else {
             const headers = ['Event Info', 'Organization', 'Shared By', 'Shared At', 'MISP Servers', 'Event ID'];
-            
-            const csvContent = sortedShareLogs.map(log => {
-                const mispServers = extractMispServers(log);
-                return [
-                    `"${log.event_info.replace(/"/g, '""')}"`,
-                    `"${log.organization.replace(/"/g, '""')}"`,
-                    `"${log.shared_by.username} (${log.shared_by.email})"`,
-                    formatDateDisplay(log.shared_at),
-                    `"${formatMispServers(mispServers)}"`,
-                    log.event_id
-                ].join(',');
-            });
-            
-            const csvString = [
-                headers.join(','),
-                ...csvContent
-            ].join('\n');
-            
-            const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `share-logs-export-${new Date().toISOString().slice(0,10)}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
+
+            const rows = sortedShareLogs.map(log => [
+                log.event_info || '',
+                log.organization || '',
+                `${log.shared_by?.username || ''} (${log.shared_by?.email || ''})`,
+                formatDateDisplay(log.shared_at),
+                formatMispServers(extractMispServers(log)),
+                log.event_id
+            ]);
+
+            downloadCsv(
+                buildCsv(headers, rows),
+                `share-logs-export-${new Date().toISOString().slice(0,10)}.csv`
+            );
         }
     };
     
