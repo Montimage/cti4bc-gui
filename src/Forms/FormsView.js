@@ -417,15 +417,20 @@ const FormsView = () => {
       if (formStatus === 'active' && !f.is_active) return false;
       if (formStatus === 'inactive' && f.is_active) return false;
       if (formOrg !== 'all' && !(f.organization_names || []).includes(formOrg)) return false;
-      if (q && !`${f.title} ${f.description || ''}`.toLowerCase().includes(q)) return false;
+      if (q && !`${f.title || ''} ${f.description || ''}`.toLowerCase().includes(q)) return false;
       return true;
     });
     const dir = formSort.dir === 'asc' ? 1 : -1;
-    return [...list].sort((a, b) =>
-      formSort.key === 'title'
-        ? a.title.localeCompare(b.title) * dir
-        : (new Date(a.created_at) - new Date(b.created_at)) * dir
-    );
+    // Titles and creation dates can be missing (e.g. an imported Google Form):
+    // guard both, and coerce invalid dates to 0 so the comparator stays transitive.
+    return [...list].sort((a, b) => {
+      if (formSort.key === 'title') {
+        return (a.title || '').localeCompare(b.title || '') * dir;
+      }
+      const ta = new Date(a.created_at).getTime() || 0;
+      const tb = new Date(b.created_at).getTime() || 0;
+      return (ta - tb) * dir;
+    });
   }, [forms, debouncedFormSearch, formStatus, formOrg, formSort]);
 
   const toggleSort = (key) =>
