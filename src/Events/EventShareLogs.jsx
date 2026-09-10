@@ -14,18 +14,23 @@ const formatDateDisplay = (dateString) => {
 const formatDeletedAtDisplay = (dateString) => {
     if (!dateString) return '';
     
-    const [datePart, timePart] = dateString.split(' ');
-    const [year, month, day] = datePart.split('-');
-    const [hours, minutes, seconds] = timePart.split(':');
+    // Accepts both 'YYYY-MM-DD HH:MM:SS' and ISO 'YYYY-MM-DDTHH:MM:SSZ'; a
+    // trailing 'Z' lands in seconds and parseInt reads it as 0, which matches
+    // the UTC assumption below. Falls back to the raw value if unparseable.
+    const [datePart, timePart] = String(dateString).split(/[ T]/);
+    const [year, month, day] = (datePart || '').split('-');
+    const [hours, minutes, seconds] = (timePart || '').split(':');
     
     const date = new Date(Date.UTC(
         parseInt(year, 10),
         parseInt(month, 10) - 1,
         parseInt(day, 10),
-        parseInt(hours, 10),
-        parseInt(minutes, 10),
-        parseInt(seconds, 10)
+        parseInt(hours, 10) || 0,
+        parseInt(minutes, 10) || 0,
+        parseInt(seconds, 10) || 0
     ));
+    
+    if (Number.isNaN(date.getTime())) return String(dateString);
     
     const localOffset = date.getTimezoneOffset() * 60000;
     const adjustedDate = new Date(date.getTime() - localOffset);
