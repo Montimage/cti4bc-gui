@@ -11,30 +11,15 @@ export const getToken = () => {
            sessionStorage.getItem('authToken');
 };
 
-// Get user info from localStorage
-export const getUserInfo = () => {
-    try {
-        const userInfo = localStorage.getItem('userInfo');
-        return userInfo ? JSON.parse(userInfo) : null;
-    } catch (error) {
-        console.error('Error parsing user info:', error);
-        return null;
-    }
-};
+// Every key that can hold session state. Keep in sync with getToken() above.
+// 'userInfo' is legacy: nothing writes it any more, but it is cleared here so
+// values already sitting in returning users' browsers get removed on logout.
+const AUTH_STORAGE_KEYS = ['accessToken', 'refreshToken', 'authToken', 'userInfo'];
 
-// Check if user is staff (admin)
-export const isUserStaff = () => {
-    const userInfo = getUserInfo();
-    return userInfo?.is_staff || false;
-};
-
-// Check if user is superuser
-export const isUserSuperuser = () => {
-    const userInfo = getUserInfo();
-    return userInfo?.is_superuser || false;
-};
-
-// Check if user has admin privileges (staff or superuser)
-export const hasAdminPrivileges = () => {
-    return isUserStaff() || isUserSuperuser();
+// Wipe the session from both storages. Single source of truth for logout.
+export const clearAuth = () => {
+    AUTH_STORAGE_KEYS.forEach((key) => {
+        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
+    });
 };

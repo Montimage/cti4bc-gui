@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../../ThemeContext';
 import { useHealth } from './HealthContext';
-import { hasAdminPrivileges, getToken } from '../../auth';
+import { getToken } from '../../auth';
 import './SystemHealthIndicator.css';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
@@ -35,8 +35,6 @@ function SystemHealthIndicator() {
 
         if (response.ok) {
           const userData = await response.json();
-          // Store user info for other components
-          localStorage.setItem('userInfo', JSON.stringify(userData));
           // Check if user has admin privileges (staff or superuser)
           const isAdmin = userData.is_staff || userData.is_superuser;
           setUserHasAdminAccess(isAdmin);
@@ -55,7 +53,7 @@ function SystemHealthIndicator() {
   // Listen for health status changes
   useEffect(() => {
     const handleStatusChange = (event) => {
-      const { previous, current } = event.detail;
+      const { previous } = event.detail;
       
       // Trigger animation on status change
       setStatusChangeAnimation(true);

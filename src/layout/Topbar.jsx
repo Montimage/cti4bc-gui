@@ -4,6 +4,7 @@ import { useTheme } from '../ThemeContext';
 import SystemHealthIndicator from '../components/SystemHealth';
 import NotificationBell from '../components/Notifications/NotificationBell';
 import UserProfile from '../UserProfile/UserProfile';
+import { clearAuth } from '../auth';
 
 // Map routes to a human page title shown in the topbar.
 const TITLES = {
@@ -39,14 +40,8 @@ function Topbar({ onToggle }) {
     : themePreference === 'dark' ? 'bi-sun'
     : 'bi-display';
 
-  // Identical logout behaviour to the former NavBar.
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
-    sessionStorage.removeItem('authToken');
-    localStorage.removeItem('userData');
-    sessionStorage.removeItem('userData');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    clearAuth();
     navigate('/');
   };
 

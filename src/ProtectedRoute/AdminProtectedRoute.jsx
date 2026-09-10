@@ -25,9 +25,7 @@ const AdminProtectedRoute = () => {
 
                 if (response.ok) {
                     const userData = await response.json();
-                    // Store user info in localStorage for other components
-                    localStorage.setItem('userInfo', JSON.stringify(userData));
-                    
+
                     // Check if user has admin privileges (staff or superuser)
                     const isAdmin = userData.is_staff || userData.is_superuser;
                     setHasAdminAccess(isAdmin);
