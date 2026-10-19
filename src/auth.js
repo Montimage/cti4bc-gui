@@ -14,7 +14,7 @@ export const getToken = () => {
 // Every key that can hold session state. Keep in sync with getToken() above.
 // 'userInfo' is legacy: nothing writes it any more, but it is cleared here so
 // values already sitting in returning users' browsers get removed on logout.
-const AUTH_STORAGE_KEYS = ['accessToken', 'refreshToken', 'authToken', 'userInfo'];
+const AUTH_STORAGE_KEYS = ['accessToken', 'refreshToken', 'authToken', 'userInfo', 'certsyncTraining'];
 
 // Wipe the session from both storages. Single source of truth for logout.
 export const clearAuth = () => {

@@ -1,3 +1,4 @@
+import { isTrainingSession } from '../../training/session';
 import React, { useState, useEffect } from 'react';
 import MISPServerSelector from './MISPServerSelector';
 import OrganizationSelector from './OrganizationSelector';
@@ -38,10 +39,13 @@ const ShareEventModal = ({ show, onClose, onConfirm, eventId }) => {
           <div className="modal-body">
             <div>
               <MISPServerSelector onServersSelected={handleServersSelected} eventId={eventId} />
+              {!isTrainingSession() && <>
               <hr className="my-4" />
 
               <h6 className="mb-2">Share with other CTI4BC organisations</h6>
               <OrganizationSelector onOrganizationsSelected={handleOrganizationsSelected} />
+              </>}
+              {isTrainingSession() && <p className="text-muted">Share to the platform MISP. The event will be addressed to your training organisation.</p>}
             </div>
 
             {/* Warning message if no recipients are selected */}

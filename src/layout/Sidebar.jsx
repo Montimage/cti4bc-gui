@@ -1,3 +1,4 @@
+import { isTrainingSession } from '../training/session';
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -63,7 +64,7 @@ function Sidebar() {
         />
       </NavLink>
       <nav className="mi-rail__nav">
-        {NAV_MAIN.map((it) => <Item key={it.to} {...it} />)}
+        {NAV_MAIN.filter(it => !isTrainingSession() || ['/events', '/share-logs'].includes(it.to)).map((it) => <Item key={it.to} {...it} />)}
         {userIsStaff && <div className="mi-rail__group-label">Admin</div>}
         {userIsStaff && NAV_ADMIN.map((it) => <Item key={it.to} {...it} />)}
       </nav>

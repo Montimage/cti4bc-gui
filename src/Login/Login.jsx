@@ -29,6 +29,7 @@ const Login = () => {
                 throw new Error('Invalid login credentials');
             }
             const data = await response.json();
+            localStorage.removeItem('certsyncTraining');
             localStorage.setItem('accessToken', data.access);
             localStorage.setItem('refreshToken', data.refresh);
             window.location.href = 'events/';

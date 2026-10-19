@@ -1,3 +1,4 @@
+import PlatformSso from './training/PlatformSso';
 import React, { useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EventList from "./Events/EventList";
@@ -38,6 +39,7 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<Login/>} />
+                {process.env.REACT_APP_CERTSYNC_TRAINING_ENABLED === 'true' && <Route path="/sso" element={<PlatformSso />} />}
                 <Route element={<ProtectedRoute />}>
                  <Route element={<AppLayout />}>
                   <Route path="/events" element={<EventList />} />
