@@ -7,6 +7,14 @@ import { ThemeProvider } from './ThemeContext';
 // Montimage brand re-skin — imported LAST so its token overrides win the cascade
 import './theme/montimage-theme.css';
 import './theme/patterns.css';
+// The CERT-SYNCHRONY palette. The build switch decides whether it applies:
+// the attribute is what its rules are scoped on, so a build without the flag
+// renders CTI4BC exactly as it does on main. Set before the first render, so
+// the frame never flashes the wrong colours.
+import './theme/certsync-theme.css';
+if (process.env.REACT_APP_CERTSYNC_THEME === 'true') {
+  document.documentElement.setAttribute('data-certsync-theme', 'true');
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

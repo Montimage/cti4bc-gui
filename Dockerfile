@@ -10,6 +10,11 @@ RUN npm install --legacy-peer-deps
 ARG REACT_APP_CERTSYNC_TRAINING_ENABLED=false
 ENV REACT_APP_CERTSYNC_TRAINING_ENABLED=$REACT_APP_CERTSYNC_TRAINING_ENABLED
 
+# The CERT-Synchrony palette for the embedded training frame. Off by default:
+# without it the image is CTI4BC's own look. The VPS build turns it on.
+ARG REACT_APP_CERTSYNC_THEME=false
+ENV REACT_APP_CERTSYNC_THEME=$REACT_APP_CERTSYNC_THEME
+
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 

@@ -1,0 +1,185 @@
+/* =====================================================================
+   CERTSYNCHRONY palette for CTI4BC — a build switch, off by default
+   ---------------------------------------------------------------------
+   CTI4BC's own re-skin (theme/montimage-theme.css) maps the Montimage
+   "Golden Amber" brand onto Bootstrap's tokens. This file maps the same
+   tokens onto the CERT-Synchrony platform's palette, so the CTI4BC frame
+   inside the platform's Training tab does not look like a different
+   product.
+
+   The values are the platform's own, taken from
+   certsynchrony-gui/src/index.css and mapped the way the simulator mapped
+   them (certsynchrony-simulator/orchestrator/ui/static/index.html): the
+   brand blue as the primary, slate neutrals, a card-coloured sidebar and
+   the same light and dark values. The semantic green, amber, red and blue
+   stay as they are — they are states, not brand.
+
+   The token NAMES keep saying "amber": they are CTI4BC's vocabulary, and
+   renaming them would mean touching every component. What changes is the
+   colour they carry.
+
+   EVERY rule here is scoped on [data-certsync-theme], which the build sets
+   on <html> only when REACT_APP_CERTSYNC_THEME=true (src/index.js). A
+   build without the flag therefore renders CTI4BC exactly as it does on
+   main: the rules are present but inert. (The file is always imported,
+   because a stylesheet cannot be excluded from the bundle at build time —
+   a conditional require() would still be extracted into the main CSS.)
+   ===================================================================== */
+
+/* --------------------------- Brand tokens -------------------------- */
+:root[data-certsync-theme],
+:root[data-certsync-theme][data-bs-theme="light"] {
+  /* The platform's brand blue (light): #2868C0 in the mark, 5.6:1 on
+     white, and white on it is 5.6:1 as well — so it can carry body text
+     and button labels alike. */
+  --mi-amber: #2766BE;
+  --mi-amber-hover: #3D75C4;
+  --mi-amber-light: #2766BE;      /* the focus ring and the active rail link */
+  --mi-amber-rgb: 39, 102, 190;
+  --mi-amber-text: #2766BE;       /* links and text emphasis on light */
+
+  /* The text on a primary button: white on the platform's light blue. */
+  --mi-dark: #FFFFFF;
+  --mi-light: #FFFFFF;
+
+  /* Slate neutrals instead of warm sand. */
+  --mi-neutral: #64748B;
+  --mi-surface: #F1F5F9;
+  --mi-surface-dark: #1E293B;
+
+  --mi-shadow: 0 4px 24px rgba(15, 23, 42, .08);
+  --mi-shadow-lg: 0 8px 48px rgba(15, 23, 42, .12);
+}
+
+:root[data-certsync-theme][data-bs-theme="dark"] {
+  --mi-amber: #4C93F0;            /* 6.4:1 on the dark ground */
+  --mi-amber-hover: #4585DA;
+  --mi-amber-light: #4C93F0;
+  --mi-amber-rgb: 76, 147, 240;
+  --mi-amber-text: #4C93F0;
+
+  --mi-dark: #0C1831;              /* 5.7:1 on the dark primary */
+  --mi-light: #F8FAFC;
+
+  --mi-neutral: #64748B;
+  --mi-surface: #1E293B;
+  --mi-surface-dark: #1E293B;
+}
+
+/* --------------------- Bootstrap tokens (light) --------------------- */
+:root[data-certsync-theme],
+:root[data-certsync-theme][data-bs-theme="light"] {
+  --bs-body-bg: #FFFFFF;
+  --bs-body-color: #020817;
+  --bs-body-color-rgb: 2, 8, 23;
+  --bs-secondary-bg: #F1F5F9;
+  --bs-tertiary-bg: #E9F4FB;
+  --bs-border-color: #E2E8F0;
+  --bs-secondary-color: #64748B;
+  --bs-secondary-color-rgb: 100, 116, 139;
+  --bs-tertiary-color: #94A3B8;
+  --bs-heading-color: #020817;
+
+  --bs-light: #F1F5F9;
+  --bs-dark: #020817;
+  --bs-modal-bg: #FFFFFF;
+  --bs-card-bg: #FFFFFF;
+  --bs-card-cap-bg: transparent;
+  --bs-code-color: #2766BE;
+  --bs-form-control-bg: #FFFFFF;
+
+  --bs-primary-bg-subtle: #E9F4FB;
+  --bs-primary-border-subtle: #C7DDF5;
+  --bs-link-color: #2766BE;
+  --bs-link-color-rgb: 39, 102, 190;
+  --bs-link-hover-color: #1D4E96;
+  --bs-link-hover-color-rgb: 29, 78, 150;
+  --bs-focus-ring-color: rgba(39, 102, 190, 0.35);
+}
+
+/* --------------------- Bootstrap tokens (dark) ---------------------- */
+:root[data-certsync-theme][data-bs-theme="dark"] {
+  --bs-body-bg: #020817;
+  --bs-body-color: #F8FAFC;
+  --bs-body-color-rgb: 248, 250, 252;
+  --bs-secondary-bg: #1E293B;
+  --bs-tertiary-bg: #1E293B;
+  --bs-border-color: #1E293B;
+  --bs-secondary-color: #94A3B8;
+  --bs-secondary-color-rgb: 148, 163, 184;
+  --bs-tertiary-color: #64748B;
+  --bs-heading-color: #F8FAFC;
+
+  --bs-light: #F1F5F9;
+  --bs-dark: #020817;
+  --bs-modal-bg: #020817;
+  --bs-card-bg: #020817;
+  --bs-card-cap-bg: transparent;
+  --bs-code-color: #4C93F0;
+  --bs-form-control-bg: #1E293B;
+
+  --bs-primary-bg-subtle: #16233A;
+  --bs-primary-border-subtle: #24405F;
+  --bs-link-color: #4C93F0;
+  --bs-link-color-rgb: 76, 147, 240;
+  --bs-link-hover-color: #76AEF5;
+  --bs-link-hover-color-rgb: 118, 174, 245;
+  --bs-focus-ring-color: rgba(76, 147, 240, 0.45);
+}
+
+/* ------------------ Page surfaces (patterns.css) --------------------- */
+:root[data-certsync-theme],
+:root[data-certsync-theme][data-bs-theme="light"] {
+  --mi-content-bg: #FFFFFF;
+  --mi-card-bg: #FFFFFF;
+  --mi-card-border: #E2E8F0;
+  --mi-muted: #64748B;
+}
+:root[data-certsync-theme][data-bs-theme="dark"] {
+  --mi-content-bg: #020817;
+  --mi-card-bg: #020817;
+  --mi-card-border: #1E293B;
+  --mi-muted: #94A3B8;
+}
+
+/* ----------------------- The card-coloured rail ---------------------- */
+/* The platform's sidebar is a card, not a coloured band: it turns light
+   with the rest and separates by its border. */
+:root[data-certsync-theme],
+:root[data-certsync-theme][data-bs-theme="light"] {
+  --mi-rail-bg: #FFFFFF;
+  --mi-rail-bg-2: #E9F4FB;
+  --mi-rail-text: #162F5A;
+  --mi-rail-text-muted: #64748B;
+  --mi-rail-active-bg: rgba(39, 102, 190, .12);
+}
+:root[data-certsync-theme][data-bs-theme="dark"] {
+  --mi-rail-bg: #020817;
+  --mi-rail-bg-2: #24354C;
+  --mi-rail-text: #CBE4F6;
+  --mi-rail-text-muted: #94A3B8;
+  --mi-rail-active-bg: rgba(76, 147, 240, .14);
+}
+
+/* The rail's separators were white-on-dark; on the light rail they need
+   the platform's border colour. */
+:root[data-certsync-theme][data-bs-theme="light"] .mi-rail { border-right-color: #E2E8F0; }
+:root[data-certsync-theme][data-bs-theme="light"] .mi-rail__brand { border-bottom-color: #E2E8F0; }
+:root[data-certsync-theme][data-bs-theme="light"] .mi-rail__foot { border-top-color: #E2E8F0; }
+/* White on a light hover wash would be unreadable. */
+:root[data-certsync-theme][data-bs-theme="light"] .mi-rail__link:hover { color: #162F5A; }
+
+/* ------------------- The rules that had a colour baked in ----------- */
+/* montimage-theme.css painted these two cards with the warm palette. */
+:root[data-certsync-theme][data-bs-theme="dark"] .clickable-card {
+  background: #020817 !important;
+  border: 1px solid #1E293B !important;
+}
+:root[data-certsync-theme][data-bs-theme="dark"] .active-card {
+  background: #16233A !important;
+  border: 1px solid var(--mi-amber) !important;
+}
+/* The card text was amber; on the platform's dark ground it is the body
+   colour, and the line below it the muted one. */
+:root[data-certsync-theme][data-bs-theme="dark"] .card-text { color: var(--bs-body-color) !important; }
+:root[data-certsync-theme][data-bs-theme="dark"] .card-text + p { color: #94A3B8 !important; }

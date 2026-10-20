@@ -25,7 +25,7 @@
 
 /* Table improvements */
 .table-hover tbody tr:hover {
-    background-color: rgba(233, 171, 52, 0.05);
+    background-color: rgba(var(--mi-amber-rgb), 0.05);
     transition: background-color 0.2s ease;
 }
 
@@ -65,7 +65,7 @@ td .badge {
 }
 
 .btn-link:hover {
-    color: #D49A2E;
+    color: var(--mi-amber-hover);
     text-decoration: none;
     transform: translateY(-1px);
 }
@@ -102,5 +102,5 @@ td .badge {
 }
 
 [data-bs-theme="dark"] .table-hover tbody tr:hover {
-    background-color: rgba(233, 171, 52, 0.1);
+    background-color: rgba(var(--mi-amber-rgb), 0.1);
 }

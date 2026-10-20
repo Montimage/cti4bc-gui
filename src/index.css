@@ -72,7 +72,7 @@ code {
 
 .form-control:focus, .form-select:focus {
   border-color: var(--mi-amber-light, #F0BC52);
-  box-shadow: 0 0 0 0.2rem rgba(233, 171, 52,0.25);
+  box-shadow: 0 0 0 0.2rem rgba(var(--mi-amber-rgb), 0.25);
 }
 
 .form-control::file-selector-button {

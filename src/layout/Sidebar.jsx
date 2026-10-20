@@ -1,6 +1,7 @@
 import { isTrainingSession } from '../training/session';
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from '../ThemeContext';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
 
@@ -28,6 +29,14 @@ function Item({ to, label, icon }) {
 
 function Sidebar() {
   const [userIsStaff, setUserIsStaff] = useState(false);
+  // With the CERT-SynchronY palette the rail is a card, so it turns light
+  // with the rest of the app: the wordmark has to follow, or it disappears
+  // into the background. CTI4BC's own rail stays dark in both themes, so
+  // without that build the dark wordmark stays as it was.
+  const { theme } = useTheme();
+  const logo = (process.env.REACT_APP_CERTSYNC_THEME === 'true' && theme !== 'dark')
+    ? 'cti4bc-logo.svg'
+    : 'cti4bc-logo-dark.svg';
 
   // Same staff check as the former NavBar (GET /api/users/info/).
   useEffect(() => {
@@ -53,7 +62,7 @@ function Sidebar() {
     <aside className="mi-rail">
       <NavLink to="/events" className="mi-rail__brand">
         <img
-          src={`${process.env.PUBLIC_URL}/cti4bc-logo-dark.svg`}
+          src={`${process.env.PUBLIC_URL}/${logo}`}
           alt="CTI4BC"
           className="mi-rail__logo mi-rail__logo--full"
         />
