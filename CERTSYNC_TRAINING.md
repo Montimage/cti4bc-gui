@@ -19,6 +19,32 @@ entrypoint generates a framing header from this single HTTPS origin. When off,
 its include is empty. Bind the published GUI port to loopback, or use only the
 shared Docker network. Keep the API behind `/api-backend/` on the same origin.
 
+## The platform's colours
+
+`REACT_APP_CERTSYNC_THEME=true` (default **off**) adds the CERT-Synchrony
+palette: the brand blue as the primary, slate neutrals, a card-coloured
+sidebar and the same light and dark values, so the CTI4BC frame inside the
+platform's Training tab does not look like a different product. Only the
+colours change — the layout, the fonts and every behaviour stay CTI4BC's.
+
+```sh
+docker build -t cti4bc-gui:certsync-training \
+  --build-arg REACT_APP_CERTSYNC_TRAINING_ENABLED=true \
+  --build-arg REACT_APP_CERTSYNC_THEME=true \
+  --build-arg REACT_APP_API_URL=https://certsync-cti4bc.montimage.eu/api-backend .
+```
+
+Without the flag the build is CTI4BC's own, unchanged: the palette's rules
+(`src/theme/certsync-theme.css`) are scoped on a `data-certsync-theme`
+attribute that the build only sets when the flag is on, so they are inert
+otherwise. The stylesheet is always in the bundle — a stylesheet cannot be
+left out of it at build time — and that is why the switch is an attribute
+rather than a conditional import.
+
+The token names keep saying "amber" (they are CTI4BC's vocabulary); the
+colours they carry are the platform's. The CTI4BC logo keeps its own amber
+hexagon: it is an image, and CTI4BC's own assets are not touched.
+
 The platform opens `/sso?theme=dark#token=...`. The route removes the fragment,
 POSTs the single-use JWT to `/api/certsync-training/sso/`, then stores
 `accessToken` and `refreshToken` in **localStorage**, exactly like normal login,
