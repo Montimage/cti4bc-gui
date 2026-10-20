@@ -132,7 +132,7 @@ const MISPServerSelector = ({ onServersSelected, eventId: eventIdProp }) => {
                                 onChange={() => handleServerCheckChange(server.id)}
                             />
                             <label className="form-check-label" htmlFor={`server-${server.id}`}>
-                                <strong>{server.name}</strong> - {server.url}
+                                <strong>{server.name}</strong>{server.url ? <> - {server.url}</> : null}
                                 <div className="text-muted small">Organizations: {server.organization_names?.join(', ') || 'N/A'}</div>
                             </label>
                         </div>
