@@ -2,7 +2,8 @@
 
 This branch adds `/sso` only when built with
 `REACT_APP_CERTSYNC_TRAINING_ENABLED=true`. The default is off. Existing login,
-routes and token storage remain available. Coordinate deployment with Valeria.
+routes and token storage remain available. This branch is CERT-Synchrony's own;
+coordinate deployment with the colleague maintaining the CTI4BC instance on the VPS.
 
 Build with the existing API prefix and the training flag:
 
