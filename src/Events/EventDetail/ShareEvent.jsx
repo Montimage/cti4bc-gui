@@ -8,6 +8,7 @@ import SharingStrategies from "./SharingStrategiesTab";
 import MISPServerSelector from "./MISPServerSelector";
 import ShareEventModal from "./ShareEventModal";
 import FormSelectionModal from "./FormSelectionModal";
+import { isTrainingSession } from "../../training/session";
 import { useToast } from '../../components/Toast';
 
 const SERVER_URL = process.env.REACT_APP_API_URL;
@@ -218,8 +219,10 @@ const ShareEventView = () => {
                 
                 showSuccess(`Event shared successfully with ${successfulShares} out of ${totalShares} MISP servers.`);
                 
-                // Show form selection modal after successful share
-                if (eventOrganizationId) {
+                // Show form selection modal after successful share. Not in a
+                // training session: participants have no forms, and the forms
+                // API is outside what a trainee may call.
+                if (eventOrganizationId && !isTrainingSession()) {
                     setTimeout(() => {
                         setPendingFormModalOpen(true);
                         setShowFormSelectionModal(true);
