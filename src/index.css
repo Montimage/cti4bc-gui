@@ -228,4 +228,7 @@ code {
 .attr-table th { white-space: nowrap; }
 .attr-table td:last-child, .attr-table th:last-child { width: 1%; white-space: nowrap; }
 .attr-table td textarea { min-width: 14rem; width: 100%; }
+/* Value is the third column in every attribute table. Breaking anywhere lets
+   it shrink to nothing, so it gets its own floor; anything longer still wraps. */
+.attr-table td:nth-child(3) { min-width: 10rem; }
 .attr-table td select { max-width: 10rem; }
