@@ -431,7 +431,7 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
                         <div className="mt-3">
                             <h2>Risk assessment <span className="badge bg-primary ms-2" style={{ fontSize: '0.75rem' }}>RISK4BC</span></h2>
                             { jsonData.Attribute.RISK4BC && jsonData.Attribute.RISK4BC.length > 0 ? (
-                                <table className="table table-hover">
+                                <table className="table table-hover attr-table">
                                 <thead>
                                 <tr>
                                     <th>Category</th>
@@ -466,7 +466,7 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
 
                             <h2>System Reaction <span className="badge bg-primary ms-2" style={{ fontSize: '0.75rem' }}>SOAR4BC</span></h2>
                             { jsonData.Attribute.SOAR4BC && jsonData.Attribute.SOAR4BC.length > 0 ? (
-                                <table className="table table-hover">
+                                <table className="table table-hover attr-table">
                                 <thead>
                                 <tr>
                                     <th>Category</th>
@@ -501,7 +501,7 @@ const EventViewer = forwardRef(({ data, id }, ref) => {
 
                             <h2>Event Attributes <span className="badge bg-primary ms-2" style={{ fontSize: '0.75rem' }}>AWARE4BC</span></h2>
                             { jsonData.Attribute.AWARE4BC && jsonData.Attribute.AWARE4BC.length > 0 ? (
-                                <table className="table table-hover">
+                                <table className="table table-hover attr-table">
                                 <thead>
                                 <tr>
                                     <th>Category</th>

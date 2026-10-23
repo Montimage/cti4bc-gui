@@ -188,7 +188,7 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
                 </button>
             </h2>
             {jsonData.Attribute.RISK4BC && jsonData.Attribute.RISK4BC.length > 0 ? (
-                <table className="table table-hover">
+                <table className="table table-hover attr-table">
                     <thead>
                         <tr>
                             <th>Category</th>
@@ -243,7 +243,7 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
                 </button>
             </h2>
             {jsonData.Attribute.SOAR4BC && jsonData.Attribute.SOAR4BC.length > 0 ? (
-                <table className="table table-hover">
+                <table className="table table-hover attr-table">
                     <thead>
                         <tr>
                             <th>Category</th>
@@ -305,7 +305,7 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
                 </button>
             </h2>
             {jsonData.Attribute.SOAR4BC_RESULT && jsonData.Attribute.SOAR4BC_RESULT.length > 0 ? (
-                <table className="table table-hover">
+                <table className="table table-hover attr-table">
                     <thead>
                         <tr>
                             <th>Category</th>
@@ -358,7 +358,7 @@ const EventAttributes = ({ jsonData, onUpdate }) => {
             {/* Event Attributes */}
             <h2>Event Attributes <span className="badge bg-primary ms-2" style={{ fontSize: '0.9rem' }}>AWARE4BC</span></h2>
             {jsonData.Attribute.AWARE4BC && jsonData.Attribute.AWARE4BC.length > 0 ? (
-                <table className="table table-hover">
+                <table className="table table-hover attr-table">
                     <thead>
                         <tr>
                             <th>Category</th>

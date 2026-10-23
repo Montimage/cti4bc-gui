@@ -220,3 +220,12 @@ code {
 .popover {
   transition: none !important;
 }
+/* Attribute tables (Event Attributes, SOAR4BC, RISK4BC): long values such as
+   hashes and URLs cannot wrap, so they took the width and squeezed the Comment
+   column to two or three letters per line on laptop screens. Let values break
+   anywhere and give the comment box a readable minimum width. */
+.attr-table td { overflow-wrap: anywhere; word-break: break-word; }
+.attr-table th { white-space: nowrap; }
+.attr-table td:last-child, .attr-table th:last-child { width: 1%; white-space: nowrap; }
+.attr-table td textarea { min-width: 14rem; width: 100%; }
+.attr-table td select { max-width: 10rem; }
